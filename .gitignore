@@ -1,0 +1,4 @@
+**/.o
+examples/**/*.sfc
+examples/**/*.sym
+examples/**/*.srm

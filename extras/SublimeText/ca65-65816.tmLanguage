@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>s</string>
+		<string>s816</string>
+		<string>i</string>
+		<string>i816</string>
+	</array>
+	<key>name</key>
+	<string>ca65-65816</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>comment</key>
+			<string>65816 instructions</string>
+			<key>match</key>
+			<string>(?i)\b(adc|and|asl|bcc|beq|bge|bit|blt|bmi|bne|bpl|bra|brk|brl|bvc|bvs|clc|cld|cli|clv|cmp|cop|cpa|cpx|cpy|dea|dec|dex|dey|eor|ina|inc|inx|iny|jml|jmp|jsl|jsr|lda|ldx|ldy|lsr|mvn|mvp|nop|ora|pea|pei|per|pha|phb|phd|phk|php|phx|phy|pla|plb|pld|plp|plx|ply|rep|rol|ror|rti|rtl|rts|sbc|sec|sed|sei|sep|sta|stp|stx|sty|stz|swa|tad|tas|tax|tay|tcd|tcs|tda|tdc|trb|tsa|tsb|tsc|tsx|txa|txs|txy|tya|tyx|wai|wdm|xba|xce)(\.[b|w|l])?\b</string>
+			<key>name</key>
+			<string>keyword.mnenomic.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>ca65 pseudo functions</string>
+			<key>match</key>
+			<string>(?i)\.(addrsize|and|bank|bankbyte|blank|concat|const|hibyte|hiword|ident|left|lobyte|loword|match|max|mid|min|not|or|ref|referenced|right|sizeof|strat|sprintf|string|strlen|tcount|xmatch)\b</string>
+			<key>name</key>
+			<string>keyword.directives.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>ca65 control commands</string>
+			<key>match</key>
+			<string>(?i)^[\s]*\.(a16|a8|addr|align|asciiz|assert|autoimport|bankbytes|bss|byt|byte|case|charmap|code|condes|constructor|data|dbyt|debuginfo|define|def|defined|delmacro|delmac|destructor|dword|else|elseif|end|endenum|endif|endmac|endmacro|endproc|endrep|endrepeat|endscope|endstruct|enum|error|exitmac|exitmacro|export|exportzp|faraddr|fatal|feature|fileopt|fopt|forceimport|global|globalzp|hibytes|i16|i8|if|ifblank|ifconst|ifdef|ifnblank|ifndef|ifnref|ifp02|ifp816|ifpc02|ifpcs02|ifref|import|importzp|incbin|include|interruptor|linecont|list|listbytes|lobytes|local|localchar|macpack|mac|macro|org|out|p02|p816|pagelen|pagelength|pc02|popcpu|popseg|proc|psc02|pushcpu|pushseg|reloc|repeat|res|rodata|scope|segment|set|setcpu|smart|struct|tag|undef|undefine|union|warning|word|zeropage)\b</string>
+			<key>name</key>
+			<string>keyword.directives.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Labels</string>
+			<key>match</key>
+			<string>(^|\n)([a-zA-Z0-9_\\@]*):</string>
+			<key>name</key>
+			<string>support.class.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>String</string>
+			<key>match</key>
+			<string>(^|\s)"[\w\s\W]*"</string>
+			<key>name</key>
+			<string>string.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Hexadecimal number</string>
+			<key>match</key>
+			<string>(?i)\$((\d|[A-F])+)\b</string>
+			<key>name</key>
+			<string>constant.numeric.hex.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Binary number</string>
+			<key>match</key>
+			<string>(?i)\%([0|1]+)\b</string>
+			<key>name</key>
+			<string>constant.numeric.bin.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Decimal number</string>
+			<key>match</key>
+			<string>(?i)\#([0-9a-f$%]+)\b</string>
+			<key>name</key>
+			<string>constant.numeric.dec.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Block comment</string>
+			<key>begin</key>
+			<string>/\*</string>
+			<key>end</key>
+			<string>\*/</string>
+			<key>name</key>
+			<string>comment.block.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Documentation comment</string>
+			<key>begin</key>
+			<string>/\*\*(?!/)</string>
+			<key>end</key>
+			<string>\*/</string>
+			<key>name</key>
+			<string>comment.block.documentation.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Line comment</string>
+			<key>begin</key>
+			<string>;</string>
+			<key>end</key>
+			<string>\n</string>
+			<key>name</key>
+			<string>comment.line.ca65-65816</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.ca65-65816</string>
+	<key>uuid</key>
+	<string>9aef490b-df42-445f-ca65-1b6b48b9d3e4</string>
+</dict>
+</plist>

@@ -1,0 +1,10 @@
+{
+	"auto_complete": false,
+	"extensions":
+	[
+		"s700" ,"i700"
+	],
+  "tab_completion": false,
+	"tab_size": 8,
+	"translate_tabs_to_spaces": true
+}

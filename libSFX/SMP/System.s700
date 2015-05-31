@@ -1,0 +1,68 @@
+; Relocatable snippets that will load into $0002 of SPC700 RAM
+
+.include "../libSFX.i"
+.segment "SMPLIBSFX"
+
+;-------------------------------------------------------------------------------
+; Burst transfer S-CPU to S-SMP
+; by Shay Green <gblargg@gmail.com>
+
+SMP_Burst:
+        mov     x,#$fe                  ;Transfer 254 pages
+
+@page:  mov     y,#$3f                  ;Transfer four-byte chunks
+@quad:  mov     a,CPUIO0
+@movA:  mov     !$0200+y,a
+        mov     a,CPUIO1
+@movB:  mov     !$0240+y,a
+        mov     a,CPUIO2
+@movC:  mov     !$0280+y,a
+        mov     a,CPUIO3                ;Tell S-CPU we're ready for more
+        mov     CPUIO3,y
+@movD:  mov     !$02C0+y,a
+        dec     y
+        bpl     @quad
+
+        inc     .lobyte(@movA)+2        ;Increment MSBs of addresses
+        inc     .lobyte(@movB)+2
+        inc     .lobyte(@movC)+2
+        inc     .lobyte(@movD)+2
+        dec     x
+        bne     @page
+
+        jmp     !IPL_INIT               ;Back to IPL
+
+SMP_Burst_END:
+
+;-------------------------------------------------------------------------------
+; Upload DSP registers
+; by Shay Green <gblargg@gmail.com>
+
+LOADER_DATA = $21
+
+SMP_SetDSP:
+        mov     x,LOADER_DATA
+        mov     sp,x
+        mov     x,#LOADER_DATA+1
+
+        mov     a,(x)+          ;Push PC and PSW from SPC header
+        push    a
+        mov     a,(x)+
+        push    a
+        mov     a,(x)+
+        push    a
+
+        mov     a,#$60          ;Set FLG to $60 rather than value from SPC
+        mov     FLG+x,a
+
+        mov     y,#$00          ;Restore DSP registers
+:       mov     a,(x)+
+        mov     DSPADDR,y
+        mov     DSPDATA,a
+        inc     y
+        bpl     :-
+
+        mov     DSPADDR,#FLG     ;Set for later
+        jmp     !IPL_INIT        ;Back to IPL
+
+SMP_SetDSP_END:
