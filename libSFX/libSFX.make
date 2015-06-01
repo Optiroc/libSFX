@@ -12,6 +12,9 @@ ifndef rpad_size
 rpad_size  := 100
 endif
 
+# Recursive wildcard
+rwildcard   = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+
 # Tools & flags
 toolsdir		:= $(libsfx_dir)/../tools
 as          := $(toolsdir)/cc65/bin/ca65
@@ -22,9 +25,9 @@ asflags			:= -g -U -I ./ -I $(libsfx_dir) -I $(libsfx_dir)/Configurations
 ldflags     := $(dflags) --cfg-path ./ --cfg-path $(libsfx_dir)/Configurations/
 
 # Source globs
-src := $(wildcard *.s) $(wildcard **/*.s)
-libsfx_src := $(wildcard $(libsfx_dir)/*.s) $(wildcard $(libsfx_dir)/**/*.s)
-libsfx_src_smp := $(wildcard $(libsfx_dir)/*.s700) $(wildcard $(libsfx_dir)/**/*.s700)
+src := $(call rwildcard, , *.s)
+libsfx_src := $(call rwildcard, $(libsfx_dir)/, *.s)
+libsfx_src_smp := $(call rwildcard, $(libsfx_dir)/, *.s700)
 cfg_files := $(wildcard *.cfg)
 
 # Targets
