@@ -2,3 +2,7 @@
 examples/**/*.sfc
 examples/**/*.sym
 examples/**/*.srm
+tests/**/*.sfc
+tests/**/*.sym
+tests/**/*.srm
+examples/SixteenMegaPower/_build_

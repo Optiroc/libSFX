@@ -407,15 +407,15 @@ SFX_RW_size_s8 .set %00
 */
 .macro  dbank   bank
 .if .xmatch({bank}, {a})
-        RW_assert a8
+        RW_assert a8, "dbank: In parameter 'bank = a' requires 8-bit accumulator"
         pha
         plb
 .elseif .xmatch({bank}, {x})
-        RW_assert i8
+        RW_assert i8, "dbank: In parameter 'bank = x' requires 8-bit index registers"
         phx
         plb
 .elseif .xmatch({bank}, {y})
-        RW_assert i8
+        RW_assert i8, "dbank: In parameter 'bank = y' requires 8-bit index registers"
         phy
         plb
 .else
@@ -451,9 +451,14 @@ SFX_dp_offset .set 0
 .macro  dpage   offs
         RW_push set:a16
 .if .xmatch({offs}, {a})
+        SFX_dp_offset .set 0
         tcd
 .else
+  .if .const(offs)
         SFX_dp_offset .set .loword(offs)
+  .else
+        SFX_dp_offset .set 0
+  .endif
         lda     #.loword(offs)
         tcd
 .endif
