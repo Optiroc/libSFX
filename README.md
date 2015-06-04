@@ -23,9 +23,9 @@ Look into the the include files (*.i) in the libSFX directory for full documenta
 There's no particular dependencies, except GNU Make for building. 
 
 ##building
-First you need to build ca65, which is included as a git submodule. Run `git submodule update` and then `make` from the project root directory.
+First you need to build ca65, which is included as a git submodule. Run `git submodule init` and `git submodule update` to fetch the submodules, then run `make` to build.
 
-Then run `make` in any of the example directories to assemble the source files into a Super Nintendo ROM image (*.sfc).
+Now that the toolchain is in place you can run `make` in any of the example directories to assemble the source files into a Super Nintendo ROM image (*.sfc).
 
 ##setting up a project
 For the most basic setup, copy "examples/Template" to a location of your liking. Then edit "Makefile" and make sure that *libsfx_dir* points to the libSFX subdirectory in the project root.
