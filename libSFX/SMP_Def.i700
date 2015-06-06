@@ -1,8 +1,8 @@
 ; MB-SFX S-SMP Register Definitions
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef __MBSFX_SMP_Def__
-__MBSFX_SMP_Def__ = 1
+.ifndef ::__MBSFX_SMP_Def__
+::__MBSFX_SMP_Def__ = 1
 
 ;-------------------------------------------------------------------------------
 ;CPU Registers

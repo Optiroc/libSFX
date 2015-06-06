@@ -4,8 +4,8 @@
 ; TODO:
 ; Macros for calculating register values for the most common operations
 
-.ifndef __MBSFX_CPU_Def__
-__MBSFX_CPU_Def__ = 1
+.ifndef ::__MBSFX_CPU_Def__
+::__MBSFX_CPU_Def__ = 1
 
 ;-------------------------------------------------------------------------------
 ;RAM locations

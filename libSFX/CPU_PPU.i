@@ -1,8 +1,8 @@
 ; libSFX S-CPU Utility Macros
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef __MBSFX_CPU_PPU__
-__MBSFX_CPU_PPU__ = 1
+.ifndef ::__MBSFX_CPU_PPU__
+::__MBSFX_CPU_PPU__ = 1
 
 .global SFX_INIT_mmio, SFX_INIT_oam
 .global SFX_WAIT_vbl, SFX_PPU_is_ntsc, SFX_PPU_fadeup

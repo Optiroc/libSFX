@@ -1,8 +1,8 @@
 ; libSFX S-CPU Macros
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef __MBSFX_CPU__
-__MBSFX_CPU__ = 1
+.ifndef ::__MBSFX_CPU__
+::__MBSFX_CPU__ = 1
 
 ;-------------------------------------------------------------------------------
 
@@ -471,9 +471,20 @@ SFX_dp_offset .set 0
 ;Meta instructions
 
 /**
+  Branch if greater than
+
+  :in:  addr  Address
+*/
+.macro bgt addr
+        beq     :+
+        bge     addr
+:
+.endmac
+
+/**
   Relative subroutine call
 
-  :param: addr  Address
+  :in:  addr  Address
 */
 .macro  bsr     addr
         per     * + 4
@@ -483,15 +494,74 @@ SFX_dp_offset .set 0
 /**
   Relative long subroutine call
 
-  :param: addr  Address
+  :in:  addr  Address
 */
 .macro  bsl     addr
         per     * + 5
         brl     addr
 .endmac
 
-/*
+/**
+  Add (without carry)
 
+  :in:    p1    Operand
+  :in?:   p2    Index
+*/
+
+.macro add p1, p2
+  .if .blank({p2})
+        clc
+        adc     p1
+  .else
+        clc
+        adc     p1, p2
+  .endif
+.endmacro
+
+/**
+  Subtract (without carry)
+
+  :in:    p1    Operand
+  :in?:   p2    Index
+*/
+.macro sub p1, p2
+  .if .blank({p2})
+        sec
+        sbc     p1
+  .else
+        sec
+        sbc     p1, p2
+  .endif
+.endmacro
+
+/**
+  Arithmetic shift right
+*/
+.macro asr
+  .if RW_a_size = 1
+        cmp     #$80
+        ror
+  .else
+        cmp     #$8000
+        ror
+  .endif
+.endmacro
+
+/**
+  Negate (signed integer)
+*/
+.macro neg
+  .if RW_a_size = 1
+        eor     #$ff
+        inc
+  .else
+        eor     #$ffff
+        inc
+  .endif
+.endmacro
+
+
+/*
   ;Move instruction
   ;Probably not a good idea after all
 
