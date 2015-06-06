@@ -2,8 +2,8 @@
 ; Super Famicom Development Framework
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef __MBSFX_H__
-__MBSFX_H__ = 1
+.ifndef ::__MBSFX_H__
+::__MBSFX_H__ = 1
 
 ;--------------------------------------------------------------------
 .p816

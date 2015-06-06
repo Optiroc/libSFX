@@ -8,13 +8,11 @@
 
 .segment "CODE"
 Main:
-
         ;Test NTSC-check, display red screen if not NTSC or emulator with good timing
         PPU_is_ntsc
         beq     :+
         jmp     Not_NTSC
 :
-
 ;-------------------------------------------------------------------------------
 @test_blockmove:
         RW a8i16
@@ -63,18 +61,18 @@ Main:
 
         ;mulu register * value -> register
         lda     #$22
-        mulu    a,$4, x                 ;Expected result: x = #$0088
+        mulu    a,$4, x                 ;Expected: x = #$0088
 
         ;mulu value * register -> register
         RW i8
-        mulu    $7f,x, y                ;Expected result: y = #$4378
+        mulu    $7f,x, y                ;Expected: y = #$4378
 
         ;mulu value * value -> RDMPYL/H
         RW i16
         mulu    .sizeof(Vec3),$66
         bit     $ff
         nop
-        ldx     RDMPYL                  ;Expected result: x = #$0264
+        ldx     RDMPYL                  ;Expected: x = #$0264
 
 ;-------------------------------------------------------------------------------
 @test_divu:
@@ -82,11 +80,11 @@ Main:
 
         ;divu register / value -> register
         ldx     #$9c00
-        divu    x,$4, x                 ;Expected resulu: x = #$2700
+        divu    x,$4, x                 ;Expected: x = #$2700
 
         ;divu register / value -> register.register
-        divu    x,$7, x,y               ;Expected result: x = #$0592
-                                        ;                 y = #$0002
+        divu    x,$7, x,y               ;Expected: x = #$0592
+                                        ;          y = #$0002
 
         ;divu value / value -> RDDIVL/H.RDMPYL/H
         divu    .sizeof(Vec3)*100,$05
@@ -98,12 +96,49 @@ Main:
         ;muls register * value -> register
         ;Note: Using forced range for negative values, or ca65 gives range error
         ldx     #.loword(-822)
-        muls    x,.lobyte(-44), ax      ;Expected result: a:x = #$008d48 (+36168)
+        muls    x,.lobyte(-44), ax      ;Expected: a:x = #$008d48 (+36168)
 
         ;muls register * register -> register
         lda     #.lobyte(-21)
         ldx     #.loword(1001)
-        muls    x,a, ay                 ;Expected result: a:y = #$ffade3 (-21021)
+        muls    x,a, ay                 ;Expected: a:y = #$ffade3 (-21021)
+
+;-------------------------------------------------------------------------------
+@test_meta:
+        RW a8i16
+
+        ;Arithmetic shift right
+        RW a8
+        lda     #%01101101
+        asr                             ;Expected: a = #%00110110 ($36)
+        asr                             ;Expected: a = #%00011011 ($1b)
+
+        lda     #%10110001
+        asr                             ;Expected: a = #%11011000 ($d8)
+        asr                             ;Expected: a = #%11101100 ($ec)
+
+        RW a16
+        lda     #%0110001110010001
+        asr                             ;Expected: a = #%0011000111001000 ($31c8)
+        asr                             ;Expected: a = #%0001100011100100 ($18e4)
+
+        lda     #%1010001110010001
+        asr                             ;Expected: a = #%1101000111001000 ($d1c8)
+        asr                             ;Expected: a = #%1110100011100100 ($e8e4)
+
+        ;Negate
+        ;Note: Using forced range for negative values, or ca65 gives range error
+        RW a8
+        lda     #101
+        neg                             ;Expected: a = #$9b
+        lda     #.lobyte(-127)
+        neg                             ;Expected: a = #$7f
+
+        RW a16
+        lda     #28123
+        neg                             ;Expected: a = #$9225
+        lda     #.loword(-32767)
+        neg                             ;Expected: a = #$7fff
 
 ;-------------------------------------------------------------------------------
 @test_wram:

@@ -1,8 +1,8 @@
 ; libSFX S-CPU NMI/IRQ Vector Macros
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef __MBSFX_CPU_Runtime__
-__MBSFX_CPU_Runtime__ = 1
+.ifndef ::__MBSFX_CPU_Runtime__
+::__MBSFX_CPU_Runtime__ = 1
 
 ;Default settings for joypad polling
 .ifndef SFX_AUTOJOY

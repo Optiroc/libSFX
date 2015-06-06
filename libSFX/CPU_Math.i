@@ -1,8 +1,8 @@
 ; libSFX S-CPU/PPU MMIO Math Macros
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef __MBSFX_CPU_Math__
-__MBSFX_CPU_Math__ = 1
+.ifndef ::__MBSFX_CPU_Math__
+::__MBSFX_CPU_Math__ = 1
 
 ;-------------------------------------------------------------------------------
 

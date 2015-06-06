@@ -1,8 +1,8 @@
 ; libSFX S-SMP Macros
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef __MBSFX_SMP_System__
-__MBSFX_SMP_System__ = 1
+.ifndef ::__MBSFX_SMP_System__
+::__MBSFX_SMP_System__ = 1
 
 .global SMP_Burst, SMP_Burst_END, SMP_SetDSP, SMP_SetDSP_END
 

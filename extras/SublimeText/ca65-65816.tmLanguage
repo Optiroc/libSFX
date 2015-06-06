@@ -17,7 +17,7 @@
 			<key>comment</key>
 			<string>65816 instructions</string>
 			<key>match</key>
-			<string>(?i)\b(adc|and|asl|bcc|beq|bge|bit|blt|bmi|bne|bpl|bra|brk|brl|bvc|bvs|clc|cld|cli|clv|cmp|cop|cpa|cpx|cpy|dea|dec|dex|dey|eor|ina|inc|inx|iny|jml|jmp|jsl|jsr|lda|ldx|ldy|lsr|mvn|mvp|nop|ora|pea|pei|per|pha|phb|phd|phk|php|phx|phy|pla|plb|pld|plp|plx|ply|rep|rol|ror|rti|rtl|rts|sbc|sec|sed|sei|sep|sta|stp|stx|sty|stz|swa|tad|tas|tax|tay|tcd|tcs|tda|tdc|trb|tsa|tsb|tsc|tsx|txa|txs|txy|tya|tyx|wai|wdm|xba|xce)(\.[b|w|l])?\b</string>
+			<string>(?i)\b(adc|and|asl|bcc|beq|bge|bit|blt|bmi|bne|bpl|bra|brk|brl|bvc|bvs|clc|cld|cli|clv|cmp|cop|cpa|cpx|cpy|dea|dec|dex|dey|eor|ina|inc|inx|iny|jml|jmp|jsl|jsr|lda|ldx|ldy|lsr|mvn|mvp|nop|ora|pea|pei|per|pha|phb|phd|phk|php|phx|phy|pla|plb|pld|plp|plx|ply|rep|rol|ror|rti|rtl|rts|sbc|sec|sed|sei|sep|sta|stp|stx|sty|stz|swa|tad|tas|tax|tay|tcd|tcs|tda|tdc|trb|tsa|tsb|tsc|tsx|txa|txs|txy|tya|tyx|wai|wdm|xba|xce)\b</string>
 			<key>name</key>
 			<string>keyword.mnenomic.ca65-65816</string>
 		</dict>
@@ -36,6 +36,14 @@
 			<string>(?i)^[\s]*\.(a16|a8|addr|align|asciiz|assert|autoimport|bankbytes|bss|byt|byte|case|charmap|code|condes|constructor|data|dbyt|debuginfo|define|def|defined|delmacro|delmac|destructor|dword|else|elseif|end|endenum|endif|endmac|endmacro|endproc|endrep|endrepeat|endscope|endstruct|enum|error|exitmac|exitmacro|export|exportzp|faraddr|fatal|feature|fileopt|fopt|forceimport|global|globalzp|hibytes|i16|i8|if|ifblank|ifconst|ifdef|ifnblank|ifndef|ifnref|ifp02|ifp816|ifpc02|ifpcs02|ifref|import|importzp|incbin|include|interruptor|linecont|list|listbytes|lobytes|local|localchar|macpack|mac|macro|org|out|p02|p816|pagelen|pagelength|pc02|popcpu|popseg|proc|psc02|pushcpu|pushseg|reloc|repeat|res|rodata|scope|segment|set|setcpu|smart|struct|tag|undef|undefine|union|warning|word|zeropage)\b</string>
 			<key>name</key>
 			<string>keyword.directives.ca65-65816</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>65816 libSFX meta instructions</string>
+			<key>match</key>
+			<string>(?i)\b(bgt|bsr|bsl|add|sub|asr|neg)\b</string>
+			<key>name</key>
+			<string>keyword.metamnenomic.ca65-65816</string>
 		</dict>
 		<dict>
 			<key>comment</key>

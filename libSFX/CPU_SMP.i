@@ -1,8 +1,8 @@
 ; libSFX S-CPU to S-SMP Communication
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef __MBSFX_CPU_SMP__
-__MBSFX_CPU_SMP__ = 1
+.ifndef ::__MBSFX_CPU_SMP__
+::__MBSFX_CPU_SMP__ = 1
 
 SFX_DSP_STATE = HIRAM   ;DSP state location
 SFX_SPC_IMAGE = EXRAM   ;SPC image dump location for SFX_APU_execspc

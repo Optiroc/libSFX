@@ -1,8 +1,8 @@
 ; libSFX S-CPU Memory Macros
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef __MBSFX_CPU_Memory__
-__MBSFX_CPU_Memory__ = 1
+.ifndef ::__MBSFX_CPU_Memory__
+::__MBSFX_CPU_Memory__ = 1
 
 .global SFX_WRAM_memset, SFX_WRAM_memcpy, SFX_VRAM_memset, SFX_VRAM_memcpy
 .global SFX_CGRAM_memset, SFX_CGRAM_memcpy

@@ -1,8 +1,8 @@
 ; libSFX Meta Macros
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef __MBSFX_META__
-__MBSFX_META__ = 1
+.ifndef ::__MBSFX_META__
+::__MBSFX_META__ = 1
 
 .define ON              1
 .define OFF             0
