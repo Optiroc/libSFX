@@ -6,3 +6,4 @@ tests/**/*.sfc
 tests/**/*.sym
 tests/**/*.srm
 examples/SixteenMegaPower/_build_
+_research
