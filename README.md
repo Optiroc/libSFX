@@ -1,17 +1,16 @@
 #libSFX
-Super Nintendo development framework
-by David Lindecrantz, <optiroc@gmail.com>
+Super Nintendo development framework. Main features:
 
-
-##features
 * Basic system runtime for initialization and interrupt handling.
-* 65816 register size tracking macros to minimize rep/sep instructions.
+* 65816 register size tracking macros to minimize rep/sep instructions (and mental overhead).
 * Full set of memcpy/memset routines for efficiently transferring data to different parts of the system.
 * S-SMP communication and SPC playing routines.
 * LZ4 decompression.
 * Sublime Text syntax definitions.
 
-Look into the the include files (*.i) in the libSFX directory for full documentation of the library features.
+Look into the the include files (*.i) in the [libSFX directory](./libSFX/) for full documentation of the library features.
+
+libSFX is developed by David Lindecrantz and distributed under the terms of the [MIT license](./LICENSE).
 
 
 ##dependencies
@@ -29,7 +28,7 @@ For the most basic setup, copy "examples/Template" to a location of your liking.
 
 For project customization (for example extending the ROM size from the default 1 megabit configuration or changing the default stack and scratchpad sizes) the build script looks for two files inside the project directory; "libSFX.cfg" and "Map.cfg". If these aren't found (like in the Template project), the defaults inside "libSFX/Configurations" are used.
 
-To override the defaults, simply copy these two files into your project directory and edit them to your liking. Inside "libSFX/Configurations" there's a couple more Map.cfg examples, and you can also check out the *SixteenMegaPower* example project (which uses a whopping 64 x 32kB ROM banks and a healthy amount of save RAM).
+To override the defaults, simply copy these two files into your project directory and edit them to your liking. In [libSFX/Configurations](./libSFX/Configurations/) there's a couple more Map.cfg examples, and you can also check out the [SixteenMegaPower](./examples/SixteenMegaPower) example project (which uses a whopping 64 x 32kB ROM banks and a healthy amount of save RAM).
 
 
 ##work in progress
