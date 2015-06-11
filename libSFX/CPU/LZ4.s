@@ -58,8 +58,7 @@ SFX_LZ4_decompress_block:
 .define LZ_dest _ZPAD_+$03      ;Destination (indirect long)
 .define LZ_mvl _ZPAD_+$06       ;Literal block move (mvn + banks + rtl)
 .define LZ_mvm _ZPAD_+$0a       ;Match block move (mvn + banks + rtl)
-.define LZ_length _ZPAD_+$0e    ;Sequence length
-.define LZ_blockend _ZPAD_+$10  ;End address for current block
+.define LZ_blockend _ZPAD_+$0e  ;End address for current block
 
 Setup:
         stx     LZ_source+$00   ;Set source for indirect and block move addressing
@@ -102,8 +101,7 @@ DecodeBlock:
         phy
         lda     [LZ_source]     ;Read lower 16 bits of block size
         jsr     Skip4           ;Skip block size
-        clc                     ;Store block end offset
-        adc     LZ_source
+        add     LZ_source       ;Store block end offset
         sta     LZ_blockend
 
 
@@ -165,8 +163,7 @@ ReadToken:
         pla                     ;Unwind
 
         tya
-        clc
-        adc     #$03
+        add     #$03
         ldy     LZ_dest
         phb
         jsl     LZ_mvm
@@ -186,22 +183,24 @@ ReadToken:
 
 
 @AddLength:
-        sta     LZ_length       ;Long sequence length:
+        pha                     ;Accumulated length at s+1
 :       lda     [LZ_source]     ;Read next length byte
         inc     LZ_source
         tay
-        and     #$00ff          ;Add to length accumulator
+        and     #$00ff          ;Add to length
         clc
-        adc     LZ_length
-        sta     LZ_length
+        adc     1,s
+        sta     1,s
 
-        tya                     ;Check end condition
-        and     #$00ff
-        cmp     #$00ff
-        beq     :-              ;Another length byte?
+        tya                     ;Check end condition: length byte != #$ff
+        RW a8
+        inc
+        RW a16
+        beq     :-
 
-        lda     LZ_length
+        pla                     ;Done: pull back summed length
         rts
+
 
 Skip4:  inc     LZ_source       ;Skip 4 bytes
 Skip3:  inc     LZ_source       ;Skip 3 bytes
