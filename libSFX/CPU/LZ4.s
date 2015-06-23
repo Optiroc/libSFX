@@ -56,8 +56,8 @@ SFX_LZ4_decompress_block:
 ;Scratch pad usage
 .define LZ_source _ZPAD_+$00    ;Source (indirect long)
 .define LZ_dest _ZPAD_+$03      ;Destination (indirect long)
-.define LZ_mvl _ZPAD_+$06       ;Literal block move (mvn + banks + rtl)
-.define LZ_mvm _ZPAD_+$0a       ;Match block move (mvn + banks + rtl)
+.define LZ_mvl _ZPAD_+$06       ;Literal block move (mvn + banks + return)
+.define LZ_mvm _ZPAD_+$0a       ;Match block move (mvn + banks + return)
 .define LZ_blockend _ZPAD_+$0e  ;End address for current block
 
 Setup:
@@ -72,10 +72,14 @@ Setup:
         sta     LZ_mvm+$01
         sta     LZ_mvm+$02
 
-        lda     #$54            ;Write MVN and RTS instructions
+        lda     #$54            ;Write MVN and RTS/RTL instructions
         sta     LZ_mvl+$00
         sta     LZ_mvm+$00
-        lda     #$6b            ;RTL
+  .if ROM_MAPMODE <> 1
+        lda     #$60            ;LoROM mapping = RTS
+  .else
+        lda     #$6b            ;HiROM mapping = RTL
+  .endif
         sta     LZ_mvl+$03
         sta     LZ_mvm+$03
         rts
@@ -127,7 +131,11 @@ ReadToken:
         ldy     LZ_dest
         dec
         phb
-        jsl     LZ_mvl
+  .if ROM_MAPMODE <> 1
+        jsr     LZ_mvl          ;LoROM mapping = JSR
+  .else
+        jsl     LZ_mvl          ;HiROM mapping = JSL
+  .endif
         plb
         stx     LZ_source       ;Copy offsets
         sty     LZ_dest
@@ -166,7 +174,11 @@ ReadToken:
         add     #$03
         ldy     LZ_dest
         phb
-        jsl     LZ_mvm
+  .if ROM_MAPMODE <> 1
+        jsr     LZ_mvm          ;LoROM mapping = JSR
+  .else
+        jsl     LZ_mvm          ;HiROM mapping = JSL
+  .endif
         plb
         sty     LZ_dest         ;Copy destination offset
 
