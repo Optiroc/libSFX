@@ -1,13 +1,13 @@
 ; Hello-HiROM
 ; David Lindecrantz <optiroc@gmail.com>
 ;
-; Mode21/HiROM version of the "Hello" example
+; Mode 21 (colloquially known as "HiROM") version of the "Hello" example
 
 .include "libSFX.i"
 
 Main:
         ;Transfer and execute SPC file
-        SMP_playspc_hirom SPC_Image, SPC_State
+        SMP_playspc SPC_State, SPC_Image
 
         ;Decompress graphics and upload to VRAM
         LZ4_decompress Tilemap, EXRAM, y

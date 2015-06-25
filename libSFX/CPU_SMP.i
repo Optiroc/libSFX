@@ -82,33 +82,22 @@ SFX_SPC_IMAGE = EXRAM   ;SPC image dump location for SFX_APU_execspc
 
 
 /**
-  SMP_playspc_lorom
-  Transfer & start SPC music file (helper macro for "LoROM" layout)
+  SMP_playspc
+  Transfer & start SPC music file
 
-  :in:    ramlo   Address to lower 32kB SPC RAM dump  uint24  value
-  :in:    ramhi   Address to upper 32kB SPC RAM dump  uint24  value
-  :in:    state   Address to DSP and CPU state        uint24  value
+  :in:    state   Address to DSP and CPU state                      uint24  value
+  :in:    ram     Address to full 64kB or lower 32kB SPC RAM dump   uint24  value
+  :in?:   ram_hi  Address to upper 32kB SPC RAM dump                uint24  value
 */
-.macro  SMP_playspc_lorom ramlo, ramhi, state
-        WRAM_memcpy SFX_SPC_IMAGE, ramlo, $8000
-        WRAM_memcpy SFX_SPC_IMAGE + $8000, ramhi, $8000
-        WRAM_memcpy SFX_DSP_STATE, state, $100
-        RW_push set:a8i16
-        jsl     SFX_SMP_execspc
-        RW_pull
-.endmac
-
-
-/**
-  SMP_playspc_hirom
-  Transfer & start SPC music file (helper macro for "HiROM" layout)
-
-  :in:    ram     Address to 64kB SPC RAM dump        uint24  value
-  :in:    state   Address to DSP and CPU state        uint24  value
-*/
-.macro  SMP_playspc_hirom ram, state
+.macro  SMP_playspc state, ram, ram_hi
+  .if .blank({ram_hi})
         WRAM_memcpy SFX_SPC_IMAGE, ram, $0000
         WRAM_memcpy SFX_DSP_STATE, state, $100
+  .else
+        WRAM_memcpy SFX_SPC_IMAGE, ram, $8000
+        WRAM_memcpy SFX_SPC_IMAGE + $8000, ram_hi, $8000
+        WRAM_memcpy SFX_DSP_STATE, state, $100
+  .endif
         RW_push set:a8i16
         jsl     SFX_SMP_execspc
         RW_pull

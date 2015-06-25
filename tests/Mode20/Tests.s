@@ -231,7 +231,7 @@ Main:
 @test_spc:
 
         ;Transfer and execute SPC dump
-        SMP_playspc_lorom SPC_Image_Lo, SPC_Image_Hi, SPC_State
+        SMP_playspc SPC_State, SPC_Image_Lo, SPC_Image_Hi
 
 ;-------------------------------------------------------------------------------
 @test_setcolorvbl:

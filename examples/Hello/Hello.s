@@ -7,7 +7,7 @@
 
 Main:
         ;Transfer and execute SPC file
-        SMP_playspc_lorom SPC_Image_Lo, SPC_Image_Hi, SPC_State
+        SMP_playspc SPC_State, SPC_Image_Lo, SPC_Image_Hi
 
         ;Decompress graphics and upload to VRAM
         LZ4_decompress Tilemap, EXRAM, y
