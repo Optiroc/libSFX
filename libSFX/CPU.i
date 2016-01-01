@@ -504,33 +504,33 @@ SFX_dp_offset .set 0
 /**
   Add (without carry)
 
-  :in:    p1    Operand
-  :in?:   p2    Index
+  :in:    op    Operand
+  :in?:   ix    Index
 */
 
-.macro add p1, p2
-  .if .blank({p2})
+.macro add op, ix
+  .if .blank({ix})
         clc
-        adc     p1
+        adc     op
   .else
         clc
-        adc     p1, p2
+        adc     op, ix
   .endif
 .endmac
 
 /**
   Subtract (without carry)
 
-  :in:    p1    Operand
-  :in?:   p2    Index
+  :in:    op    Operand
+  :in?:   ix    Index
 */
-.macro sub p1, p2
-  .if .blank({p2})
+.macro sub op, ix
+  .if .blank({ix})
         sec
-        sbc     p1
+        sbc     op
   .else
         sec
-        sbc     p1, p2
+        sbc     op, ix
   .endif
 .endmac
 
@@ -563,8 +563,8 @@ SFX_dp_offset .set 0
 /**
   wdm/break
 */
-.macro wdm p1
-        .byte   $42, <p1
+.macro wdm op
+        .byte   $42, <op
 .endmac
 
 .macro break

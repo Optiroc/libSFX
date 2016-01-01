@@ -8,27 +8,34 @@
 
 /**
   FIFO_alloc
-  Allocate FIFO buffer
+  Allocate static FIFO buffer
 
-  :in:    name    Name                  string  value
-  :in:    size    Capacity in bytes     uint16  value
-  :in?:   memtype Memory type           ident   loram (default), zeropage, hiram, exram
+  Buffer is allocated in the LORAM segment by default.
+  If <name> ends with a token named "hi" or "ex" ("midi1-hi" for example)
+  the buffer is instead allocated in HIRAM or EXRAM respectively.
+
+
+  :in:    name    Name                  symbol  value
+  :in:    size    Capacity in bytes     uint8   value
 */
-.macro FIFO_alloc name, size, memtype
+.macro FIFO_alloc name, size
 .if (.blank({size}))
   SFX_error "FIFO_init: Missing required parameter(s)"
 .else
   .pushseg
-  .if .xmatch({memtype},{zeropage})
-    .segment "ZEROPAGE"
-  .elseif .xmatch({memtype},{hiram})
-    .segment "HIRAM"
-  .elseif .xmatch({memtype},{exram})
-    .segment "EXRAM"
+  .if .tcount({name}) > 1
+    .if (.xmatch(.right(1,{name}), hi) .or .xmatch(.right(1,{name}), HI))
+      .segment "HIRAM"
+    .elseif (.xmatch(.right(1,{name}), ex) .or .xmatch(.right(1,{name}), EX))
+      .segment "EXRAM"
+    .else
+      .segment "LORAM"
+    .endif
   .else
     .segment "LORAM"
   .endif
-  .ident (.concat("__FIFO__", name)): .res .loword(size)
+  .ident(.concat("__FIFO__",.string(.left(1,{name})))): .res .loword(size)
+  .ident(.concat("__FIFO_META__",.string(.left(1,{name})))): .res 2
   .popseg
 .endif
 .endmac
@@ -44,7 +51,7 @@
 .if (.blank({data}))
   SFX_error "FIFO_write: Missing required parameter(s)"
 .else
-
+          sta   .ident(.concat("__FIFO__",.string(.left(1,{name}))))
 .endif
 .endmac
 
@@ -59,7 +66,7 @@
 .if (.blank({data}))
   SFX_error "FIFO_read: Missing required parameter(s)"
 .else
-          lda   .ident (.concat("__FIFO__", name))
+          lda   .ident(.concat("__FIFO__",.string(.left(1,{name}))))
 .endif
 .endmac
 
