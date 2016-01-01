@@ -6,6 +6,13 @@
 .include "libSFX.i"
 
 Main:
+        break
+        FIFO_alloc "MIDI", $20, zeropage
+        FIFO_alloc "HAXX", $100, exram
+        FIFO_alloc "BONKERS", $80
+
+        FIFO_read "BONKERS", 0
+
         ;Transfer and execute SPC file
         SMP_playspc SPC_State, SPC_Image_Lo, SPC_Image_Hi
 

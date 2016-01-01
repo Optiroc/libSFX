@@ -1,8 +1,8 @@
-; libSFX Utility Macros
+; libSFX Data Compression Macros
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef ::__MBSFX_CPU_Util__
-::__MBSFX_CPU_Util__ = 1
+.ifndef ::__MBSFX_CPU_Compression__
+::__MBSFX_CPU_Compression__ = 1
 
 .global SFX_LZ4_decompress, SFX_LZ4_decompress_block
 

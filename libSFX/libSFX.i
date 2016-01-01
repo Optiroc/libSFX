@@ -28,7 +28,8 @@
   .include "CPU_PPU.i"
   .include "CPU_SMP.i"
   .include "CPU_Math.i"
-  .include "CPU_Util.i"
+  .include "CPU_DataStructures.i"
+  .include "CPU_Compression.i"
 
   ;Initial register widths
   RW_assume a8i16

@@ -1,3 +1,6 @@
+# Recursive wildcard
+rwildcard   = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+
 # Set defaults if not already set
 ifndef obj_dir
 obj_dir     := .o
@@ -12,15 +15,18 @@ ifndef rpad_size
 rpad_size  := 100
 endif
 
-# Recursive wildcard
-rwildcard   = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+# ca65 defines
+dflags      := -D __STACKSIZE__=\$$$(stack_size) -D __ZPADSIZE__=\$$$(zpad_size) -D __RPADSIZE__=\$$$(rpad_size)
+ifdef debug
+ifeq ($(debug),1)
+dflags			+= -D __DEBUG__=1
+endif
+endif
 
 # Tools & flags
 toolsdir		:= $(libsfx_dir)/../tools
 as          := $(toolsdir)/cc65/bin/ca65
 ld				  := $(toolsdir)/cc65/bin/ld65
-
-dflags      := -D __STACKSIZE__=\$$$(stack_size) -D __ZPADSIZE__=\$$$(zpad_size) -D __RPADSIZE__=\$$$(rpad_size)
 asflags			:= -g -U -I ./ -I $(libsfx_dir) -I $(libsfx_dir)/Configurations
 ldflags     := $(dflags) --cfg-path ./ --cfg-path $(libsfx_dir)/Configurations/
 
@@ -58,11 +64,11 @@ $(obj): $(cfg_files)
 # Project obj : src
 $(obj_dir)/%.o: %.s
 	@mkdir -pv $(dir $@)
-	$(as) $(asflags) -o $@ $<
+	$(as) $(asflags) $(dflags) -o $@ $<
 
 $(obj_dir)/%.o: %.s700
 	@mkdir -pv $(dir $@)
-	$(as) $(asflags) -D TARGET_SMP -o $@ $<
+	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
 
 # libSFX obj : src
 $(obj_dir)/libsfx/%.o: $(libsfx_dir)/%.s

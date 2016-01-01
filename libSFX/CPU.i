@@ -516,7 +516,7 @@ SFX_dp_offset .set 0
         clc
         adc     p1, p2
   .endif
-.endmacro
+.endmac
 
 /**
   Subtract (without carry)
@@ -532,7 +532,7 @@ SFX_dp_offset .set 0
         sec
         sbc     p1, p2
   .endif
-.endmacro
+.endmac
 
 /**
   Arithmetic shift right
@@ -545,7 +545,7 @@ SFX_dp_offset .set 0
         cmp     #$8000
         ror
   .endif
-.endmacro
+.endmac
 
 /**
   Negate (signed integer)
@@ -558,7 +558,20 @@ SFX_dp_offset .set 0
         eor     #$ffff
         inc
   .endif
-.endmacro
+.endmac
+
+/**
+  wdm/break
+*/
+.macro wdm p1
+        .byte   $42, <p1
+.endmac
+
+.macro break
+  .ifdef __DEBUG__
+        wdm     $00
+  .endif
+.endmac
 
 
 /*
