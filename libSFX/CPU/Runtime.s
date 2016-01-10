@@ -180,8 +180,8 @@ SFX_word:       .res 2          ;General purpose word
 
 SFX_mvn:        .res 1          ;Modifiable mvn instruction
 SFX_mvn_dst:    .res 1          ;  Destination bank
-SFX_mvn_src:    .res 1          ;  Source bank (+rtl)
-SFX_mvn_rtl:    .res 1
+SFX_mvn_src:    .res 1          ;  Source bank
+SFX_mvn_rtl:    .res 1          ;  Return
 
 .if SFX_AUTOJOY = ENABLE
 SFX_joy1cnt:    .res 2
