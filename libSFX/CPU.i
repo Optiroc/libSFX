@@ -256,6 +256,8 @@ SFX_RW_size_s8 .set %00
       RW i8
     .elseif .xmatch({new}, {set:i16})
       RW i16
+    .elseif .xmatch({new}, {set:a8i8})
+      RW a8i8
     .elseif .xmatch({new}, {set:a8i16})
       RW a8i16
     .elseif .xmatch({new}, {set:a16i8})

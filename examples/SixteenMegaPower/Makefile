@@ -1,5 +1,6 @@
 # Name
 name        := SixteenMegaPower
+debug  			:= 1
 
 # Stack space allocated from $2000 and downwards
 stack_size  := 200
