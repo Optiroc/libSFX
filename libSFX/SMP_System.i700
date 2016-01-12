@@ -17,4 +17,4 @@ SMP_SetDSP_LENGTH = SMP_SetDSP_END - SMP_SetDSP
 ;DSP Macros
 
 
-.endif
+.endif;__MBSFX_SMP_System__

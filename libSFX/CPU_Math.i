@@ -222,4 +222,4 @@
 .endmac
 
 
-.endif
+.endif; __MBSFX_CPU_Math__

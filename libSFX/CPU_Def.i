@@ -804,4 +804,5 @@ A2A7L                   = $4378
 A2A7H                   = $4379
 NTRL7                   = $437a
 
-.endif
+
+.endif; __MBSFX_CPU_Def__

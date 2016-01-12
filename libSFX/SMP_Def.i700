@@ -216,4 +216,5 @@ V7RAM0                  = $7a
 V7RAM1                  = $7b
 V7RAM2                  = $7e
 
-.endif
+
+.endif;__MBSFX_SMP_Def__

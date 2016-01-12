@@ -257,7 +257,7 @@
   WRAM to WRAM copy is not possible.
 
   :in:    dest    Destination address   uint24  ax/ay/hi:x/hi:y/ex:x/ex:y or value
-  :in:    source  Source address
+  :in:    source  Source address        uint24  value
   :in:    length  Length                uint16  a/x/y or value
 */
 .macro  WRAM_memcpy dest, source, length
@@ -492,4 +492,4 @@
 .endmac
 
 
-.endif
+.endif; __MBSFX_CPU_Memory__

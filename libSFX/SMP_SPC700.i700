@@ -497,4 +497,5 @@
   .define jmp jmp_
 .endif
 
-.endif
+
+.endif;__MBSFX_SMP_SPC700__

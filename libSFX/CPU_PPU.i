@@ -153,4 +153,4 @@
 .endmac
 
 
-.endif
+.endif;__MBSFX_CPU_PPU__

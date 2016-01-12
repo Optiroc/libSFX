@@ -125,4 +125,4 @@ SFX_SPC_IMAGE = EXRAM   ;SPC image dump location for SFX_APU_execspc
 .endmac
 
 
-.endif
+.endif;__MBSFX_CPU_SMP__

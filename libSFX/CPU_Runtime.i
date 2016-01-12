@@ -28,9 +28,10 @@
 ;Interrupt handler macros
 
 /**
+  VBL_set
   Set software vblank interrupt
 
-  :param: addr  Address (long)
+  :in:    addr  Address       uint24  value
 */
 .macro  VBL_set addr
         RW_push set:a8i16
@@ -42,6 +43,7 @@
 .endmac
 
 /**
+  VBL_clr
   Clear software vblank interrupt
 */
 .macro  VBL_clr
@@ -54,6 +56,7 @@
 .endmac
 
 /**
+  VBL_on
   Enable vblank interrupt
 */
 .macro  VBL_on
@@ -70,6 +73,7 @@
 .endmac
 
 /**
+  VBL_off
   Disable vblank interrupt
 */
 .macro  VBL_off
@@ -84,10 +88,9 @@
 /**
   IRQ_set
   Set software vertical line interrupt
-  [a8i16]
 
-  :param: line  Trigger at line (byte)
-  :param: addr  Address (long, optional [last registered address])
+  :in:    line  Trigger line  uint8   value
+  :in?:   addr  Address       uint24  value (if omitted, last registered address remains)
 */
 .macro  IRQ_set line, addr
         RW_push set:a8i16
@@ -197,4 +200,4 @@
 .endmac
 
 
-.endif
+.endif;__MBSFX_CPU_Runtime__
