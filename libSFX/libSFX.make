@@ -27,6 +27,7 @@ endif
 toolsdir		:= $(libsfx_dir)/../tools
 as          := $(toolsdir)/cc65/bin/ca65
 ld				  := $(toolsdir)/cc65/bin/ld65
+sfcheck			:= $(toolsdir)/superfamicheck/superfamicheck
 asflags			:= -g -U -I ./ -I $(libsfx_dir) -I $(libsfx_dir)/Configurations
 ldflags     := $(dflags) --cfg-path ./ --cfg-path $(libsfx_dir)/Configurations/
 
@@ -37,7 +38,6 @@ libsfx_src := $(call rwildcard, $(libsfx_dir)/, *.s)
 libsfx_src_smp := $(call rwildcard, $(libsfx_dir)/, *.s700)
 cfg_files := $(wildcard *.cfg)
 
-
 # Targets
 rom := $(name).sfc
 sym := $(name).sym
@@ -45,7 +45,6 @@ obj := $(patsubst $(libsfx_dir)%,$(obj_dir)/libsfx%,$(patsubst %.s,%.o,$(libsfx_
 obj += $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s,%.o,$(src)))
 obj_smp := $(patsubst $(libsfx_dir)%,$(obj_dir)/libsfx%,$(patsubst %.s700,%.o,$(libsfx_src_smp)))
 obj_smp += $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s700,%.o,$(src_smp)))
-
 
 # Rules
 .SUFFIXES:
@@ -57,9 +56,9 @@ all: clean default
 
 $(rom): $(obj) $(obj_smp)
 	$(ld) $(ldflags) -C Map.cfg -o $@ -Ln $(sym) $^
+	$(sfcheck) $@ -f
 
 $(obj): $(cfg_files)
-
 
 # Project obj : src
 $(obj_dir)/%.o: %.s
@@ -78,7 +77,6 @@ $(obj_dir)/libsfx/%.o: $(libsfx_dir)/%.s
 $(obj_dir)/libsfx/%.o: $(libsfx_dir)/%.s700
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
-
 
 clean:
 	@rm -f $(rom) $(sym)

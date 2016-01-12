@@ -6,192 +6,238 @@
         vz      .word
 .endstruct
 
+;-------------------------------------------------------------------------------
 .segment "CODE"
 Main:
-        ;Test NTSC-check, display red screen if not NTSC or emulator with good timing
-        PPU_is_ntsc
-        beq     :+
-        jmp     Not_NTSC
-:
+        jsr     test_blockmove
+        jsr     test_dbank
+        jsr     test_dpage
+        jsr     test_mulu
+        jsr     test_divu
+        jsr     test_muls
+        jsr     test_wram
+        jsr     test_vram
+        jsr     test_lz4
+        jsr     test_meta
+        jsr     test_mixed
+        jsr     test_spc
+        jsr     test_setcolorvbl
+        ;jsr     test_is_ntsc
+
+:       wai
+        bra :-
+
 ;-------------------------------------------------------------------------------
-@test_blockmove:
+test_blockmove:
         RW a8i16
 
-        ;Set $7f6000-$7f6004 to #$66
-        memset EXRAM+$6000, $5, $66
+        memset EXRAM+$6000, $5, $66             ;Set $7f6000-$7f6004 to #$66
+        break
 
-        ;Copy bytes from SPC_State to $7f6774-$7f68ff
-        memcpy EXRAM+$6774, SPC_State, $18c
+        memcpy EXRAM+$6774, SPC_State, $18c     ;Copy bytes from SPC_State to $7f6774-$7f68ff
+        break
 
-        ;Copy bytes from $7e0000 (zeroes at this point) to $7f6820-$7f684f
-        memcpy EXRAM+$6820, HIRAM, $30
+        memcpy EXRAM+$6820, HIRAM, $30          ;Copy bytes from $7e0000 (zeroes at this point) to $7f6820-$7f684f
+        break
+
+        rts
 
 ;-------------------------------------------------------------------------------
-@test_dbank:
+test_dbank:
         RW a8i16
 
-        ;Set dbank using value in register a
-        lda     #$6
+        lda     #$6                     ;Set dbank using value in register a
         dbank   a
+        break                           ;expected: db == $06
 
-        ;Set dbank using constant value
-        dbank   $44
+        dbank   $44                     ;Set dbank using constant value
+        break                           ;expected: db == $06
 
-        ;Set dbank using address
-        dbank   Main
+        dbank   Main                    ;Set dbank using address
+        break                           ;expected: db == $80
+
+        rts
 
 ;-------------------------------------------------------------------------------
-@test_dpage:
-        RW a8i16
+test_dpage:
+        RW a16i16
 
-        ;Set dpage using value in register a
-        RW a16
-        lda     #$6044
+        lda     #$6044                  ;Set dpage using value in register a
         dpage   a
+        break
 
-        ;Set dpage using address
-        dpage   repetetive_lz4
+        dpage   repetetive_lz4          ;Set dpage using address
+        break
 
-        ;Set dpage using constant value
-        dpage   $0000
+        dpage   $0000                   ;Set dpage using constant value
+        break
+
+        rts
 
 ;-------------------------------------------------------------------------------
-@test_mulu:
+test_mulu:
         RW a8i16
 
-        ;mulu register * value -> register
-        lda     #$22
-        mulu    a,$4, x                 ;Expected: x = #$0088
+        lda     #$22                    ;mulu register * value -> register
+        mulu    a,$4, x
+        break                           ;expected: x == #$0088
 
-        ;mulu value * register -> register
-        RW i8
-        mulu    $7f,x, y                ;Expected: y = #$4378
+        RW i8                           ;mulu value * register -> register
+        mulu    $7f,x, y
+        break                           ;expected: y = #$4378
 
-        ;mulu value * value -> RDMPYL/H
-        RW i16
+        RW i16                          ;mulu value * value -> RDMPYL/H
         mulu    .sizeof(Vec3),$66
         bit     $ff
         nop
-        ldx     RDMPYL                  ;Expected: x = #$0264
+        ldx     RDMPYL
+        break                           ;expected: x = #$0264
+
+        rts
 
 ;-------------------------------------------------------------------------------
-@test_divu:
+test_divu:
         RW a8i16
 
-        ;divu register / value -> register
-        ldx     #$9c00
-        divu    x,$4, x                 ;Expected: x = #$2700
+        ldx     #$9c00                  ;divu register / value -> register
+        divu    x,$4, x
+        break                           ;expected: x = #$2700
 
-        ;divu register / value -> register.register
-        divu    x,$7, x,y               ;Expected: x = #$0592
+        divu    x,$7, x,y               ;divu register / value -> register.register
+        break                           ;expected: x = #$0592
                                         ;          y = #$0002
 
-        ;divu value / value -> RDDIVL/H.RDMPYL/H
-        divu    .sizeof(Vec3)*100,$05
+        divu    .sizeof(Vec3)*100,$05   ;divu value / value -> RDDIVL/H.RDMPYL/H
+        break
+
+        rts
 
 ;-------------------------------------------------------------------------------
-@test_muls:
+test_muls:
         RW a8i16
-
-        ;muls register * value -> register
         ;Note: Using forced range for negative values, or ca65 gives range error
-        ldx     #.loword(-822)
-        muls    x,.lobyte(-44), ax      ;Expected: a:x = #$008d48 (+36168)
 
-        ;muls register * register -> register
-        lda     #.lobyte(-21)
+        ldx     #.loword(-822)          ;muls register * value -> register
+        muls    x,.lobyte(-44), ax
+        break                           ;expected: a:x = #$008d48 (+36168)
+
+        lda     #.lobyte(-21)           ;muls register * register -> register
         ldx     #.loword(1001)
-        muls    x,a, ay                 ;Expected: a:y = #$ffade3 (-21021)
+        muls    x,a, ay
+        break                           ;expected: a:y = #$ffade3 (-21021)
+
+        rts
 
 ;-------------------------------------------------------------------------------
-@test_meta:
+test_wram:
         RW a8i16
 
-        ;Arithmetic shift right
-        RW a8
-        lda     #%01101101
-        asr                             ;Expected: a = #%00110110 ($36)
-        asr                             ;Expected: a = #%00011011 ($1b)
-
-        lda     #%10110001
-        asr                             ;Expected: a = #%11011000 ($d8)
-        asr                             ;Expected: a = #%11101100 ($ec)
-
-        RW a16
-        lda     #%0110001110010001
-        asr                             ;Expected: a = #%0011000111001000 ($31c8)
-        asr                             ;Expected: a = #%0001100011100100 ($18e4)
-
-        lda     #%1010001110010001
-        asr                             ;Expected: a = #%1101000111001000 ($d1c8)
-        asr                             ;Expected: a = #%1110100011100100 ($e8e4)
-
-        ;Negate
-        ;Note: Using forced range for negative values, or ca65 gives range error
-        RW a8
-        lda     #101
-        neg                             ;Expected: a = #$9b
-        lda     #.lobyte(-127)
-        neg                             ;Expected: a = #$7f
-
-        RW a16
-        lda     #28123
-        neg                             ;Expected: a = #$9225
-        lda     #.loword(-32767)
-        neg                             ;Expected: a = #$7fff
-
-;-------------------------------------------------------------------------------
-@test_wram:
-        RW a8i16
-
-        ;Copy y bytes from "Tilemap" to a:x
-        lda     #$7f
+        lda     #$7f                    ;Copy y bytes from "Tilemap" to a:x
         ldx     #$2000
         ldy     #$100
         WRAM_memcpy ax, Tilemap, y
+        break
 
-        ;Copy a bytes from $808000 to $7f:x
-        lda     #$90
+        lda     #$90                    ;Copy a bytes from $808000 to $7f:x
         ldx     #$5000
         WRAM_memcpy ex:x, $808000, a
+        break
+
+        rts
 
 ;-------------------------------------------------------------------------------
-@test_vram:
+test_vram:
         RW a8i16
 
-        ;Copy a<<8 bytes from $7e:x to VRAM word address $1600
-        ldx     #$4000
+        ldx     #$4000                  ;Copy a<<8 bytes from $7e:x to VRAM word address $1600
         lda     #$02
         VRAM_memcpy $1600, hi:x, a
+        break
 
-        ;Copy $100 bytes from $7f:x to VRAM word address in y
-        ldy     #$2000
+        ldy     #$2000                  ;Copy $100 bytes from $7f:x to VRAM word address in y
         ldx     #$4000
         VRAM_memcpy y, ex:x, $100
+        break
 
-        ;Set $100 bytes from word address in x to value in a
-        ldx     #$1220
+        ldx     #$1220                  ;Set $100 bytes from word address in x to value in a
         lda     #$cc
         VRAM_memset x, $50, a
+        break
+
+        rts
 
 ;-------------------------------------------------------------------------------
-@test_lz4:
+test_lz4:
         RW a8i16
 
         ;Decompress LZ4 frame at "repetetive_lz4" to "EXRAM", get decompressed length in x
         LZ4_decompress repetetive_lz4, EXRAM, x
+        break
 
         ;Decompress LZ4 frame at "repetetive_lz4" to a:y, get decompressed length in y
         lda     #$7e
         ldy     #$4000
         LZ4_decompress repetetive_lz4, ay, y
+        break
 
         ;Decompress LZ4 frame at "repetetive_lz4" to $7f:y
         ldy     #$4000
         LZ4_decompress repetetive_lz4, ex:y
+        break
+
+        rts
 
 ;-------------------------------------------------------------------------------
-@test_mixed:
+test_meta:
+        RW a8i16
+
+        lda     #%01101101              ;Arithmetic shift right (8-bit)
+        asr
+        break                           ;expected: a = #%00110110 ($36)
+        asr
+        break                           ;expected: a = #%00011011 ($1b)
+
+        lda     #%10110001
+        asr
+        break                           ;expected: a = #%11011000 ($d8)
+        asr
+        break                           ;expected: a = #%11101100 ($ec)
+
+        RW a16
+        lda     #%0110001110010001      ;Arithmetic shift right (16-bit)
+        asr
+        break                           ;expected: a = #%0011000111001000 ($31c8)
+        asr
+        break                           ;expected: a = #%0001100011100100 ($18e4)
+
+        lda     #%1010001110010001
+        asr
+        break                           ;expected: a = #%1101000111001000 ($d1c8)
+        asr
+        break                           ;expected: a = #%1110100011100100 ($e8e4)
+
+        RW a8
+
+        lda     #101                    ;Negate (8-bit)
+        neg                             ;Note: Using forced range for negative values, or ca65 gives range error
+        break                           ;expected: a = #$9b
+        lda     #.lobyte(-127)
+        neg
+        break                           ;expected: a = #$7f
+
+        RW a16
+
+        lda     #28123                  ;Negate (16-bit)
+        neg
+        break                           ;expected: a = #$9225
+        lda     #.loword(-32767)
+        neg
+        break                           ;expected: a = #$7fff
+
+        rts
+
+;-------------------------------------------------------------------------------
+test_mixed:
 
         ;Decompress LZ4 file to address, get decompressed length in y
         LZ4_decompress text_lz4, HIRAM, y
@@ -227,32 +273,39 @@ Main:
         ldx     #$5000
         WRAM_memcpy ex:x, $808000, a
 
+        rts
+
 ;-------------------------------------------------------------------------------
-@test_spc:
+test_spc:
 
         ;Transfer and execute SPC dump
         SMP_playspc SPC_State, SPC_Image_Lo, SPC_Image_Hi
 
-;-------------------------------------------------------------------------------
-@test_setcolorvbl:
+        rts
 
+;-------------------------------------------------------------------------------
+test_setcolorvbl:
         ; Set color 0, turn on screen
         CGRAM_setColorRGB 0, 7,31,31
         lda     #$0f
         sta     SFX_inidisp
         VBL_on
-
-:       wai
-        bra :-
+        rts
 
 ;-------------------------------------------------------------------------------
-Not_NTSC:
+test_is_ntsc:
+        ;Test NTSC-check, display red screen if not NTSC or emulator with good timing
+        PPU_is_ntsc
+        beq     :+
+        jmp     @not_ntsc
+:       rts
+
+@not_ntsc:
         ;NTSC check failed, show red screen
         CGRAM_setColorRGB 0, 31,5,5
         lda     #$0f
         sta     SFX_inidisp
         VBL_on
-
 :       wai
         bra :-
 

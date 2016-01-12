@@ -1,5 +1,6 @@
 # Name
 name        := Tests
+debug  			:= 1
 
 # Include libSFX
 libsfx_dir  := ../../libSFX
