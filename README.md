@@ -7,7 +7,7 @@ A Super Nintendo assembler development framework featuring:
 * Some useful data structures with simple allocation and accessor macros (FIFO and FILO are currently implemented).
 * S-SMP communication and SPC playing routines.
 * LZ4 decompression.
-* ROM image validation via [SuperFamicheck](/SuperFamicheck).
+* ROM image validation via [SuperFamicheck](/Optiroc/SuperFamicheck).
 * Sublime Text [syntax definitions](./extras/SublimeText).
 
 Look into the the include files (*.i) in the [libSFX directory](./libSFX/) for full documentation of the library features.
