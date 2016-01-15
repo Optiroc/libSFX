@@ -1,12 +1,14 @@
 #libSFX
-Super Nintendo development framework. Main features:
+A Super Nintendo assembler development framework featuring:
 
 * Basic system runtime for initialization and interrupt handling.
 * 65816 register size tracking macros to minimize rep/sep instructions (and mental overhead).
 * Full set of memcpy/memset routines for efficiently transferring data to different parts of the system.
+* Some useful data structures with simple allocation and accessor macros (FIFO and FILO are currently implemented).
 * S-SMP communication and SPC playing routines.
 * LZ4 decompression.
-* Sublime Text syntax definitions.
+* ROM image validation via [SuperFamicheck](/SuperFamicheck).
+* Sublime Text [syntax definitions](./extras/SublimeText).
 
 Look into the the include files (*.i) in the [libSFX directory](./libSFX/) for full documentation of the library features.
 
