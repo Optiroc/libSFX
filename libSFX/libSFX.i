@@ -9,6 +9,7 @@
 .p816
 .smart -
 .feature c_comments
+.linecont +
 
 .include "Meta.i"
 .include "libSFX.cfg"
