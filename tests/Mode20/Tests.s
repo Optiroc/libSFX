@@ -17,12 +17,14 @@ Main:
         jsr     test_muls
         jsr     test_wram
         jsr     test_vram
+        jsr     test_fifo
+        jsr     test_filo
         jsr     test_lz4
         jsr     test_meta
         jsr     test_mixed
         jsr     test_spc
         jsr     test_setcolorvbl
-        ;jsr     test_is_ntsc
+        jsr     test_is_ntsc
 
 :       wai
         bra :-
@@ -163,6 +165,71 @@ test_vram:
         lda     #$cc
         VRAM_memset x, $50, a
         break
+
+        rts
+
+;-------------------------------------------------------------------------------
+test_fifo:
+        FIFO_alloc TestFIFO, 8
+
+        FIFO_enq TestFIFO, $f
+        FIFO_enq TestFIFO, $a
+        FIFO_enq TestFIFO, $5
+        FIFO_enq TestFIFO, $d
+
+        FIFO_deq TestFIFO
+        FIFO_deq TestFIFO
+        break                           ;z = 0, a = $0a, head = 4, tail = 2
+
+        FIFO_enq TestFIFO, $f0
+        FIFO_enq TestFIFO, $0d
+        FIFO_deq TestFIFO
+        FIFO_deq TestFIFO
+        FIFO_deq TestFIFO
+        FIFO_deq TestFIFO
+        break                           ;z = 0, a = $0d, head = 6, tail = 6
+
+        FIFO_deq TestFIFO
+        break                           ;z = 1 (queue empty), head = 6, tail = 6
+
+        FIFO_enq TestFIFO, $10
+        FIFO_enq TestFIFO, $ff
+        break                           ;last byte in buffer = $ff, head = 0, tail = 6
+
+        FIFO_enq TestFIFO, $aa
+        break                           ;first byte in buffer = $aa, head = 1, tail = 6
+
+        FIFO_deq TestFIFO
+        FIFO_deq TestFIFO
+        break                           ;z = 0, a = $ff, head = 1, tail = 0
+
+        FIFO_deq TestFIFO
+        break                           ;z = 0, a = $aa, head = 1, tail = 1
+
+        FIFO_deq TestFIFO
+        break                           ;z = 1 (queue empty), head = 6, tail = 6
+
+        rts
+
+;-------------------------------------------------------------------------------
+test_filo:
+        break
+        FILO_alloc TestFILO, 8
+
+        FILO_push TestFILO, $f
+        FILO_push TestFILO, $8
+        FILO_push TestFILO, $a
+        FILO_push TestFILO, $d
+        break
+
+        FILO_pop TestFILO
+        FILO_pop TestFILO
+        FILO_pop TestFILO
+        FILO_pop TestFILO
+        break
+
+        FILO_pop TestFILO
+        break                           ;z = 1 (stack empty), top = 0
 
         rts
 

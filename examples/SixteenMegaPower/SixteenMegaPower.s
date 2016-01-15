@@ -2,18 +2,13 @@
 
 Main:
         break
-        FIFO_alloc FIFO, $6
-        jsr     InitScreen
+        FIFO_alloc TestFIFO, 8
 
-        ;Set color 0
-        CGRAM_setColorRGB 0, 7,31,31
+        jsr     InitScreen              ;Jump to subroutine defined elsewhere
 
-        ;Turn on screen
-        lda     #$0f
-        sta     SFX_inidisp
+        FIFO_enq TestFIFO, $f
 
-        ;Turn on vblank interrupt
-        VBL_on
+        VBL_on                          ;Turn on vblank interrupt
 
 :       wai
         bra :-
