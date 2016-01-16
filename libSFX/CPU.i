@@ -4,6 +4,7 @@
 .ifndef ::__MBSFX_CPU__
 ::__MBSFX_CPU__ = 1
 
+
 ;-------------------------------------------------------------------------------
 
 /**
@@ -49,16 +50,14 @@
 */
 
 
-;Variables for tracking accumlator/index flag (0 = 16-bit, 1 = 8-bit)
-SFX_RW_a_size .set 1
-SFX_RW_i_size .set 0
+/**
+  RW
+  Set accumulator/index width
 
-;Get current accumulator/index size
-.define RW_a_size SFX_RW_a_size
-.define RW_i_size SFX_RW_i_size
+  No-op if current state == intended state.
 
-
-;Set accumulator/index width (no-op if current state == intended state)
+  :in:    widths  Register widths       string  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+*/
 .macro RW widths
 .if .blank({widths})
   SFX_error "RW: Missing required parameter"
@@ -369,11 +368,18 @@ SFX_RW_size_s8 .set %00
   .endif
 .endmac
 
+;Get current accumulator/index size
+SFX_RW_a_size .set 1
+SFX_RW_i_size .set 0
+.define RW_a_size SFX_RW_a_size
+.define RW_i_size SFX_RW_i_size
+
 
 ;-------------------------------------------------------------------------------
 ;CPU register macros
 
 /**
+  push
   Push CPU state to stack
 */
 .macro  push
@@ -389,6 +395,7 @@ SFX_RW_size_s8 .set %00
 
 
 /**
+  pull
   Pull CPU state from stack
 */
 .macro  pull
@@ -403,6 +410,7 @@ SFX_RW_size_s8 .set %00
 
 
 /**
+  dbank
   Set data bank register (DB)
 
   :in:    bank  Bank          uint8   a/x/y or value (using a)
@@ -439,6 +447,8 @@ SFX_RW_size_s8 .set %00
   Get address minus current direct page offset
 
   Works with the latest value set by the 'dpage' macro with a constant/symbol parameter
+
+  :in:    addr  Address       uint16  a or value
 */
 SFX_dp_offset .set 0
 .define dpo(addr) -SFX_dp_offset+(addr)
@@ -448,7 +458,7 @@ SFX_dp_offset .set 0
   dpage
   Set direct page register (D)
 
-  :in:    offs  Offset        uint16  a or value (using a)
+  :in:    offs  Offset        uint16  a or value
 */
 .macro  dpage   offs
         RW_push set:a16
@@ -473,6 +483,7 @@ SFX_dp_offset .set 0
 ;Meta instructions
 
 /**
+  bgt
   Branch if greater than
 
   :in:  addr  Address
@@ -484,6 +495,7 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
+  bsr
   Relative subroutine call
 
   :in:  addr  Address
@@ -494,6 +506,7 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
+  bsl
   Relative long subroutine call
 
   :in:  addr  Address
@@ -504,6 +517,7 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
+  add
   Add (without carry)
 
   :in:    op    Operand
@@ -521,6 +535,7 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
+  sub
   Subtract (without carry)
 
   :in:    op    Operand
@@ -537,6 +552,7 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
+  asr
   Arithmetic shift right
 */
 .macro asr
@@ -550,6 +566,7 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
+  neg
   Negate (signed integer)
 */
 .macro neg
