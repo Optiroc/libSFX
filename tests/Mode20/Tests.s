@@ -174,11 +174,14 @@ test_fifo:
 
         FIFO_enq TestFIFO, $f
         FIFO_enq TestFIFO, $a
-        FIFO_enq TestFIFO, $5
-        FIFO_enq TestFIFO, $d
+        lda     #$5
+        FIFO_enq TestFIFO, a
+        lda     #$d
+        FIFO_enq TestFIFO, a
 
         FIFO_deq TestFIFO
-        FIFO_deq TestFIFO
+        break                           ;z = 0, y = $0f, head = 4, tail = 2
+        FIFO_deq TestFIFO, a
         break                           ;z = 0, a = $0a, head = 4, tail = 2
 
         FIFO_enq TestFIFO, $f0
@@ -186,8 +189,8 @@ test_fifo:
         FIFO_deq TestFIFO
         FIFO_deq TestFIFO
         FIFO_deq TestFIFO
-        FIFO_deq TestFIFO
-        break                           ;z = 0, a = $0d, head = 6, tail = 6
+        FIFO_deq TestFIFO, x
+        break                           ;z = 0, x = $0d, head = 6, tail = 6
 
         FIFO_deq TestFIFO
         break                           ;z = 1 (queue empty), head = 6, tail = 6
@@ -201,10 +204,10 @@ test_fifo:
 
         FIFO_deq TestFIFO
         FIFO_deq TestFIFO
-        break                           ;z = 0, a = $ff, head = 1, tail = 0
+        break                           ;z = 0, y = $ff, head = 1, tail = 0
 
         FIFO_deq TestFIFO
-        break                           ;z = 0, a = $aa, head = 1, tail = 1
+        break                           ;z = 0, y = $aa, head = 1, tail = 1
 
         FIFO_deq TestFIFO
         break                           ;z = 1 (queue empty), head = 6, tail = 6
@@ -213,20 +216,24 @@ test_fifo:
 
 ;-------------------------------------------------------------------------------
 test_filo:
-        break
         FILO_alloc TestFILO, 8
 
         FILO_push TestFILO, $f
         FILO_push TestFILO, $8
-        FILO_push TestFILO, $a
-        FILO_push TestFILO, $d
-        break
+        lda     #$a
+        FILO_push TestFILO, a
+        lda     #$d
+        FILO_push TestFILO, a
+        break                           ;stack = 0f 08 0a 0d, top = 4
 
         FILO_pop TestFILO
+        break                           ;z = 0, y = $0d, top = 3
+        FILO_pop TestFILO, a
+        break                           ;z = 0, a = $0a, top = 2
+        FILO_pop TestFILO, x
+        break                           ;z = 0, x = $08, top = 1
         FILO_pop TestFILO
-        FILO_pop TestFILO
-        FILO_pop TestFILO
-        break
+        break                           ;z = 0, y = $0f, top = 0
 
         FILO_pop TestFILO
         break                           ;z = 1 (stack empty), top = 0
