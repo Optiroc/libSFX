@@ -4,13 +4,13 @@ A Super Nintendo assembler development framework featuring:
 * Basic system runtime for initialization and interrupt handling.
 * 65816 register size tracking macros to minimize rep/sep instructions (and mental overhead).
 * Full set of memcpy/memset routines for efficiently transferring data to different parts of the system.
-* Some useful data structures with simple allocation and accessor macros (FIFO and FILO are currently implemented).
+* Some useful data structures with allocation and accessor macros (FIFO and FILO are currently implemented).
 * S-SMP communication and SPC playing routines.
 * LZ4 decompression.
 * ROM image validation via [SuperFamicheck](https://github.com/Optiroc/SuperFamicheck).
 * Sublime Text [syntax definitions](./extras/SublimeText).
 
-Look into the the include files (*.i) in the [libSFX directory](./libSFX/) for full documentation of the library features.
+Look in the the include files (*.i) in the [libSFX directory](./libSFX/) for full documentation of the library features.
 
 libSFX is developed by David Lindecrantz and distributed under the terms of the [MIT license](./LICENSE).
 
@@ -22,7 +22,7 @@ GNU Make and a decent command line interface.
 ##building
 First you need to build ca65, which is included as a git submodule. Run `git submodule init` and `git submodule update` to fetch the submodules, then run `make` to build.
 
-Now that the toolchain is in place you can run `make` in any of the example directories to assemble the source files into a Super Nintendo ROM image (*.sfc).
+Now that the toolchain is in place you can run `make` in any of the example directories to assemble the source files and link a Super Nintendo ROM image (*.sfc).
 
 
 ##setting up a project
