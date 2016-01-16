@@ -58,6 +58,8 @@ test_dbank:
         dbank   Main                    ;Set dbank using address
         break                           ;expected: db == $80
 
+        dbank   0
+
         rts
 
 ;-------------------------------------------------------------------------------
@@ -359,7 +361,7 @@ test_spc:
         RW a8i16
 
         ;Transfer and execute SPC dump
-        SMP_playspc SPC_State, SPC_Image_Lo, SPC_Image_Hi
+        SMP_playspc SPC_State, SPC_Image
 
         rts
 
@@ -404,7 +406,6 @@ repetetive_lz4:         .incbin "Data/The Eyes Have It.txt.lz4"
 repetetive_lz4_END:
 
 ;Import graphics
-.segment "ROM1"
 Tilemap:                .incbin "Data/Graphics.tilemap.lz4"
 Tiles:                  .incbin "Data/Graphics.tiles.lz4"
 Palette:                .incbin "Data/Graphics.palette"
@@ -413,8 +414,6 @@ Palette_END:
 ;Import music
 .define spc_file "Data/Music.spc"
 .segment "RODATA"
-SPC_State:              SPC_incbin_state spc_file
-.segment "ROM2"
-SPC_Image_Lo:           SPC_incbin_lo spc_file
-.segment "ROM3"
-SPC_Image_Hi:           SPC_incbin_hi spc_file
+SPC_State:  SPC_incbin_state spc_file
+.segment "ROM1"
+SPC_Image:  SPC_incbin spc_file
