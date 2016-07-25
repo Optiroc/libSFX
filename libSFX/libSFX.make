@@ -19,16 +19,16 @@ endif
 dflags      := -D __STACKSIZE__=\$$$(stack_size) -D __ZPADSIZE__=\$$$(zpad_size) -D __RPADSIZE__=\$$$(rpad_size)
 ifdef debug
 ifeq ($(debug),1)
-dflags			+= -D __DEBUG__=1
+dflags      += -D __DEBUG__=1
 endif
 endif
 
 # Tools & flags
-toolsdir		:= $(libsfx_dir)/../tools
+toolsdir    := $(libsfx_dir)/../tools
 as          := $(toolsdir)/cc65/bin/ca65
-ld				  := $(toolsdir)/cc65/bin/ld65
-sfcheck			:= $(toolsdir)/superfamicheck/superfamicheck
-asflags			:= -g -U -I ./ -I $(libsfx_dir) -I $(libsfx_dir)/Configurations
+ld          := $(toolsdir)/cc65/bin/ld65
+sfcheck     := $(toolsdir)/superfamicheck/superfamicheck
+asflags     := -g -U -I ./ -I $(libsfx_dir) -I $(libsfx_dir)/Configurations
 ldflags     := $(dflags) --cfg-path ./ --cfg-path $(libsfx_dir)/Configurations/
 
 # Source globs
@@ -55,29 +55,29 @@ default: $(rom)
 all: clean default
 
 $(rom): $(obj) $(obj_smp)
-	$(ld) $(ldflags) -C Map.cfg -o $@ -Ln $(sym) $^
-	$(sfcheck) $@ -f
+  $(ld) $(ldflags) -C Map.cfg -o $@ -Ln $(sym) $^
+  $(sfcheck) $@ -f
 
 $(obj): $(cfg_files)
 
 # Project obj : src
 $(obj_dir)/%.o: %.s
-	@mkdir -pv $(dir $@)
-	$(as) $(asflags) $(dflags) -o $@ $<
+  @mkdir -pv $(dir $@)
+  $(as) $(asflags) $(dflags) -o $@ $<
 
 $(obj_dir)/%.o: %.s700
-	@mkdir -pv $(dir $@)
-	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
+  @mkdir -pv $(dir $@)
+  $(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
 
 # libSFX obj : src
 $(obj_dir)/libsfx/%.o: $(libsfx_dir)/%.s
-	@mkdir -pv $(dir $@)
-	$(as) $(asflags) $(dflags) -o $@ $<
+  @mkdir -pv $(dir $@)
+  $(as) $(asflags) $(dflags) -o $@ $<
 
 $(obj_dir)/libsfx/%.o: $(libsfx_dir)/%.s700
-	@mkdir -pv $(dir $@)
-	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
+  @mkdir -pv $(dir $@)
+  $(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
 
 clean:
-	@rm -f $(rom) $(sym)
-	@rm -frd $(obj_dir)
+  @rm -f $(rom) $(sym)
+  @rm -frd $(obj_dir)
