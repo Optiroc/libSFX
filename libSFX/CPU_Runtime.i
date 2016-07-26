@@ -182,7 +182,7 @@
         lda     #$0000                  ;Set direct page at $0000
         tcd
   .if ROM_MAPMODE <> 1
-        phk                             ;If not HiROM: Set DB to fast mirror
+        phk                             ;If not Mode 21 (HiROM): Set DB to fast mirror
         plb
   .endif
         WAIT_frames 2

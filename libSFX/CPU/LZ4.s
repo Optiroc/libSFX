@@ -76,9 +76,9 @@ Setup:
         sta     LZ_mvl+$00
         sta     LZ_mvm+$00
   .if ROM_MAPMODE <> 1
-        lda     #$60            ;LoROM mapping = RTS
+        lda     #$60            ;Mode 20 = RTS
   .else
-        lda     #$6b            ;HiROM mapping = RTL
+        lda     #$6b            ;Mode 21 = RTL
   .endif
         sta     LZ_mvl+$03
         sta     LZ_mvm+$03
@@ -132,9 +132,9 @@ ReadToken:
         dec
         phb
   .if ROM_MAPMODE <> 1
-        jsr     LZ_mvl          ;LoROM mapping = JSR
+        jsr     LZ_mvl          ;Mode 20 = JSR
   .else
-        jsl     LZ_mvl          ;HiROM mapping = JSL
+        jsl     LZ_mvl          ;Mode 21 = JSL
   .endif
         plb
         stx     LZ_source       ;Copy offsets
@@ -175,9 +175,9 @@ ReadToken:
         ldy     LZ_dest
         phb
   .if ROM_MAPMODE <> 1
-        jsr     LZ_mvm          ;LoROM mapping = JSR
+        jsr     LZ_mvm          ;Mode 20 = JSR
   .else
-        jsl     LZ_mvm          ;HiROM mapping = JSL
+        jsl     LZ_mvm          ;Mode 21 = JSL
   .endif
         plb
         sty     LZ_dest         ;Copy destination offset
