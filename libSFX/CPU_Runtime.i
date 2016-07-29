@@ -1,13 +1,19 @@
 ; libSFX S-CPU NMI/IRQ Vector Macros
 ; David Lindecrantz <optiroc@gmail.com>
 
+
 .ifndef ::__MBSFX_CPU_Runtime__
 ::__MBSFX_CPU_Runtime__ = 1
 
 ;Default settings for joypad polling
 .ifndef SFX_AUTOJOY
-    SFX_AUTOJOY = ENABLE
+    SFX_AUTOJOY = JOY1 | JOY2
 .endif
+
+.if (SFX_AUTOJOY < 0) || (SFX_AUTOJOY > (JOY1 | JOY2 | JOY3 | JOY4))
+    SFX_error "SFX_AUTOJOY: Bad configuration"
+.endif
+
 .ifndef SFX_AUTOJOY_FIRST
     SFX_AUTOJOY_FIRST = NO
 .endif
@@ -20,8 +26,17 @@
 .globalzp SFX_tick, SFX_jml, SFX_addr, SFX_word
 .globalzp SFX_mvn, SFX_mvn_dst, SFX_mvn_src
 
-.if SFX_AUTOJOY = ENABLE
-.globalzp SFX_joy1cnt, SFX_joy1trg, SFX_joy2cnt, SFX_joy2trg
+.if SFX_AUTOJOY & JOY1
+.globalzp SFX_joy1cnt, SFX_joy1trg
+.endif
+.if SFX_AUTOJOY & JOY2
+.globalzp SFX_joy2cnt, SFX_joy2trg
+.endif
+.if SFX_AUTOJOY & JOY3
+.globalzp SFX_joy3cnt, SFX_joy3tr
+.endif
+.if SFX_AUTOJOY & JOY4
+.globalzp SFX_joy3cnt, SFX_joy3tr
 .endif
 
 ;-------------------------------------------------------------------------------

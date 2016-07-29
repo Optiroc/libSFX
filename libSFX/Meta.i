@@ -11,6 +11,11 @@
 .define ENABLE          1
 .define DISABLE         0
 
+.define JOY1    %00000001
+.define JOY2    %00000010
+.define JOY3    %00000100
+.define JOY4    %00001000
+
 .macro SFX_warning description
   .assert 0, warning, description
 .endmac

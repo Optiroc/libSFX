@@ -78,14 +78,16 @@ VBlankVector:
         jsl     SFX_nmi_jml             ;Call trampoline
 .endif
 
-.if SFX_AUTOJOY = ENABLE
+.if SFX_AUTOJOY <> DISABLE
         RW a8
-:       lda     HVBJOY                  ;Wait for joystick readout
+:       lda     HVBJOY                  ;Wait for joypad readout
         and     #1
         bne     :-
 
         RW a16i16
-        ldx     JOY1L                   ;Read controller 1
+.endif
+.if SFX_AUTOJOY & JOY1
+        ldx     JOY1L                   ;Read joypad 1
         txa
         eor     a:SFX_joy1cnt
         sta     a:SFX_joy1trg
@@ -93,8 +95,9 @@ VBlankVector:
         and     a:SFX_joy1trg
         sta     a:SFX_joy1trg
         stx     a:SFX_joy1cnt
-
-        ldx     JOY2L                   ;Read controller 2
+.endif
+.if SFX_AUTOJOY & JOY2
+        ldx     JOY2L
         txa
         eor     a:SFX_joy2cnt
         sta     a:SFX_joy2trg
@@ -102,6 +105,26 @@ VBlankVector:
         and     a:SFX_joy2trg
         sta     a:SFX_joy2trg
         stx     a:SFX_joy2cnt
+.endif
+.if SFX_AUTOJOY & JOY3
+        ldx     JOY3L
+        txa
+        eor     a:SFX_joy3cnt
+        sta     a:SFX_joy3trg
+        txa
+        and     a:SFX_joy3trg
+        sta     a:SFX_joy3trg
+        stx     a:SFX_joy3cnt
+.endif
+.if SFX_AUTOJOY & JOY4
+        ldx     JOY4L
+        txa
+        eor     a:SFX_joy4cnt
+        sta     a:SFX_joy4trg
+        txa
+        and     a:SFX_joy4trg
+        sta     a:SFX_joy4trg
+        stx     a:SFX_joy4cnt
 .endif
 
 .if SFX_AUTOJOY_FIRST = YES
@@ -183,11 +206,21 @@ SFX_mvn_dst:    .res 1          ;  Destination bank
 SFX_mvn_src:    .res 1          ;  Source bank
 SFX_mvn_rtl:    .res 1          ;  Return
 
-.if SFX_AUTOJOY = ENABLE
+.if SFX_AUTOJOY & JOY1
 SFX_joy1cnt:    .res 2
 SFX_joy1trg:    .res 2
+.endif
+.if SFX_AUTOJOY & JOY2
 SFX_joy2cnt:    .res 2
 SFX_joy2trg:    .res 2
+.endif
+.if SFX_AUTOJOY & JOY3
+SFX_joy3cnt:    .res 2
+SFX_joy3trg:    .res 2
+.endif
+.if SFX_AUTOJOY & JOY4
+SFX_joy4cnt:    .res 2
+SFX_joy4trg:    .res 2
 .endif
 
 ;Reserve ZPAD (ZEROPAGE scratchpad)
