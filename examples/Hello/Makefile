@@ -2,6 +2,6 @@
 name        := Hello
 debug		:= 1
 
-# Include libSFX
-libsfx_dir	:= ../../libSFX
+# Include libSFX.make
+libsfx_dir	:= ../..
 include $(libsfx_dir)/libSFX.make

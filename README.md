@@ -10,33 +10,34 @@ A Super Nintendo assembler development framework featuring:
 * ROM image validation via [SuperFamicheck](https://github.com/Optiroc/SuperFamicheck).
 * Sublime Text [syntax definitions](./extras/SublimeText).
 
-Look in the the include files (*.i) in the [libSFX directory](./libSFX/) for full documentation of the library features.
+Look at the include files (*.i) in the [libSFX include directory](./include/) for full documentation of the library features.
 
 libSFX is developed by David Lindecrantz and distributed under the terms of the [MIT license](./LICENSE).
 
 
 ##dependencies
-GNU Make and a decent command line interface.
+A C/C++ toolchain, (GNU) Make and a decent command line interface.
 
 
 ##building
-First you need to build ca65, which is included as a git submodule. Run `git submodule init` and `git submodule update` to fetch the submodules, then run `make` to build.
+First you need to build the bundled tools, which are included as git submodules. Run `git submodule init` from libSFX root to initialize the submodules, then run `make` to fetch/update and build them.
 
 Now that the toolchain is in place you can run `make` in any of the example directories to assemble the source files and link a Super Nintendo ROM image (*.sfc).
 
 
 ##setting up a project
-For the most basic setup, copy "examples/Template" to a location of your liking. Then edit "Makefile" and make sure that *libsfx_dir* points to the libSFX subdirectory in the project root.
+For the most basic setup, copy "examples/Template" to a location of your liking. Then edit "Makefile" and make sure that *libsfx_dir* points to the libSFX root directory.
 
-For project customization (for example extending the ROM size from the default 1 megabit configuration or changing the default stack and scratchpad sizes) the build script looks for two files inside the project directory; "libSFX.cfg" and "Map.cfg". If these aren't found (like in the Template project), the defaults inside "libSFX/Configurations" are used.
+For project customization (for example extending the ROM size from the default 1 megabit configuration or changing the default stack and scratchpad sizes) the build script looks for two files in the project directory; "libSFX.cfg" and "Map.cfg". If these aren't found (like in the Template project), the defaults inside "libsfx_dir/include/Configurations" are used.
 
-To override the defaults, simply copy these two files into your project directory and edit them to your liking. In [libSFX/Configurations](./libSFX/Configurations/) there's a couple more Map.cfg examples, and you can also check out the [SixteenMegaPower](./examples/SixteenMegaPower) example project (which uses a whopping 64 x 32kB ROM banks and a healthy amount of save RAM).
+To override the defaults, simply copy these two files into your project directory and edit them to your liking. In [include/Configurations](./include/Configurations/) there's a few additional Map.cfg examples, and you can also check out the [SixteenMegaPower](./examples/SixteenMegaPower) example project (which uses a whopping 64 x 32kB ROM banks and a healthy amount of save RAM) to see how a project can be customized.
 
 
 ##work in progress
 * More fleshed out examples.
 * Macros for handling common CPU/PPU register flags.
 * Asset conversion tools.
+* Automated testing.
 
 
 ##acknowledgments

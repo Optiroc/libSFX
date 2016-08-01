@@ -1,6 +1,6 @@
 # Name
 name		:= Template
 
-# Include libSFX
-libsfx_dir	:= ../../libSFX
+# Include libSFX.make
+libsfx_dir	:= ../..
 include $(libsfx_dir)/libSFX.make

@@ -1,6 +1,10 @@
 #Ideas for possible additions to libSFX code/macro library
 
 
+##Automate tests
+Build, invoke emulator, dump RAM and diff against known good output..?
+
+
 ##Decent PRG
 Go for pcg-random or settle for something simpler?
 

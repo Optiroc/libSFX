@@ -10,6 +10,6 @@ zpad_size	:= 30
 # Set custom dir for intermediate build files
 obj_dir		:= _build_
 
-# Include libSFX
-libsfx_dir	:= ../../libSFX
+# Include libSFX.make
+libsfx_dir	:= ../..
 include $(libsfx_dir)/libSFX.make
