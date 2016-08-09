@@ -1,4 +1,4 @@
-; MB-SFX S-SMP Register Definitions
+; libSFX S-SMP Register Definitions
 ; David Lindecrantz <optiroc@gmail.com>
 
 .ifndef ::__MBSFX_SMP_Def__

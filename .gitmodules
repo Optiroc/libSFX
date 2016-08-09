@@ -4,3 +4,6 @@
 [submodule "tools/superfamicheck"]
 	path = tools/superfamicheck
 	url = https://github.com/Optiroc/SuperFamicheck
+[submodule "tools/brrtools"]
+	path = tools/brrtools
+	url = https://github.com/Optiroc/BRRtools.git
