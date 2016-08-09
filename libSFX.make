@@ -28,7 +28,8 @@ libsfx_inc		:= $(libsfx_dir)/include
 libsfx_bin		:= $(libsfx_dir)/tools
 as				:= $(libsfx_bin)/cc65/bin/ca65
 ld				:= $(libsfx_bin)/cc65/bin/ld65
-sfcheck			:= $(libsfx_bin)/superfamicheck/superfamicheck
+sfcheck			:= $(libsfx_bin)/superfamicheck/bin/superfamicheck
+brr_enc			:= $(libsfx_bin)/brrtools/bin/brr_encoder
 asflags			:= -g -U -I ./ -I $(libsfx_inc) -I $(libsfx_inc)/Configurations
 ldflags			:= $(dflags) --cfg-path ./ --cfg-path $(libsfx_inc)/Configurations/
 
