@@ -16,13 +16,13 @@ libSFX is developed by David Lindecrantz and distributed under the terms of the 
 
 
 ##dependencies
-A C/C++ toolchain, (GNU) Make and a decent command line interface.
+A C/C++ toolchain, (GNU) make, git and a decent command line interface.
 
 
 ##building
-First you need to build the bundled tools, which are included as git submodules. Run `git submodule init` from libSFX root to initialize the submodules, then run `make` to fetch/update and build them.
+First you need to build the bundled tools, which are included as git submodules. Simply run `make` from the libSFX root path to initialize the submodules and build the tools.
 
-Now that the toolchain is in place you can run `make` in any of the example directories to assemble the source files and link a Super Nintendo ROM image (*.sfc).
+Now that the toolchain is in place you should be able to run `make` from any of the example directories to assemble the source files and link a Super Nintendo ROM image (*.sfc).
 
 
 ##setting up a project

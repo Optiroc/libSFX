@@ -14,7 +14,7 @@ brrtools: submodules
 	@$(MAKE) -C tools/brrtools
 
 submodules:
-	git submodule update
+	git submodule update --init --recursive
 
 clean:
 	@$(MAKE) clean -C tools/cc65
