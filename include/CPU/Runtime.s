@@ -29,7 +29,7 @@ BootVector:
         lda     #(NMI_NMI_OFF + NMI_JOY_OFF)
         sta     SFX_nmitimen
         sta     NMITIMEN
-        lda     #DISP_BLANKING_ON
+        lda     #inidisp(OFF, DISP_BRIGHTNESS_MIN)
         sta     SFX_inidisp
 
         ;Set up interrupt handlers
@@ -71,7 +71,7 @@ VBlankVector:
 
         RW a8
         lda     RDNMI                   ;Clear NMI
-        lda     #DISP_BLANKING_ON
+        lda     #inidisp(OFF, DISP_BRIGHTNESS_MIN)
         sta     INIDISP
 
 .if SFX_AUTOJOY_FIRST = NO

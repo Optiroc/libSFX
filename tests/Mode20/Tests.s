@@ -333,7 +333,7 @@ test_mixed:
         ;Copy compressed file to WRAM using DMA
         lda     #$7f
         ldx     #$0000
-        ldy     #(text_lz4_END - text_lz4)
+        ldy     #sizeof_text_lz4
         WRAM_memcpy ax, text_lz4, y
 
         ;Decompress LZ4 file in WRAM to WRAM, get decompressed length in x
@@ -398,17 +398,14 @@ test_is_ntsc:
 
 ;Import lz4 textfile
 .segment "RODATA"
-text_lz4:               .incbin "Data/The Eyes Have It.txt.lz4"
-text_lz4_END:
-repetetive_lz4:         .incbin "Data/The Eyes Have It.txt.lz4"
-repetetive_lz4_END:
+incbin  text_lz4,       "Data/The Eyes Have It.txt.lz4"
+incbin  repetetive_lz4, "Data/The Eyes Have It.txt.lz4"
 
 ;Import graphics
 .segment "ROM1"
-Tilemap:                .incbin "Data/Graphics.tilemap.lz4"
-Tiles:                  .incbin "Data/Graphics.tiles.lz4"
-Palette:                .incbin "Data/Graphics.palette"
-Palette_END:
+incbin  Tilemap,        "Data/Graphics.tilemap.lz4"
+incbin  Tiles,          "Data/Graphics.tiles.lz4"
+incbin  Palette,        "Data/Graphics.palette"
 
 ;Import music
 .define spc_file "Data/Music.spc"

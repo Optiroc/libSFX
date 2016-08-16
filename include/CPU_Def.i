@@ -22,6 +22,9 @@ DISP_BRIGHTNESS_MASK    = $f0
 DISP_BLANKING_SHIFT     = 7
 DISP_BLANKING_ON        = $80
 DISP_BLANKING_OFF       = $00
+DISP_BRIGHTNESS_MIN     = $00
+DISP_BRIGHTNESS_MAX     = $0f
+.define inidisp(blanking, brightness) .lobyte(((~blanking & 1) << DISP_BLANKING_SHIFT) | (brightness & ~DISP_BRIGHTNESS_MASK))
 
 SETINI                  = $2133 ;Display Control
 SET_INTERLACE_MASK      = $fe
@@ -98,6 +101,7 @@ OBJ_8x8_64x64           = $40
 OBJ_16x16_32x32         = $60
 OBJ_16x16_64x64         = $80
 OBJ_32x32_64x64         = $a0
+;.define objsel()
 
 BGMODE                  = $2105 ;BG Mode + BG Character Size
 BG_MODE_MASK            = $f8
@@ -115,6 +119,11 @@ BG_MODE_5               = $05
 BG_MODE_6               = $06
 BG_MODE_7               = $07
 BG_BG3_MAX_PRIO         = $08
+BG_SIZE_8X8             = $0
+BG_SIZE_16X16           = $1
+BG3_PRIO_NORMAL         = $0
+BG3_PRIO_HIGH           = $1
+.define bgmode(mode, bg3_prio, bg1sz, bg2sz, bg3sz, bg4sz) .lobyte((mode & ~BG_MODE_MASK) | ((bg3_prio & 1) << BG_BG3_MAX_PRIO_SHIFT) | ((bg1sz & 1) << 4) | ((bg2sz & 1) << 5) | ((bg3sz & 1) << 6) | ((bg4sz & 1) << 7))
 
 BG1SC                   = $2107 ;BG1 Screen Base + Screen Size
 BG2SC                   = $2108 ;BG2 Screen Base + Screen Size
@@ -125,9 +134,14 @@ SC_BASE_MASK            = $03
 SC_SIZE_SHIFT           = 0
 SC_BASE_SHIFT           = 2
 SC_SIZE_0               = $00
+SC_SIZE_32X32           = $00
 SC_SIZE_1               = $01
+SC_SIZE_64X32           = $01
 SC_SIZE_2               = $02
+SC_SIZE_32X64           = $02
 SC_SIZE_3               = $03
+SC_SIZE_64X64           = $03
+.define bgsc(base, size) .lobyte(((base >> 11) << SC_BASE_SHIFT) | size)
 
 BG12NBA                 = $210b ;BG1/2 Character Data Area Designation
 BG34NBA                 = $210c ;BG3/4 Character Data Area Designation
@@ -135,6 +149,9 @@ BG_NBA1_MASK            = $f0
 BG_BNA2_MASK            = $0f
 BG_NBA1_SHIFT           = 0
 BG_NBA2_SHIFT           = 4
+.define bgnba(bg1, bg2, bg3, bg4) .loword((bg1 >> 13) | ((bg2 >> 13) << 4) | ((bg3 >> 13) << 8) | ((bg4 >> 13) << 12))
+.define bg12nba(bg1, bg2) .lobyte((bg1 >> 13) | ((bg2 >> 13) << 4))
+.define bg34nba(bg3, bg4) .lobyte((bg3 >> 13) | ((bg4 >> 13) << 4))
 
 BG1HOFS                 = $210d ;BG1 Horizontal Scroll (2x)
 BG1VOFS                 = $210e ;BG1 Vertical Scroll (2x)
@@ -359,6 +376,7 @@ TM_BG4_ON               = $08
 TM_BG4_OFF              = $00
 TM_OBJ_ON               = $10
 TM_OBJ_OFF              = $00
+.define tm(bg1, bg2, bg3, bg4, obj) .lobyte((bg1 & 1) | ((bg2 & 1) << TM_BG2_SHIFT) | ((bg3 & 1) << TM_BG3_SHIFT) | ((bg4 & 1) << TM_BG4_SHIFT) | ((obj & 1) << TM_OBJ_SHIFT))
 
 TS                      = $212d ;Sub Screen Designation
 TS_BG1_MASK             = $fe

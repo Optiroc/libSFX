@@ -5,29 +5,32 @@
 
 .include "libSFX.i"
 
+TILEMAP_LOC     = $0000
+TILESET_LOC     = $8000
+
 Main:
         ;Transfer and execute SPC file
         SMP_playspc SPC_State, SPC_Image
 
         ;Decompress graphics and upload to VRAM
         LZ4_decompress Tilemap, EXRAM, y
-        VRAM_memcpy $0000, EXRAM, y
+        VRAM_memcpy TILEMAP_LOC, EXRAM, y
         LZ4_decompress Tiles, EXRAM, y
-        VRAM_memcpy $4000, EXRAM, y
-        CGRAM_memcpy 0, Palette, Palette_END-Palette
+        VRAM_memcpy TILESET_LOC, EXRAM, y
+        CGRAM_memcpy 0, Palette, sizeof_Palette
 
         ;Set up screen mode
-        lda     #BG_MODE_1
+        lda     #bgmode(BG_MODE_1, BG3_PRIO_NORMAL, BG_SIZE_8X8, BG_SIZE_8X8, BG_SIZE_8X8, BG_SIZE_8X8)
         sta     BGMODE
-        lda     #$00
+        lda     #bgsc(TILEMAP_LOC, SC_SIZE_32X32)
         sta     BG1SC
-        ldx     #$fff4
+        ldx     #bgnba(TILESET_LOC, 0, 0, 0)
         stx     BG12NBA
-        lda     #$01
+        lda     #tm(ON, OFF, OFF, OFF, OFF)
         sta     TM
 
         ;Turn on screen
-        lda     #$0f
+        lda     #inidisp(ON, DISP_BRIGHTNESS_MAX)
         sta     SFX_inidisp
         VBL_on
 
@@ -39,10 +42,9 @@ Main:
 
 ;Import graphics
 .segment "RODATA"
-Tilemap:      .incbin "Data/SNES.png.tilemap.lz4"
-Tiles:        .incbin "Data/SNES.png.tiles.lz4"
-Palette:      .incbin "Data/SNES.png.palette"
-Palette_END:
+incbin  Tilemap,        "Data/SNES.png.tilemap.lz4"
+incbin  Tiles,          "Data/SNES.png.tiles.lz4"
+incbin  Palette,        "Data/SNES.png.palette"
 
 ;Import music
 .define spc_file "Data/Music.spc"

@@ -160,7 +160,7 @@ SFX_INIT_mmio:
         RW a8i8
 
         dpage   INIDISP
-        lda     #DISP_BLANKING_ON       ;Forced blank
+        lda     #inidisp(OFF, DISP_BRIGHTNESS_MIN)
         sta     z:dpo(INIDISP)
         sta     a:SFX_inidisp
 

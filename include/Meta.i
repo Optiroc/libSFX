@@ -25,6 +25,16 @@
 .endmac
 
 ;-------------------------------------------------------------------------------
+;incbin
+;like .incbin with the addition of a sizeof_{name} identifier
+
+.macro incbin name, file
+  .ident(.sprintf("%s", .string(name))):
+  .incbin file
+  .ident(.sprintf("sizeof_%s", .string(name))) = * - .ident(.sprintf("%s", .string(name)))
+.endmac
+
+;-------------------------------------------------------------------------------
 ;isdefined/define/undefine
 ;By Movax12 (http://forums.nesdev.com/viewtopic.php?f=2&t=11112&start=15#p127674)
 

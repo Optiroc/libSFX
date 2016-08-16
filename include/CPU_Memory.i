@@ -344,13 +344,12 @@
 
 /**
   VRAM_memset
-  Set VRAM to a given value
 
-  Address and length are word units.
+  Set VRAM to a given value
   Disables DMA and uses channel 7 for transfer.
 
-  :in:    addr    Address (word)        uint16  x or value
-  :in:    length  Number of words       uint16  y or value
+  :in:    addr    Address               uint16  x (word address) or value (byte address)
+  :in:    length  Length                uint16  y (words) or value (bytes)
   :in?:   value   Value                 uint8   a or value
 */
 .macro  VRAM_memset addr, length, value
@@ -360,10 +359,10 @@
         RW_push set:a8i16
 
   .if .not .xmatch({addr},{x})
-        ldx     #addr
+        ldx     #.loword(addr >> 1)
   .endif
   .if .not .xmatch({length},{y})
-        ldy     #length
+        ldy     #.loword(length)
   .endif
 
   .ifblank value
@@ -384,7 +383,7 @@
   Copy bytes from CPU-bus to VRAM.
   Disables DMA and uses channel 7 for transfer.
 
-  :in:    dest    Destination (word)    uint16  y or value
+  :in:    dest    Destination           uint16  y (word address) or value (byte address)
   :in:    source  Source                uint24  ax/hi:x/ex:x or value
   :in:    length  Length                uint16  y/a(<<8) or value
 */
@@ -401,16 +400,16 @@
   .else
     .if .xmatch({length},{y}) .and .xmatch( .right(1,{source}),{x} )
         phy                                     ;No register free, use stack
-        ldy     #.loword(dest)
-        sty     VMADDL                          ;Set VRAM destination (in words)
+        ldy     #.loword(dest >> 1)
+        sty     VMADDL                          ;Set VRAM destination (in bytes)
         ply
     .else
       .if .xmatch({length},{y})
-        ldx     #.loword(dest)                  ;Register x not used
-        stx     VMADDL                          ;Set VRAM destination (in words)
+        ldx     #.loword(dest >> 1)             ;Register x not used
+        stx     VMADDL                          ;Set VRAM destination (in bytes)
       .else
-        ldy     #.loword(dest)                  ;Register y not used
-        sty     VMADDL                          ;Set VRAM destination (in words)
+        ldy     #.loword(dest >> 1)             ;Register y not used
+        sty     VMADDL                          ;Set VRAM destination (in bytes)
       .endif
     .endif
   .endif
