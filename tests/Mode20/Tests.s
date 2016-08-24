@@ -78,15 +78,19 @@ test_dpage:
 
 ;-------------------------------------------------------------------------------
 test_mulu:
-        RW a8i16
-
-        lda     #$22                    ;mulu register * value -> register
+        RW a8i16                        ;mulu register * value -> register
+        lda     #$22
         mulu    a,$4, x
         break                           ;expected: x == #$0088
 
         RW i8                           ;mulu value * register -> register
         mulu    $7f,x, y
         break                           ;expected: y = #$4378
+
+        RW i8                           ;mulu register * register -> register
+        ldy     #$42
+        mulu    y,x, y
+        break                           ;expected: y = #$2310
 
         RW i16                          ;mulu value * value -> RDMPYL/H
         mulu    .sizeof(Vec3),$66

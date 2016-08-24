@@ -12,9 +12,11 @@
 
   If :out: parameter is omitted, get result in RDMPYL/H (uint16) after 5 cycles
 
-  :in:    n1    Multiplicand  uint8   a/x/y or value (using a, sets RW a8)
-  :in:    n2    Multiplier    uint8   a/x/y or value (using a, sets RW a8)
-  :out?:  ret   Product       uint16  a/x/y (sets RW a16/i16)
+  :in:    n1    Multiplicand (uint8)    a/x/y     Requires RW a8 or i8
+                                        constant  Uses a, sets RW a8
+  :in:    n2    Multiplier (uint8)      a/x/y     Requires RW a8 or i8
+                                        constant  Uses a, sets RW a8
+  :out?:  ret   Product (uint16)        a/x/y     Sets RW a16 or i16
 */
 .macro  mulu    n1, n2, ret
 .if (.blank({n2}))
@@ -79,10 +81,12 @@
   If :out: parameters are omitted, get quotient in RDDIVL (uint16)
   and remainder in RDMPYL (uint16) after 13 cycles
 
-  :in:    n1    Dividend    uint16  a/x/y or value (using x, sets RW i16)
-  :in:    n2    Divisor     uint8   a/x/y or value (using a, sets RW a8)
-  :out?:  ret   Quotient    uint16  a/x/y (sets RW a16/i16)
-  :out?:  retr  Remainder   uint16  a/x/y (sets RW a16/i16)
+  :in:    n1    Dividend (uint16)       a/x/y     Requires RW a16 or i16
+                                        constant  Uses x, sets RW i16
+  :in:    n2    Divisor (uint8)         a/x/y     Requires RW a8 or i8
+                                        constant  Uses a, sets RW a8
+  :out?:  ret   Quotient (uint16)       a/x/y     Sets RW a16 or i16
+  :out?:  retr  Remainder (uint16)      a/x/y     Sets RW a16 or i16
 */
 .macro  divu    n1, n2, ret, retr
 .if (.blank({n2}))
@@ -159,14 +163,17 @@
 
 
 /**
+  muls
   Signed multiplication (S-PPU MMIO)
 
   Not available during Mode 7 rendering
   If :out: parameter is omitted, result available in MPYL/M/H (sint24) immediately
 
-  :in:    n1    Multiplicand  sint16  x/y (using a) or value (using a) (sets RW a8)
-  :in:    n2    Multiplier    sint8   a or value (using a, sets RW a8)
-  :out?:  ret   Product       sint24  ax/ay (sets RW a8i16)
+  :in:    n1    Multiplicand (sint16)   x/y       Uses a, sets RW a8
+                                        constant  Uses a, sets RW a8
+  :in:    n2    Multiplier (sint8)      a         Requires RW a8
+                                        constant  Uses a, sets RW a8
+  :out?:  ret   Product (sint24)        ax/ay     Sets RW a8i16
 */
 .macro  muls    n1, n2, ret
 .if (.blank({n2}))

@@ -25,9 +25,15 @@
 .endmac
 
 ;-------------------------------------------------------------------------------
-;incbin
-;like .incbin with the addition of a sizeof_{name} identifier
+;Utility macros
 
+/**
+  incbin
+  Include binary file and create "name:" label and "sizeof_name" constant
+
+  :in:    name    Name         identifier
+  :in:    file    Filename     string
+*/
 .macro incbin name, file
   .ident(.sprintf("%s", .string(name))):
   .incbin file

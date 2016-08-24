@@ -153,7 +153,6 @@ SFX_CGRAM_memcpy:
 /**
   SFX_INIT_mmio
   Initialize PPU/CPU MMIO according to N's recommendations
-
 */
 SFX_INIT_mmio:
         RW_assume a8i16
@@ -299,7 +298,6 @@ SFX_INIT_oam:
 /**
   SFX_WAIT_vbl
   Wait for VBlank period
-
 */
 SFX_WAIT_vbl:
         RW_assume a8
@@ -314,12 +312,9 @@ SFX_WAIT_vbl:
   SFX_PPU_is_ntsc
   Check if system timing is near enough real NTSC hardware
 
-  Returns with A=0/Z=1 if system passes as NTSC, otherwise A=1/Z=0.
   NB! Perform check with blank screen and with interrupts disabled.
 
-  SNES/NTSC     #$1918          SNES/PAL      #$1de2
-  BSNES/NTSC    #$1918          BSNES/PAL     #$1de2
-  NO$SNS/NTSC   #$1917          NO$SNS/PAL    #$1de2
+  :out: a/z     a=0 and z=1 if system passes as NTSC, otherwise a=1 and z=0
 */
 NTSC_true       = $1918
 NTSC_margin     = $3
@@ -335,6 +330,10 @@ SFX_PPU_is_ntsc:
 :       inx
         lda     HVBJOY
         bpl     :-
+
+        ;SNES/NTSC     #$1918          SNES/PAL      #$1de2
+        ;BSNES/NTSC    #$1918          BSNES/PAL     #$1de2
+        ;NO$SNS/NTSC   #$1917          NO$SNS/PAL    #$1de2
 
         cpx     #(NTSC_true - NTSC_margin)
         bmi     :+

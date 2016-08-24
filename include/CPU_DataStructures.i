@@ -11,12 +11,10 @@
   Allocate static FIFO buffer
 
   Buffer is allocated in the LORAM segment.
-  Size must be a power of two value up to 256 bytes.
-
   Implemented as a circular buffer without overrun protection.
 
-  :in:    name    Name                  string  value
-  :in:    size    Capacity in bytes     uint8   value
+  :in:    name    Name                  identifier  Any string (without quotes)
+  :in:    size    Capacity in bytes     constant    Power of two integer up to 256 bytes
 */
 .macro FIFO_alloc name, size
 .if .blank({size})
@@ -40,14 +38,16 @@
 .endif
 .endmac
 
+
 /**
   FIFO_enq
   Write (enqueue) byte to FIFO buffer
 
-  :in:    name    Buffer name           string  value
-  :in:    data    Data                  uint8   a or value
+  Destroys a and x.
 
-  Destroys:       a, x
+  :in:    name    Buffer name           identifier  Any string (without quotes)
+  :in:    data    Data (int8)           a           Enqueue value in accumulator
+                                        constant    Enqueue assemble-time constant
 */
 .macro FIFO_enq name, data
 .if .blank({data})
@@ -73,6 +73,7 @@
 .endif
 .endmac
 
+
 /**
   FIFO_deq
   Read (dequeue) byte from FIFO buffer
@@ -80,10 +81,10 @@
   Value is returned in 'outreg' (default y), z = 0.
   If queue is empty z = 1.
 
-  :in:    name    Buffer name           string  value
-  :out?:  outreg  Return register       string  y/x/a
+  Destroys a and x or y.
 
-  Destroys:       a, x/y
+  :in:    name    Buffer name           identifier  Any string (without quotes)
+  :out?:  outreg  Return register       identifier  y/x/a
 */
 .macro FIFO_deq name, outreg
 .if .blank({name})
@@ -137,12 +138,10 @@
   Allocate static FILO (stack) buffer
 
   Buffer is allocated in the LORAM segment.
-  Size must be a power of two value up to 256 bytes.
-
   No overflow protection.
 
-  :in:    name    Name                  string  value
-  :in:    size    Capacity in bytes     uint8   value
+  :in:    name    Name                  identifier  Any string (without quotes)
+  :in:    size    Capacity in bytes     constant    Power of two integer up to 256 bytes
 */
 .macro FILO_alloc name, size
 .if .blank({size})
@@ -165,14 +164,16 @@
 .endif
 .endmac
 
+
 /**
   FILO_push
   Write byte to FILO buffer
 
-  :in:    name    Buffer name           string  value
-  :in:    data    Data                  uint8   a or
+  Destroys x.
 
-  Destroys:       x
+  :in:    name    Buffer name           identifier  Any string (without quotes)
+  :in:    data    Data (int8)           a           Push value in accumulator
+                                        constant    Push assemble-time constant
 */
 .macro FILO_push name, data
 .if .blank({data})
@@ -192,7 +193,7 @@
           sta   a:.ident(.concat("__FILO__",.string(.left(1,{name})))),x
           inx
           stx   a:.ident(.concat("__FILO_TOP__",.string(.left(1,{name}))))
-  ;Wasting cycles on overflow protection seems moot
+  ;Wasting cycles on overflow protection seems moot, maybe include optionally?
           ;txa
           ;inc
           ;and   #<.ident(.concat("__FILO_MASK__",.string(.left(1,{name}))))
@@ -201,6 +202,7 @@
 .endif
 .endmac
 
+
 /**
   FILO_pop
   Read byte from FILO buffer
@@ -208,10 +210,10 @@
   Value is returned in 'outreg' (default y), z = 0.
   If stack is empty z = 1.
 
-  :in:    name    Buffer name           string  value
-  :out?:  outreg  Return register       string  y/x/a
+  Destroys a and x or y.
 
-  Destroys:       a, x/y
+  :in:    name    Buffer name           identifier  Any string (without quotes)
+  :out?:  outreg  Return register       identifier  y/x/a
 */
 .macro FILO_pop name, outreg
 .if .blank({name})

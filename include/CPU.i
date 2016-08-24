@@ -11,7 +11,7 @@
   Register width (RW*) macros
 
   Instead of using ca65's .a* and .i* directives or the "smart" mode to set
-  current register width, libSFX uses these macros to track CPU state.
+  current register widths, libSFX uses these macros to track CPU state.
 
   The main advantage of this approach is that rep/sep instructions will be
   emitted only when necessary. When relying a lot on "function inlining" via
@@ -52,11 +52,11 @@
 
 /**
   RW
-  Set accumulator/index width
+  Set accumulator/index register widths
 
   No-op if current state == intended state.
 
-  :in:    widths  Register widths       string  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+  :in:    widths  Register widths       identifier  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
 */
 .macro RW widths
 .if .blank({widths})
@@ -100,7 +100,12 @@
 .endmac
 
 
-;Assume known accumulator/index width
+/**
+  RW_assume
+  Assume known accumulator/index register widths without emitting any instructions.
+
+  :in:    widths  Register widths       identifier  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+*/
 .macro RW_assume widths
 .if .blank({widths})
   SFX_error "RW_assume: Missing required parameter"
@@ -136,7 +141,12 @@
 .endmac
 
 
-;Forced set (for when returning from subroutine and using RW_pull_forced to restore state)
+/**
+  RW_forced
+  Force set accumulator/index register widths (ie. always emit rep/sep instructions).
+
+  :in:    widths  Register widths       identifier  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+*/
 .macro RW_forced widths
 .if .blank({widths})
   SFX_error "RW_forced: Missing required parameter"
@@ -159,7 +169,14 @@
 .endmac
 
 
-;Assert current accumulator/index width
+/**
+  RW_assert
+  Assert (at assemble time) that the specified register widths
+  match with the state of the register tracking logic.
+
+  :in:    widths  Register widths         identifier  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+  :in:    message Error message           string
+*/
 .macro RW_assert widths, message
 .if .blank({message})
   SFX_error "RW_assert: Missing required parameter(s)"
@@ -201,18 +218,15 @@
 .endmac
 
 
-;Accumulator/index width stack (bit 0 = accumulator size, bit 1 = index size)
-SFX_RW_size_sp .set 0
-SFX_RW_size_s1 .set %00
-SFX_RW_size_s2 .set %00
-SFX_RW_size_s3 .set %00
-SFX_RW_size_s4 .set %00
-SFX_RW_size_s5 .set %00
-SFX_RW_size_s6 .set %00
-SFX_RW_size_s7 .set %00
-SFX_RW_size_s8 .set %00
+/**
+  RW_push
+  Push current register widths state to the RW stack,
+  and optionally set new state.
 
-;Push accumulator/index width state (optionally set new state)
+  No-op if current state == intended state.
+
+  :in?:   widths  Register widths       identifier  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+*/
 .macro RW_push new
 .if SFX_RW_size_sp = 8
   SFX_error "RW_push: RW stack overflow"
@@ -269,7 +283,12 @@ SFX_RW_size_s8 .set %00
   .endif
 .endmac
 
-;Pull accumulator/index width state
+/**
+  RW_pull
+  Pull register widths state from the RW stack.
+
+  No-op if current state == intended state.
+*/
 .macro RW_pull
 .if SFX_RW_size_sp = 0
   SFX_error "RW_pull: RW stack underflow"
@@ -310,6 +329,15 @@ SFX_RW_size_s8 .set %00
   SFX_RW_size_sp .set SFX_RW_size_sp-1
 .endmac
 
+
+/**
+  RW_pull_forced
+  Pull register widths state from the RW stack,
+  always emitting rep/sep instructions.
+
+  Might come in handy when calling a subroutine that returns
+  with the register widths in an unknown state.
+*/
 .macro RW_pull_forced
 .if SFX_RW_size_sp = 0
   SFX_error "RW_pull_forced: RW stack underflow"
@@ -350,7 +378,10 @@ SFX_RW_size_s8 .set %00
   SFX_RW_size_sp .set SFX_RW_size_sp-1
 .endmac
 
-;Print current accumulator/index width state
+/**
+  RW_print
+  Print (at assemble time) the current register widths state.
+*/
 .macro RW_print
   .if SFX_RW_a_size = 0
     .out "Accumulator size = 0 (16-bit)"
@@ -368,11 +399,36 @@ SFX_RW_size_s8 .set %00
   .endif
 .endmac
 
-;Get current accumulator/index size
+
+/**
+  RW_a_size()
+  Get the current accumlator register width.
+  0 = 16 bits / 1 = 8 bits
+*/
+.define RW_a_size SFX_RW_a_size
+
+/**
+  RW_i_size()
+  Get the current index register width.
+  0 = 16 bits / 1 = 8 bits
+*/
+.define RW_i_size SFX_RW_i_size
+
+
+;Book-keeping variables
 SFX_RW_a_size .set 1
 SFX_RW_i_size .set 0
-.define RW_a_size SFX_RW_a_size
-.define RW_i_size SFX_RW_i_size
+
+;RW stack (bit 0 = accumulator size, bit 1 = index size)
+SFX_RW_size_sp .set 0
+SFX_RW_size_s1 .set %00
+SFX_RW_size_s2 .set %00
+SFX_RW_size_s3 .set %00
+SFX_RW_size_s4 .set %00
+SFX_RW_size_s5 .set %00
+SFX_RW_size_s6 .set %00
+SFX_RW_size_s7 .set %00
+SFX_RW_size_s8 .set %00
 
 
 ;-------------------------------------------------------------------------------
@@ -413,7 +469,8 @@ SFX_RW_i_size .set 0
   dbank
   Set data bank register (DB)
 
-  :in:    bank  Bank          uint8   a/x/y or value (using a)
+  :in:    bank  Bank (uint8)            a/x/y     Requires RW a8 or i8
+                                        constant  Using a
 */
 .macro  dbank   bank
 .if .xmatch({bank}, {a})
@@ -443,22 +500,11 @@ SFX_RW_i_size .set 0
 
 
 /**
-  dpo()
-  Get address minus current direct page offset
-
-  Works with the latest value set by the 'dpage' macro with a constant/symbol parameter
-
-  :in:    addr  Address       uint16  a or value
-*/
-SFX_dp_offset .set 0
-.define dpo(addr) -SFX_dp_offset+(addr)
-
-
-/**
   dpage
   Set direct page register (D)
 
-  :in:    offs  Offset        uint16  a or value
+  :in:    offs  Offset (uint16)         a
+                                        constant  Using a
 */
 .macro  dpage   offs
         RW_push set:a16
@@ -478,6 +524,17 @@ SFX_dp_offset .set 0
 .endmac
 
 
+/**
+  dpo()
+  Get address minus current direct page offset
+
+  Calculates a byte offset using the latest value set by the 'dpage' macro.
+
+  :in:    addr  Address (uint16)        constant
+*/
+SFX_dp_offset .set 0
+.define dpo(addr) -SFX_dp_offset+(addr)
+
 
 ;-------------------------------------------------------------------------------
 ;Meta instructions
@@ -486,7 +543,7 @@ SFX_dp_offset .set 0
   bgt
   Branch if greater than
 
-  :in:  addr  Address
+  :in:    addr  Address
 */
 .macro bgt addr
         beq     :+
@@ -498,7 +555,7 @@ SFX_dp_offset .set 0
   bsr
   Relative subroutine call
 
-  :in:  addr  Address
+  :in:    addr  Address
 */
 .macro  bsr     addr
         per     * + 4
@@ -509,7 +566,7 @@ SFX_dp_offset .set 0
   bsl
   Relative long subroutine call
 
-  :in:  addr  Address
+  :in:    addr  Address
 */
 .macro  bsl     addr
         per     * + 5
@@ -523,7 +580,6 @@ SFX_dp_offset .set 0
   :in:    op    Operand
   :in?:   ix    Index
 */
-
 .macro add op, ix
   .if .blank({ix})
         clc
@@ -580,12 +636,17 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
-  wdm/break
+  wdm
 */
 .macro wdm op
         .byte   $42, <op
 .endmac
 
+/**
+  break
+  If assembled with debug=1 the break macro emits a "wdm $00" instruction,
+  which can be set to trigger a break in the bsnes+ debugger.
+*/
 .macro break
   .ifdef __DEBUG__
         wdm     $00

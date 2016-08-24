@@ -25,7 +25,6 @@
   :in:  x       Source offset
   :in:  y       Destination offset
   :in:  b:a     Destination:Source banks
-
   :out: a       Decompressed length
 */
 SFX_LZ4_decompress:
@@ -43,7 +42,6 @@ SFX_LZ4_decompress:
   :in:  x       Source offset
   :in:  y       Destination offset
   :in:  b:a     Destination:Source banks
-
   :out: a       Decompressed length
 */
 SFX_LZ4_decompress_block:

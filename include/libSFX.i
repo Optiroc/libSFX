@@ -2,14 +2,32 @@
 ; Super Famicom Development Framework
 ; David Lindecrantz <optiroc@gmail.com>
 
+.feature c_comments
+.p816
+.smart -
+.linecont +
+
 .ifndef ::__MBSFX_INC__
 ::__MBSFX_INC__ = 1
 
-;--------------------------------------------------------------------
-.p816
-.smart -
-.feature c_comments
-.linecont +
+/**
+  Macros are documented in the following format:
+  macro_name
+  Description and notes
+
+  :in/out:  parameter_name      Description   valid       Notes
+                                              inputs      Notes
+
+
+  Subroutines are documented in the following format:
+  SFX_subroutine_name
+  Description and notes
+
+  :in/out:  register/location   Description and notes
+
+*/
+
+;-------------------------------------------------------------------------------
 
 .include "Meta.i"
 .include "libSFX.cfg"
@@ -36,6 +54,5 @@
   RW_assume a8i16
 
 .endif
-
 
 .endif;__MBSFX_INC__

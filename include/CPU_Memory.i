@@ -8,7 +8,6 @@
 .global SFX_CGRAM_memset, SFX_CGRAM_memcpy
 
 ;-------------------------------------------------------------------------------
-;Memory move/set macros
 
 /**
   memset
@@ -18,9 +17,12 @@
   for large blocks of memory. On the other hand it's quicker to setup
   doesn't interfere with DMA.
 
-  :in:    addr    Address               uint24  ax/hi:x/ex:x or value
-  :in:    length  Number of bytes       uint16  y or value
-  :in?:   value   Value                 uint8   a or value
+  :in:    addr    Address (uint24)      ax/hi:x/ex:x
+                                        constant
+  :in:    length  Length (uint16)       y
+                                        constant
+  :in?:   value   Value (uint8)         a
+                                        constant
 */
 .macro memset addr, length, value
 .if .blank({length})
@@ -115,9 +117,12 @@
   for large transfers. On the other hand it's quicker to setup and
   doesn't interfere with DMA.
 
-  :in:    dest    Destination address   uint24  ay/hi:y/ex:y or value
-  :in:    source  Source address        uint24  ax/hi:x/ex:x or value
-  :in:    length  Length                uint16  a or value
+  :in:    dest    Destination (uint24)  ay/hi:y/ex:y
+                                        constant
+  :in:    source  Source (uint24)       ax/hi:x/ex:x
+                                        constant
+  :in:    length  Length (uint16)       a
+                                        constant
 */
 .macro memcpy dest, source, length
 .if .blank({length})
@@ -207,9 +212,12 @@
 
   Disables DMA and uses channel 7 for transfer.
 
-  :in:    addr    Address               uint24  hi:x/ex:x or value
-  :in:    length  Number of bytes       uint16  y or value
-  :in?:   value   Value                 uint8   a or value
+  :in:    addr    Address (uint24)      hi:x/ex:x
+                                        constant
+  :in:    length  Length (uint16)       y
+                                        constant
+  :in?:   value   Value (uint8)         a
+                                        constant
 */
 .macro  WRAM_memset addr, length, value
 .if .blank({length})
@@ -255,6 +263,17 @@
 
   Disables DMA and uses channel 7 for transfer.
   WRAM to WRAM copy is not possible.
+
+
+
+  :in:    dest    Destination (uint24)  ay/hi:y/ex:y
+                                        constant
+  :in:    source  Source (uint24)       ax/hi:x/ex:x
+                                        constant
+  :in:    length  Length (uint16)       a
+                                        constant
+
+
 
   :in:    dest    Destination address   uint24  ax/ay/hi:x/hi:y/ex:x/ex:y or value
   :in:    source  Source address        uint24  value
