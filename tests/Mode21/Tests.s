@@ -80,15 +80,19 @@ test_dpage:
 
 ;-------------------------------------------------------------------------------
 test_mulu:
-        RW a8i16
-
-        lda     #$22                    ;mulu register * value -> register
+        RW a8i16                        ;mulu register * value -> register
+        lda     #$22
         mulu    a,$4, x
         break                           ;expected: x == #$0088
 
         RW i8                           ;mulu value * register -> register
         mulu    $7f,x, y
         break                           ;expected: y = #$4378
+
+        RW i8                           ;mulu register * register -> register
+        ldy     #$42
+        mulu    y,x, y
+        break                           ;expected: y = #$2310
 
         RW i16                          ;mulu value * value -> RDMPYL/H
         mulu    .sizeof(Vec3),$66
@@ -369,9 +373,25 @@ test_spc:
 test_setcolorvbl:
         RW a8i16
 
-        ; Set color 0, turn on screen
-        CGRAM_setColorRGB 0, 7,31,31
-        lda     #$0f
+        ;Set some colors
+        break
+        ldx     #rgb(7,31,31)
+        CGRAM_setcolor_rgb 0, 7,31,31
+
+        lda     #1
+        CGRAM_setcolor_rgb a, 31,0,7
+
+        CGRAM_setcolor 2, rgb(9,31,3)
+
+        ldx     #rgb(3,7,25)
+        CGRAM_setcolor 3, x
+
+        lda     #4
+        ldy     #rgb(8,29,4)
+        CGRAM_setcolor a, y
+
+        ;Turn on screen
+        lda     #inidisp(ON, DISP_BRIGHTNESS_MAX)
         sta     SFX_inidisp
         VBL_on
         rts
@@ -389,8 +409,8 @@ test_is_ntsc:
 
 @not_ntsc:
         ;NTSC check failed, show red screen
-        CGRAM_setColorRGB 0, 31,5,5
-        lda     #$0f
+        CGRAM_setcolor_rgb 0, 31,5,5
+        lda     #inidisp(ON, DISP_BRIGHTNESS_MAX)
         sta     SFX_inidisp
         VBL_on
 :       wai
