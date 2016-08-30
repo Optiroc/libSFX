@@ -1,7 +1,21 @@
 # Recursive wildcard
 rwildcard		= $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
-# Set defaults if not already set
+# Platform
+ifeq ($(platform),)
+  ifdef SystemRoot
+    platform := win
+  else
+  	uname := $(shell uname -a)
+  	ifneq ($(findstring Darwin,$(uname)),)
+  	  platform := osx
+  	else
+  	  platform := x
+  	endif
+  endif
+endif
+
+# Set defaults
 ifndef obj_dir
 	obj_dir		:= .o
 endif
@@ -48,6 +62,7 @@ obj				+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s,%.o,$(src)))
 obj_smp			:= $(patsubst $(libsfx_inc)%,$(obj_dir)/libsfx%,$(patsubst %.s700,%.o,$(libsfx_src_smp)))
 obj_smp			+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s700,%.o,$(src_smp)))
 
+
 # Rules
 .SUFFIXES:
 .PHONY: clean
@@ -55,6 +70,15 @@ obj_smp			+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s700,%.o,$(src_smp
 default: $(rom)
 
 all: clean default
+
+run: $(rom)
+ifdef LIBSFX_RUNCMD
+	$(LIBSFX_RUNCMD)
+else
+	@echo NB! To enable running set LIBSFX_RUNCMD, for example:
+	@echo \ \ \ \ export LIBSFX_RUNCMD\=\'open -a \~/bsnes/bsnes+.app --args \$$\(realpath \$$\(rom\)\)\'
+endif
+
 
 $(rom): $(obj) $(obj_smp)
 	$(ld) $(ldflags) -C Map.cfg -o $@ -Ln $(sym) $^
