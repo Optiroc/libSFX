@@ -46,7 +46,7 @@
   VBL_set
   Set software vblank interrupt
 
-  :in:    addr  Address       uint24  value
+  :in:    addr    Address (uint24)      constant
 */
 .macro  VBL_set addr
         RW_push set:a8i16
@@ -104,8 +104,8 @@
   IRQ_set
   Set software vertical line interrupt
 
-  :in:    line  Trigger line  uint8   value
-  :in?:   addr  Address       uint24  value (if omitted, last registered address remains)
+  :in:    line    Trigger line (uint8)  constant
+  :in?:   addr    Address (uint24)      constant    If omitted, last registered address remains
 */
 .macro  IRQ_set line, addr
         RW_push set:a8i16

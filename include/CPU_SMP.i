@@ -26,10 +26,10 @@ SFX_SPC_IMAGE = EXRAM   ;SPC image dump location for SFX_APU_execspc
   SMP_exec
   Transfer & execute SPC700 binary via IPL transfer
 
-  :in:    dest    Destination address   uint16  value
-  :in:    source  Source address        uint24  value
-  :in:    length  Length                uint16  value
-  :in:    exec    Jump address          uint16  value
+  :in:    dest    Destination address (uint16)      constant
+  :in:    source  Source address (uint24)           constant
+  :in:    length  Length (uint16)                   constant
+  :in:    exec    Jump address (uint16)             constant
 */
 .macro  SMP_exec dest, source, length, exec
         RW_push set:a8i16
@@ -49,9 +49,9 @@ SFX_SPC_IMAGE = EXRAM   ;SPC image dump location for SFX_APU_execspc
   SMP_memcpy
   Copy bytes from CPU to SMP memory and return to IPL
 
-  :in:    dest    Destination address   uint16  value
-  :in:    source  Source address        uint24  value
-  :in:    length  Length                uint16  value
+  :in:    dest    Destination address (uint16)      constant
+  :in:    source  Source address (uint24)           constant
+  :in:    length  Length (uint16)                   constant
 */
 .macro  SMP_memcpy dest, source, length
         RW_push set:a8i16
@@ -71,7 +71,7 @@ SFX_SPC_IMAGE = EXRAM   ;SPC image dump location for SFX_APU_execspc
   SMP_jmp
   Transfer SPC700 control to address via IPL jump
 
-  :in:    addr    Jump address          uint16  value
+  :in:    addr    Jump address (uint16)             constant
 */
 .macro  SMP_jmp addr
         RW_push set:a8i16
@@ -85,9 +85,12 @@ SFX_SPC_IMAGE = EXRAM   ;SPC image dump location for SFX_APU_execspc
   SMP_playspc
   Transfer & start SPC music file
 
-  :in:    state   Address to DSP and CPU state                      uint24  value
-  :in:    ram     Address to full 64kB or lower 32kB SPC RAM dump   uint24  value
-  :in?:   ram_hi  Address to upper 32kB SPC RAM dump                uint24  value
+  If ROM_MAPMODE == 0 ("LoROM") both ram and ram_hi parameters are required.
+
+  :in:    state   Address to DSP/CPU state (uint24)           constant
+  :in:    ram     Address to full 64kB SPC RAM dump (uint24)  constant
+                  Address to lower 32kB SPC RAM dump (uint24) constant
+  :in?:   ram_hi  Address to upper 32kB SPC RAM dump (uint24) constant
 */
 .macro  SMP_playspc state, ram, ram_hi
   .if .blank({ram_hi})

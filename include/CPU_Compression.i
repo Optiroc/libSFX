@@ -12,18 +12,17 @@
 /**
   Decompress LZ4 frame
 
-  :in:    source  LZ4 frame address
-  :in:    dest    Destination address   uint24  ay/hi:y/ex:y or value
-  :out?:  outlen  Decompressed length   uint16  a/x/y
+  :in:    source  LZ4 frame address (uint24)    constant
+  :in:    dest    Destination address (uint24)  ay/hi:y/ex:y
+                                                constant
+  :out?:  outlen  Decompressed length (uint16)  a/x/y
 */
 .macro  LZ4_decompress source, dest, outlen
 .if (.blank({dest}))
   SFX_error "LZ4_decompress: Missing required parameter(s)"
 .else
         RW_push set:a16i16
-
         ldx     #.loword(source)
-
 .if .xmatch({dest}, {ay})
         xba
         and     #$ff00
@@ -61,18 +60,17 @@
 /**
   Decompress LZ4 block
 
-  :in:    source  LZ4 block address
-  :in:    dest    Destination address   uint24  ay/hi:y/ex:y or value
-  :out?:  outlen  Decompressed length   uint16  a/x/y
+  :in:    source  LZ4 block address (uint24)    constant
+  :in:    dest    Destination address (uint24)  ay/hi:y/ex:y
+                                                constant
+  :out?:  outlen  Decompressed length (uint16)  a/x/y
 */
 .macro  LZ4_decompress_block source, dest
 .if (.blank({dest}))
   SFX_error "LZ4_decompress_block: Missing required parameter(s)"
 .else
         RW_push set:a16i16
-
         ldx     #.loword(source)
-
 .if .xmatch({dest}, {ay})
         xba
         and     #$ff00
