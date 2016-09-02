@@ -93,6 +93,9 @@ SFX_SPC_IMAGE = EXRAM   ;SPC image dump location for SFX_APU_execspc
   :in?:   ram_hi  Address to upper 32kB SPC RAM dump (uint24) constant
 */
 .macro  SMP_playspc state, ram, ram_hi
+  .if ((ROM_MAPMODE = $0) && (.blank({ram_hi})))
+        SFX_error "SMP_playspc: If ROM_MAPMODE == 0 (`LoROM`) both ram and ram_hi parameters are required."
+  .endif
   .if .blank({ram_hi})
         WRAM_memcpy SFX_SPC_IMAGE, ram, $0000
         WRAM_memcpy SFX_DSP_STATE, state, $100
