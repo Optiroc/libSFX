@@ -17,7 +17,7 @@ SFX_SPC_IMAGE = EXRAM   ;SPC image dump location for SFX_APU_execspc
 */
 .macro  SMP_ready
         RW_push set:i16
-        jsl     SFX_SMP_waitReady
+        jsl     SFX_SMP_ready
         RW_pull
 .endmac
 
