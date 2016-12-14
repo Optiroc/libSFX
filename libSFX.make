@@ -45,15 +45,18 @@ ld				:= $(libsfx_bin)/cc65/bin/ld65
 sfcheck			:= $(libsfx_bin)/superfamicheck/bin/superfamicheck
 brr_enc			:= $(libsfx_bin)/brrtools/bin/brr_encoder
 usb2snes		:= $(libsfx_bin)/usb2snes/bin/usb2snes
+
 asflags			:= -g -U -I ./ -I $(libsfx_inc) -I $(libsfx_inc)/Configurations
 ldflags			:= $(dflags) --cfg-path ./ --cfg-path $(libsfx_inc)/Configurations/
+brrflags		:= -rn1.0 -g
 
 # Source globs
-src				:= $(call rwildcard, , *.s)
-src_smp			:= $(call rwildcard, , *.s700)
+src				+= $(call rwildcard, , *.s)
+src_smp			+= $(call rwildcard, , *.s700)
 libsfx_src		:= $(call rwildcard, $(libsfx_inc)/, *.s)
 libsfx_src_smp	:= $(call rwildcard, $(libsfx_inc)/, *.s700)
 cfg_files		:= $(wildcard *.cfg)
+bin_files		+=
 
 # Targets
 rom				:= $(name).sfc
@@ -85,7 +88,8 @@ $(rom): $(obj) $(obj_smp)
 	$(ld) $(ldflags) -C Map.cfg -o $@ -Ln $(sym) $^
 	$(sfcheck) $@ -f
 
-$(obj): $(cfg_files)
+$(obj): $(cfg_files) $(bin_files)
+$(obj_smp): $(cfg_files) $(bin_files)
 
 # Project obj : src
 $(obj_dir)/%.o: %.s
@@ -105,6 +109,11 @@ $(obj_dir)/libsfx/%.o: $(libsfx_inc)/%.s700
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
 
+# Project brr : wav
+%.wav.brr: %.wav
+	$(brr_enc) $(brrflags) $< $@
+
 clean:
 	@rm -f $(rom) $(sym)
 	@rm -frd $(obj_dir)
+
