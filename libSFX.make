@@ -61,9 +61,9 @@ derived_files	+=
 # Targets
 rom				:= $(name).sfc
 sym				:= $(name).sym
-obj				:= $(patsubst $(libsfx_inc)%,$(obj_dir)/libsfx%,$(patsubst %.s,%.o,$(libsfx_src)))
+obj				:= $(patsubst $(libsfx_inc)%,$(obj_dir)/__LIBSFX__%,$(patsubst %.s,%.o,$(libsfx_src)))
 obj				+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s,%.o,$(src)))
-obj_smp			:= $(patsubst $(libsfx_inc)%,$(obj_dir)/libsfx%,$(patsubst %.s700,%.o700,$(libsfx_src_smp)))
+obj_smp			:= $(patsubst $(libsfx_inc)%,$(obj_dir)/__LIBSFX__%,$(patsubst %.s700,%.o700,$(libsfx_src_smp)))
 obj_smp			+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s700,%.o700,$(src_smp)))
 
 
@@ -93,11 +93,11 @@ $(rom): $(obj) $(obj_smp)
 	$(sfcheck) $@ -f
 
 # libSFX obj : src
-$(obj_dir)/libsfx/%.o: $(libsfx_inc)/%.s
+$(obj_dir)/__LIBSFX__/%.o: $(libsfx_inc)/%.s
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) $(dflags) -o $@ $<
 
-$(obj_dir)/libsfx/%.o700: $(libsfx_inc)/%.s700
+$(obj_dir)/__LIBSFX__/%.o700: $(libsfx_inc)/%.s700
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
 
