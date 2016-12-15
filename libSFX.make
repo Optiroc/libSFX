@@ -55,7 +55,7 @@ src				+= $(call rwildcard, , *.s)
 src_smp			+= $(call rwildcard, , *.s700)
 libsfx_src		:= $(call rwildcard, $(libsfx_inc)/, *.s)
 libsfx_src_smp	:= $(call rwildcard, $(libsfx_inc)/, *.s700)
-cfg_files		:= $(wildcard *.cfg)
+cfg_files		:= Makefile $(libsfx_dir)/libSFX.make $(wildcard *.cfg)
 bin_files		+=
 
 # Targets
@@ -63,8 +63,8 @@ rom				:= $(name).sfc
 sym				:= $(name).sym
 obj				:= $(patsubst $(libsfx_inc)%,$(obj_dir)/libsfx%,$(patsubst %.s,%.o,$(libsfx_src)))
 obj				+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s,%.o,$(src)))
-obj_smp			:= $(patsubst $(libsfx_inc)%,$(obj_dir)/libsfx%,$(patsubst %.s700,%.o,$(libsfx_src_smp)))
-obj_smp			+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s700,%.o,$(src_smp)))
+obj_smp			:= $(patsubst $(libsfx_inc)%,$(obj_dir)/libsfx%,$(patsubst %.s700,%.o700,$(libsfx_src_smp)))
+obj_smp			+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s700,%.o700,$(src_smp)))
 
 
 # Rules
@@ -88,32 +88,32 @@ $(rom): $(obj) $(obj_smp)
 	$(ld) $(ldflags) -C Map.cfg -o $@ -Ln $(sym) $^
 	$(sfcheck) $@ -f
 
-$(obj): $(cfg_files) $(bin_files)
+$(obj): $(obj_smp)
 $(obj_smp): $(cfg_files) $(bin_files)
-
-# Project obj : src
-$(obj_dir)/%.o: %.s
-	@mkdir -pv $(dir $@)
-	$(as) $(asflags) $(dflags) -o $@ $<
-
-$(obj_dir)/%.o: %.s700
-	@mkdir -pv $(dir $@)
-	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
 
 # libSFX obj : src
 $(obj_dir)/libsfx/%.o: $(libsfx_inc)/%.s
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) $(dflags) -o $@ $<
 
-$(obj_dir)/libsfx/%.o: $(libsfx_inc)/%.s700
+$(obj_dir)/libsfx/%.o700: $(libsfx_inc)/%.s700
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
 
-# Project brr : wav
+# Project obj : src
+$(obj_dir)/%.o: %.s
+	@mkdir -pv $(dir $@)
+	$(as) $(asflags) $(dflags) -o $@ $<
+
+$(obj_dir)/%.o700: %.s700
+	@mkdir -pv $(dir $@)
+	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
+
+# Data conversion
 %.wav.brr: %.wav
 	$(brr_enc) $(brrflags) $< $@
 
 clean:
-	@rm -f $(rom) $(sym)
+	@rm -f $(rom) $(sym) $(bin_files)
 	@rm -frd $(obj_dir)
 
