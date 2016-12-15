@@ -83,14 +83,14 @@ else
 	@echo \ \ \ \ export LIBSFX_RUNCMD\=\'open -a \~/bsnes/bsnes+.app --args \$$\(realpath \$$\(rom\)\)\'
 endif
 
-
-$(rom): $(obj) $(obj_smp)
-	$(ld) $(ldflags) -C Map.cfg -o $@ -Ln $(sym) $^
-	$(sfcheck) $@ -f
-
 $(obj): $(obj_smp)
 $(obj_smp): $(derived_files)
 $(derived_files): $(cfg_files)
+
+# Link
+$(rom): $(obj) $(obj_smp)
+	$(ld) $(ldflags) -C Map.cfg -o $@ -Ln $(sym) $^
+	$(sfcheck) $@ -f
 
 # libSFX obj : src
 $(obj_dir)/libsfx/%.o: $(libsfx_inc)/%.s
