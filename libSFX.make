@@ -56,7 +56,7 @@ src_smp			+= $(call rwildcard, , *.s700)
 libsfx_src		:= $(call rwildcard, $(libsfx_inc)/, *.s)
 libsfx_src_smp	:= $(call rwildcard, $(libsfx_inc)/, *.s700)
 cfg_files		:= Makefile $(libsfx_dir)/libSFX.make $(wildcard *.cfg)
-bin_files		+=
+derived_files	+=
 
 # Targets
 rom				:= $(name).sfc
@@ -89,7 +89,8 @@ $(rom): $(obj) $(obj_smp)
 	$(sfcheck) $@ -f
 
 $(obj): $(obj_smp)
-$(obj_smp): $(cfg_files) $(bin_files)
+$(obj_smp): $(derived_files)
+$(derived_files): $(cfg_files)
 
 # libSFX obj : src
 $(obj_dir)/libsfx/%.o: $(libsfx_inc)/%.s
@@ -114,6 +115,6 @@ $(obj_dir)/%.o700: %.s700
 	$(brr_enc) $(brrflags) $< $@
 
 clean:
-	@rm -f $(rom) $(sym) $(bin_files)
+	@rm -f $(rom) $(sym) $(derived_files)
 	@rm -frd $(obj_dir)
 
