@@ -32,11 +32,16 @@
 .include "Meta.i"
 .include "libSFX.cfg"
 .include "SMP_System.i700"
+.include "GSU_System.igs"
 
-.ifdef TARGET_SMP
+.if .defined(TARGET_SMP)
   ;S-SMP includes
+  .include "SMP_Assembler.i700"
   .include "SMP_Def.i700"
-  .include "SMP_SPC700.i700"
+
+.elseif .defined(TARGET_GSU)
+  ;GSU includes
+  .include "GSU_Assembler.igs"
 
 .else
   ;S-CPU includes

@@ -55,8 +55,10 @@ lz4flags		:= -f -9
 # Source globs
 src				+= $(call rwildcard, , *.s)
 src_smp			+= $(call rwildcard, , *.s700)
+src_gsu			+= $(call rwildcard, , *.sgs)
 libsfx_src		:= $(call rwildcard, $(libsfx_inc)/, *.s)
 libsfx_src_smp	:= $(call rwildcard, $(libsfx_inc)/, *.s700)
+libsfx_src_gsu	:= $(call rwildcard, $(libsfx_inc)/, *.sfx)
 cfg_files		:= Makefile $(libsfx_dir)/libSFX.make $(wildcard *.cfg)
 derived_files	+=
 
@@ -67,7 +69,7 @@ obj				:= $(patsubst $(libsfx_inc)%,$(obj_dir)/__LIBSFX__%,$(patsubst %.s,%.o,$(
 obj				+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s,%.o,$(src)))
 obj_smp			:= $(patsubst $(libsfx_inc)%,$(obj_dir)/__LIBSFX__%,$(patsubst %.s700,%.o700,$(libsfx_src_smp)))
 obj_smp			+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s700,%.o700,$(src_smp)))
-
+obj_gsu			:= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.sgs,%.ogs,$(src_gsu)))
 
 # Rules
 .SUFFIXES:
@@ -85,12 +87,13 @@ else
 	@echo \ \ \ \ export LIBSFX_RUNCMD\=\'open -a \~/bsnes/bsnes+.app --args \$$\(realpath \$$\(rom\)\)\'
 endif
 
-$(obj): $(obj_smp) $(derived_files)
+$(obj): $(derived_files)
+$(obj_gsu): $(derived_files)
 $(obj_smp): $(derived_files)
 $(derived_files): $(cfg_files)
 
 # Link
-$(rom): $(obj) $(obj_smp)
+$(rom): $(obj) $(obj_smp) $(obj_gsu)
 	$(ld) $(ldflags) -C Map.cfg -o $@ -Ln $(sym) $^
 	$(sfcheck) $@ -f
 
@@ -111,6 +114,10 @@ $(obj_dir)/%.o: %.s
 $(obj_dir)/%.o700: %.s700
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
+
+$(obj_dir)/%.ogs: %.sgs
+	@mkdir -pv $(dir $@)
+	$(as) $(asflags) $(dflags) -D TARGET_GSU -o $@ $<
 
 # Derived data transformation
 $(filter %.lz4,$(derived_files)): %.lz4: %

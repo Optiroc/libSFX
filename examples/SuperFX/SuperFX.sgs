@@ -1,0 +1,20 @@
+; SuperFX
+; David Lindecrantz <optiroc@gmail.com>
+;
+; Noperator-GS1
+
+.include "libSFX.i"
+
+.segment "GSUCODE"
+
+GSU_Code:
+	nop
+	nop
+	alt1
+	nop
+	alt2
+	nop
+	nop
+	alt3
+	nop
+	stop

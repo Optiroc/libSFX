@@ -36,6 +36,10 @@ ROM_ROMSIZE = $07
 ROM_RAMSIZE = $00
 .endif
 
+.ifndef ROM_EXPRAMSIZE
+ROM_EXPRAMSIZE = $00
+.endif
+
 .if isnotdefined "ROM_GAMECODE"
 define "ROM_GAMECODE", "SFXJ"
 .endif
@@ -67,7 +71,7 @@ ROM_HEADER:
         .byte ROM_GAMECODE              ;$ffb2-$ffb5  Game code
         .byte 0,0,0,0,0,0               ;$ffb6-$ffbb  Reserved
         .byte $00                       ;$ffbc        Expansion flash size
-        .byte $00                       ;$ffbd        Expansion RAM size
+        .byte ROM_EXPRAMSIZE            ;$ffbd        Expansion RAM size
         .byte $00                       ;$ffbe        Special version
         .byte >ROM_CHIPSET              ;$ffbf        Chipset sub-type
         .byte ROM_TITLE                 ;$ffc0-$ffd4  ROM title

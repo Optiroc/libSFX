@@ -1,8 +1,8 @@
 ; SPC-700 Assembler for ca65
-; Shay Green <gblargg@gmail.com>
+; by Shay Green <gblargg@gmail.com>
 
-.ifndef ::__MBSFX_SMP_SPC700__
-::__MBSFX_SMP_SPC700__ = 1
+.ifndef ::__MBSFX_SMP_Assembler__
+::__MBSFX_SMP_Assembler__ = 1
 
 ;-------------------------------------------------------------------------------
 .setcpu "none"
@@ -498,4 +498,4 @@
 .endif
 
 
-.endif;__MBSFX_SMP_SPC700__
+.endif;__MBSFX_SMP_Assembler__

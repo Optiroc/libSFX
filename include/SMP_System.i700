@@ -13,8 +13,4 @@ SMP_Burst_LENGTH = SMP_Burst_END - SMP_Burst
 SMP_SetDSP_OFFSET = __SMPLIBSFX_LOAD__ + SMP_SetDSP - $02
 SMP_SetDSP_LENGTH = SMP_SetDSP_END - SMP_SetDSP
 
-;-------------------------------------------------------------------------------
-;DSP Macros
-
-
 .endif;__MBSFX_SMP_System__
