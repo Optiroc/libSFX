@@ -44,11 +44,13 @@ as				:= $(libsfx_bin)/cc65/bin/ca65
 ld				:= $(libsfx_bin)/cc65/bin/ld65
 sfcheck			:= $(libsfx_bin)/superfamicheck/bin/superfamicheck
 brr_enc			:= $(libsfx_bin)/brrtools/bin/brr_encoder
+lz4_compress	:= $(libsfx_bin)/lz4/programs/lz4
 usb2snes		:= $(libsfx_bin)/usb2snes/bin/usb2snes
 
 asflags			:= -g -U -I ./ -I $(libsfx_inc) -I $(libsfx_inc)/Configurations
 ldflags			:= $(dflags) --cfg-path ./ --cfg-path $(libsfx_inc)/Configurations/
 brrflags		:= -rn1.0 -g
+lz4flags		:= -f -9
 
 # Source globs
 src				+= $(call rwildcard, , *.s)
@@ -83,7 +85,7 @@ else
 	@echo \ \ \ \ export LIBSFX_RUNCMD\=\'open -a \~/bsnes/bsnes+.app --args \$$\(realpath \$$\(rom\)\)\'
 endif
 
-$(obj): $(obj_smp)
+$(obj): $(obj_smp) $(derived_files)
 $(obj_smp): $(derived_files)
 $(derived_files): $(cfg_files)
 
@@ -110,11 +112,14 @@ $(obj_dir)/%.o700: %.s700
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) $(dflags) -D TARGET_SMP -o $@ $<
 
-# Data conversion
-%.wav.brr: %.wav
+# Derived data transformation
+$(filter %.lz4,$(derived_files)): %.lz4: %
+	$(lz4_compress) $(lz4flags) $< $@
+
+$(filter %.brr,$(derived_files)): %.brr: %.wav
+	@rm -f $@
 	$(brr_enc) $(brrflags) $< $@
 
 clean:
 	@rm -f $(rom) $(sym) $(derived_files)
 	@rm -frd $(obj_dir)
-
