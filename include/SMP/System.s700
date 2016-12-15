@@ -3,6 +3,8 @@
 .include "../libSFX.i"
 .segment "SMPLIBSFX"
 
+.export SMP_Burst, SMP_Burst_END, SMP_SetDSP, SMP_SetDSP_END
+
 ;-------------------------------------------------------------------------------
 ; Burst transfer S-CPU to S-SMP
 ; by Shay Green <gblargg@gmail.com>

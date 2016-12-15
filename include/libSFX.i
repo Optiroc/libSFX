@@ -31,17 +31,15 @@
 
 .include "Meta.i"
 .include "libSFX.cfg"
-.include "SMP_System.i700"
-.include "GSU_System.igs"
 
 .if .defined(TARGET_SMP)
   ;S-SMP includes
-  .include "SMP_Assembler.i700"
-  .include "SMP_Def.i700"
+  .include "SMP_Def.i"
+  .include "SMP_Assembler.i"
 
 .elseif .defined(TARGET_GSU)
   ;GSU includes
-  .include "GSU_Assembler.igs"
+  .include "GSU_Assembler.i"
 
 .else
   ;S-CPU includes
@@ -50,10 +48,11 @@
   .include "CPU_Runtime.i"
   .include "CPU_Memory.i"
   .include "CPU_PPU.i"
-  .include "CPU_SMP.i"
   .include "CPU_Math.i"
   .include "CPU_DataStructures.i"
   .include "CPU_Compression.i"
+  .include "CPU_SMP.i"
+  .include "CPU_GSU.i"
 
   ;Initial register widths
   RW_assume a8i16

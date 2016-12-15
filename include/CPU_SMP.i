@@ -4,12 +4,19 @@
 .ifndef ::__MBSFX_CPU_SMP__
 ::__MBSFX_CPU_SMP__ = 1
 
-SFX_DSP_STATE = HIRAM   ;DSP state location
-SFX_SPC_IMAGE = EXRAM   ;SPC image dump location for SFX_APU_execspc
+;Locations and sizes for relocatable SMP routines
+.import SMP_Burst, SMP_Burst_END, SMP_SetDSP, SMP_SetDSP_END
+SMP_Burst_OFFSET = __SMPLIBSFX_LOAD__ + SMP_Burst - $02
+SMP_Burst_LENGTH = SMP_Burst_END - SMP_Burst
+SMP_SetDSP_OFFSET = __SMPLIBSFX_LOAD__ + SMP_SetDSP - $02
+SMP_SetDSP_LENGTH = SMP_SetDSP_END - SMP_SetDSP
 
-.global SFX_SMP_ready, SFX_SMP_jmp, SFX_SMP_exec, SFX_SMP_execspc
+;RAM locations for SPC burst transfer
+SFX_DSP_STATE = HIRAM
+SFX_SPC_IMAGE = EXRAM
 
 ;-------------------------------------------------------------------------------
+.global SFX_SMP_ready, SFX_SMP_jmp, SFX_SMP_exec, SFX_SMP_execspc
 
 /**
   SMP_ready

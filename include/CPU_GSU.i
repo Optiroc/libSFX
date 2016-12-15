@@ -1,8 +1,8 @@
-; libSFX S-CPU side GSU Definitions
+; libSFX S-CPU to GSU Register Definitions
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef ::__MBSFX_GSU_System__
-::__MBSFX_GSU_System__ = 1
+.ifndef ::__MBSFX_CPU_GSU__
+::__MBSFX_CPU_GSU__ = 1
 
 ;-------------------------------------------------------------------------------
 
@@ -43,4 +43,4 @@ GSU_CLSR        = $3039 ;Clock Select Register
 
 GSU_CACHE       = $3100 ;GSU Cache RAM
 
-.endif;__MBSFX_GSU_System__
+.endif;__MBSFX_CPU_GSU__
