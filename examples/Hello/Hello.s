@@ -5,6 +5,7 @@
 
 .include "libSFX.i"
 
+;VRAM destination addresses
 TILEMAP_LOC     = $0000
 TILESET_LOC     = $8000
 

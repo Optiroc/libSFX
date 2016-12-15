@@ -1,13 +1,15 @@
+; SixteenMegaPower
+; David Lindecrantz <optiroc@gmail.com>
+;
+; Example showing:
+;   - Customized memory map (Map.cfg)
+;   - Customized libSFX.cfg
+;   - Customized Makefile
+
 .include "libSFX.i"
 
 Main:
-        break
-        FIFO_alloc TestFIFO, 8
-
         jsr     InitScreen              ;Jump to subroutine defined elsewhere
-
-        FIFO_enq TestFIFO, $f
-
         VBL_on                          ;Turn on vblank interrupt
 
 :       wai
