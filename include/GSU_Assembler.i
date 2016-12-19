@@ -5,7 +5,7 @@
 ::__MBSFX_GSU_Assembler__ = 1
 
 ;-------------------------------------------------------------------------------
-.setcpu "none"
+_CASFX_AUTO_NOP = 1
 
 .define _CASFX_TEMP_ERR_STRING "Invalid argument for opcode "
 
