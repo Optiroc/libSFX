@@ -44,4 +44,5 @@ To override the defaults, simply copy these two files into your project director
 libSFX includes the following code and snippets:
 
 * SPC-700 assembler for ca65 and S-SMP transfer routines by Shay Green, aka [Blargg](http://blargg.8bitalley.com)
+* GSU assembler for ca65 by [ARM9](https://github.com/ARM9/casfx)
 * ca65 define/undefine macros by [Movax12](http://forums.nesdev.com/memberlist.php?mode=viewprofile&u=4680)
