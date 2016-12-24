@@ -59,7 +59,15 @@ src_gsu			+= $(call rwildcard, , *.sgs)
 libsfx_src		:= $(call rwildcard, $(libsfx_inc)/, *.s)
 libsfx_src_smp	:= $(call rwildcard, $(libsfx_inc)/, *.s700)
 libsfx_src_gsu	:= $(call rwildcard, $(libsfx_inc)/, *.sfx)
-cfg_files		:= Makefile $(libsfx_dir)/libSFX.make $(wildcard *.cfg)
+
+cfg_files		:= Makefile $(libsfx_dir)/libSFX.make
+ifneq ("$(wildcard libSFX.cfg)","")
+cfg_files		+= libSFX.cfg
+endif
+ifneq ("$(wildcard Map.cfg)","")
+cfg_files		+= Map.cfg
+endif
+
 derived_files	+=
 
 # Targets
@@ -87,9 +95,9 @@ else
 	@echo \ \ \ \ export LIBSFX_RUNCMD\=\'open -a \~/bsnes/bsnes+.app --args \$$\(realpath \$$\(rom\)\)\'
 endif
 
-$(obj): $(derived_files)
-$(obj_gsu): $(derived_files)
-$(obj_smp): $(derived_files)
+$(obj): $(derived_files) $(cfg_files)
+$(obj_gsu): $(derived_files) $(cfg_files)
+$(obj_smp): $(derived_files) $(cfg_files)
 $(derived_files): $(cfg_files)
 
 # Link
