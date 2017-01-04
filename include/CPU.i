@@ -546,6 +546,14 @@ SFX_RW_size_s8 .set %00
 
   Parameter:
   >:in:    addr      Address (uint16)        constant
+
+  Example:
+  (start code)
+  dpage   INIDISP
+  stz     z:dpo(OBJSEL)           ;Reset OAM regs
+  stz     z:dpo(OAMADDL)
+  stz     z:dpo(OAMADDH)
+  (end)
 */
 SFX_dp_offset .set 0
 .define dpo(addr) -SFX_dp_offset+(addr)

@@ -24,6 +24,12 @@
   >                                          constant
   >:in?:   value     Value (uint8)           a
   >                                          constant
+
+  Example:
+  (start code)
+  ldy               #$40
+  memset            $7f6000, y, $66         ;Set $7f6000-$7f603f to #$66
+  (end)
 */
 .macro memset addr, length, value
 .if .blank({length})
@@ -117,6 +123,10 @@
   Uses the 65816 block move instruction so its much slower than DMA
   for large transfers. On the other hand it's quicker to setup and
   doesn't interfere with DMA.
+
+  If the memory regions overlap, but are known at assemble time, the
+  copy will be done safely. If both addresses aren't known the copy
+  will be performed using MVN, ie. in negative direction.
 
   Parameters:
   >:in:    dest      Destination (uint24)    ay/hi:y/ex:y
@@ -221,6 +231,14 @@
   >                                          constant
   >:in?:   value     Value (uint8)           a
   >                                          constant
+
+  Example:
+  (start code)
+  ldx               #$4000
+  ldy               #$2000
+  lda               #$40
+  WRAM_memset       ex:x, y, a              ;Set $7f:4000-5fff to #$40
+  (end)
 */
 .macro  WRAM_memset addr, length, value
 .if .blank({length})
@@ -409,6 +427,14 @@
   >:in:    length    Length (uint16)         y
   >                                          a (<<8)
   >                                          constant
+
+  Example:
+  (begin code)
+  ;Decompress graphics and upload to VRAM
+
+  LZ4_decompress    Tilemap, EXRAM, y           ;Returns decompressed length in y
+  VRAM_memcpy       $2000, EXRAM, y             ;Copy y bytes to VRAM
+  (end)
 */
 .macro  VRAM_memcpy dest, source, length
 .if .blank({length})
@@ -479,6 +505,11 @@
   >                                          constant
   >:in:    length    Length (uint16)         y
   >                                          constant
+
+  Example:
+  (begin code)
+  CGRAM_memcpy      0, Palette, sizeof_Palette
+  (end)
 */
 .macro  CGRAM_memcpy dest, source, length
 .if .blank({length})

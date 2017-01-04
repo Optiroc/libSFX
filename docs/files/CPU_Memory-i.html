@@ -20,9 +20,10 @@ if (browserType) {document.write("<div class=" + browserType + ">");if (browserV
 :in:    length    Length (uint16)         y
                                           constant
 :in?:   value     Value (uint8)           a
-                                          constant</pre></blockquote></div></div></div>
+                                          constant</pre></blockquote><h4 class=CHeading>Example</h4><blockquote><pre class="prettyprint">ldy               #$40
+memset            $7f6000, y, $66         ;Set $7f6000-$7f603f to #$66</pre></blockquote></div></div></div>
 
-<div class="CMacro"><div class=CTopic><h3 class=CTitle><a name="memcpy"></a>memcpy</h3><div class=CBody><p>Copy bytes from/to CPU-bus</p><p>Uses the 65816 block move instruction so its much slower than DMA for large transfers.&nbsp; On the other hand it&rsquo;s quicker to setup and doesn&rsquo;t interfere with DMA.</p><h4 class=CHeading>Parameters</h4><blockquote><pre>:in:    dest      Destination (uint24)    ay/hi:y/ex:y
+<div class="CMacro"><div class=CTopic><h3 class=CTitle><a name="memcpy"></a>memcpy</h3><div class=CBody><p>Copy bytes from/to CPU-bus</p><p>Uses the 65816 block move instruction so its much slower than DMA for large transfers.&nbsp; On the other hand it&rsquo;s quicker to setup and doesn&rsquo;t interfere with DMA.</p><p>If the memory regions overlap, but are known at assemble time, the copy will be done safely.&nbsp; If both addresses aren&rsquo;t known the copy will be performed using MVN, ie. in negative direction.</p><h4 class=CHeading>Parameters</h4><blockquote><pre>:in:    dest      Destination (uint24)    ay/hi:y/ex:y
                                           constant
 :in:    source    Source (uint24)         ax/hi:x/ex:x
                                           constant
@@ -34,7 +35,10 @@ if (browserType) {document.write("<div class=" + browserType + ">");if (browserV
 :in:    length    Length (uint16)         y
                                           constant
 :in?:   value     Value (uint8)           a
-                                          constant</pre></blockquote></div></div></div>
+                                          constant</pre></blockquote><h4 class=CHeading>Example</h4><blockquote><pre class="prettyprint">ldx               #$4000
+ldy               #$2000
+lda               #$40
+WRAM_memset       ex:x, y, a              ;Set $7f:4000-5fff to #$40</pre></blockquote></div></div></div>
 
 <div class="CMacro"><div class=CTopic><h3 class=CTitle><a name="WRAM_memcpy"></a>WRAM_memcpy</h3><div class=CBody><p>Copy bytes from CPU-bus to WRAM</p><p>Disables DMA and uses channel 7 for transfer.&nbsp; WRAM to WRAM copy is not possible.</p><h4 class=CHeading>Parameters</h4><blockquote><pre>:in:    dest      Destination (uint24)    ax/ay/hi:x/hi:y/ex:y
                                           constant
@@ -55,14 +59,17 @@ if (browserType) {document.write("<div class=" + browserType + ">");if (browserV
                                           constant
 :in:    length    Length (uint16)         y
                                           a (&lt;&lt;8)
-                                          constant</pre></blockquote></div></div></div>
+                                          constant</pre></blockquote><h4 class=CHeading>Example</h4><blockquote><pre class="prettyprint">;Decompress graphics and upload to VRAM
+
+LZ4_decompress    Tilemap, EXRAM, y           ;Returns decompressed length in y
+VRAM_memcpy       $2000, EXRAM, y             ;Copy y bytes to VRAM</pre></blockquote></div></div></div>
 
 <div class="CMacro"><div class=CTopic><h3 class=CTitle><a name="CGRAM_memcpy"></a>CGRAM_memcpy</h3><div class=CBody><p>Copy bytes from CPU-bus to CGRAM.&nbsp; Disables DMA and uses channel 7 for transfer.</p><h4 class=CHeading>Parameters</h4><blockquote><pre>:in:    dest      Destination (uint16)    a
                                           constant
 :in:    source    Source (uint24)         ax/hi:x/ex:x
                                           constant
 :in:    length    Length (uint16)         y
-                                          constant</pre></blockquote></div></div></div>
+                                          constant</pre></blockquote><h4 class=CHeading>Example</h4><blockquote><pre class="prettyprint">CGRAM_memcpy      0, Palette, sizeof_Palette</pre></blockquote></div></div></div>
 
 </div><!--Content-->
 

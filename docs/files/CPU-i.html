@@ -69,7 +69,10 @@ The 'external' subroutine looks like this:
 <div class="CMacro"><div class=CTopic><h3 class=CTitle><a name="dpage"></a>dpage</h3><div class=CBody><p>Set direct page register (D).</p><h4 class=CHeading>Parameter</h4><blockquote><pre>:in:    offs      Offset (uint16)         a
                                           constant    Using a</pre></blockquote></div></div></div>
 
-<div class="CMacro"><div class=CTopic><h3 class=CTitle><a name="dpo"></a>dpo()</h3><div class=CBody><p>Get address minus current direct page offset.</p><p>Calculates a byte offset using the latest value set by the &lsquo;dpage&rsquo; macro.</p><h4 class=CHeading>Parameter</h4><blockquote><pre>:in:    addr      Address (uint16)        constant</pre></blockquote></div></div></div>
+<div class="CMacro"><div class=CTopic><h3 class=CTitle><a name="dpo"></a>dpo()</h3><div class=CBody><p>Get address minus current direct page offset.</p><p>Calculates a byte offset using the latest value set by the &lsquo;dpage&rsquo; macro.</p><h4 class=CHeading>Parameter</h4><blockquote><pre>:in:    addr      Address (uint16)        constant</pre></blockquote><h4 class=CHeading>Example</h4><blockquote><pre class="prettyprint">dpage   INIDISP
+stz     z:dpo(OBJSEL)           ;Reset OAM regs
+stz     z:dpo(OAMADDL)
+stz     z:dpo(OAMADDH)</pre></blockquote></div></div></div>
 
 <div class="CGroup"><div class=CTopic><h3 class=CTitle><a name="CPU_meta_instructions"></a>CPU meta instructions</h3></div></div>
 
