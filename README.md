@@ -11,7 +11,9 @@ A Super Nintendo assembler development framework featuring:
 * ROM image validation via [SuperFamicheck](https://github.com/Optiroc/SuperFamicheck).
 * Sublime Text [syntax definitions](./extras/SublimeText).
 
-Look at the include files (*.i) in the [libSFX include directory](./include/) for full documentation of the library features.
+Full documentation of the macro library at [optiroc.github.io/libSFX](http://optiroc.github.io/libSFX).
+
+Also, feel free to take a closer look at the [libSFX/include](./include/) directory!
 
 libSFX is developed by David Lindecrantz and distributed under the terms of the [MIT license](./LICENSE).
 
