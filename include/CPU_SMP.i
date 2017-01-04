@@ -19,7 +19,11 @@ SFX_SPC_IMAGE = EXRAM
 .global SFX_SMP_ready, SFX_SMP_jmp, SFX_SMP_exec, SFX_SMP_execspc
 
 /**
-  SMP_ready
+  Group: SMP macros
+*/
+
+/**
+  Macro: SMP_ready
   Wait for SMP ready signal
 */
 .macro  SMP_ready
@@ -30,13 +34,14 @@ SFX_SPC_IMAGE = EXRAM
 
 
 /**
-  SMP_exec
+  Macro: SMP_exec
   Transfer & execute SPC700 binary via IPL transfer
 
-  :in:    dest    Destination address (uint16)      constant
-  :in:    source  Source address (uint24)           constant
-  :in:    length  Length (uint16)                   constant
-  :in:    exec    Jump address (uint16)             constant
+  Parameters:
+  >:in:    dest      Destination address (uint16)    constant
+  >:in:    source    Source address (uint24)         constant
+  >:in:    length    Length (uint16)                 constant
+  >:in:    exec      Jump address (uint16)           constant
 */
 .macro  SMP_exec dest, source, length, exec
         RW_push set:a8i16
@@ -53,12 +58,13 @@ SFX_SPC_IMAGE = EXRAM
 
 
 /**
-  SMP_memcpy
+  Macro: SMP_memcpy
   Copy bytes from CPU to SMP memory and return to IPL
 
-  :in:    dest    Destination address (uint16)      constant
-  :in:    source  Source address (uint24)           constant
-  :in:    length  Length (uint16)                   constant
+  Parameters:
+  >:in:    dest      Destination address (uint16)    constant
+  >:in:    source    Source address (uint24)         constant
+  >:in:    length    Length (uint16)                 constant
 */
 .macro  SMP_memcpy dest, source, length
         RW_push set:a8i16
@@ -75,10 +81,11 @@ SFX_SPC_IMAGE = EXRAM
 
 
 /**
-  SMP_jmp
+  Macro: SMP_jmp
   Transfer SPC700 control to address via IPL jump
 
-  :in:    addr    Jump address (uint16)             constant
+  Parameters:
+  >:in:    addr      Jump address (uint16)           constant
 */
 .macro  SMP_jmp addr
         RW_push set:a8i16
@@ -89,15 +96,16 @@ SFX_SPC_IMAGE = EXRAM
 
 
 /**
-  SMP_playspc
+  Macro: SMP_playspc
   Transfer & start SPC music file
 
   If ROM_MAPMODE == 0 ("LoROM") both ram and ram_hi parameters are required.
 
-  :in:    state   Address to DSP/CPU state (uint24)           constant
-  :in:    ram     Address to full 64kB SPC RAM dump (uint24)  constant
-                  Address to lower 32kB SPC RAM dump (uint24) constant
-  :in?:   ram_hi  Address to upper 32kB SPC RAM dump (uint24) constant
+  Parameters:
+  >:in:    state     Address to DSP/CPU state (uint24)            constant
+  >:in:    ram       Address to full 64kB SPC RAM dump (uint24)   constant
+  >                  Address to lower 32kB SPC RAM dump (uint24)  constant
+  >:in?:   ram_hi    Address to upper 32kB SPC RAM dump (uint24)  constant
 */
 .macro  SMP_playspc state, ram, ram_hi
   .if ((ROM_MAPMODE = $0) && (.blank({ram_hi})))
@@ -118,20 +126,50 @@ SFX_SPC_IMAGE = EXRAM
 
 
 /**
+  Group: Helper macros
   Helper macros for importing SPC dumps
+*/
+
+/**
+  Macro: SPC_incbin
+  Import SPC RAM image (64k)
+
+  Parameters:
+  >:in:    filename  SPC File                path
 */
 .macro SPC_incbin filename
         .incbin filename, $100, $10000  ;$0000-$ffff SMP RAM
 .endmac
 
+/**
+  Macro: SPC_incbin_lo
+  Import SPC RAM image (lower 32k)
+
+  Parameters:
+  >:in:    filename  SPC File                path
+*/
 .macro SPC_incbin_lo filename
         .incbin filename, $100, $8000   ;$0000-$7fff SMP RAM
 .endmac
 
+/**
+  Macro: SPC_incbin_hi
+  Import SPC RAM image (upper 32k)
+
+  Parameters:
+  >:in:    filename  SPC File                path
+*/
 .macro SPC_incbin_hi filename
         .incbin spc_file, $8100, $8000  ;$8000-$ffff SMP RAM
 .endmac
 
+/**
+  Macro: SPC_incbin_state
+  Import SPC DSP/CPU state (#$87 bytes)
+
+  Parameters:
+  >:in:    filename  SPC File                path
+*/
 .macro SPC_incbin_state filename
         .incbin filename, $10100, $80   ;DSP registers
         .incbin filename, $25, $7       ;CPU registers

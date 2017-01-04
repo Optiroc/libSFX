@@ -7,3 +7,6 @@ tests/**/*.sym
 tests/**/*.srm
 examples/SixteenMegaPower/_build_
 _research
+extras/NaturalDocs/Data
+extras/NaturalDocs/libsfx.css
+dsp1b.bin

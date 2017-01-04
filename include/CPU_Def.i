@@ -1,22 +1,36 @@
 ; libSFX S-CPU & S-PPU Register Definitions
 ; David Lindecrantz <optiroc@gmail.com>
 
-; TODO:
-; Macros for calculating register values for the most common operations
-
 .ifndef ::__MBSFX_CPU_Def__
 ::__MBSFX_CPU_Def__ = 1
 
 ;-------------------------------------------------------------------------------
-;RAM locations
+/**
+   Group: General
+*/
+/**
+   Memory locations: RAM
+
+   >HIRAM - 56KB of RAM at 7e:2000
+   >EXRAM - 64KB of RAM at 7f:0000
+*/
 
 HIRAM                   = $7e2000
 EXRAM                   = $7f0000
 
 ;-------------------------------------------------------------------------------
-;Hardware Registers
+/**
+   Group: PPU Display Control
+*/
 
-INIDISP                 = $2100 ;Display Control
+/**
+   Registers: PPU Display Control Registers
+
+   >INIDISP                 = $2100   ;Display Control 1
+   >SETINI                  = $2133   ;Display Control 2
+*/
+
+INIDISP                 = $2100 ;Display Control 1
 DISP_BLANKING_MASK      = $7f
 DISP_BRIGHTNESS_MASK    = $f0
 DISP_BLANKING_SHIFT     = 7
@@ -25,9 +39,7 @@ DISP_BLANKING_OFF       = $00
 DISP_BRIGHTNESS_MIN     = $00
 DISP_BRIGHTNESS_MAX     = $0f
 
-.define inidisp(blanking, brightness) (.lobyte(((~blanking & 1) << DISP_BLANKING_SHIFT) | (brightness & ~DISP_BRIGHTNESS_MASK)))
-
-SETINI                  = $2133 ;Display Control
+SETINI                  = $2133 ;Display Control 2
 SET_INTERLACE_MASK      = $fe
 SET_OBJ_V_MASK          = $fd
 SET_BG_V_MASK           = $fb
@@ -53,9 +65,43 @@ SET_EXT_BG_OFF          = $00
 SET_EXT_SYNC_ON         = $80
 SET_EXT_SYNC_OFF        = $00
 
+/**
+  Macro: inidisp()
+
+  Encode value for INIDISP
+
+  Parameters:
+  >:in:    blanking    Screen blanking       bool (1 = screen blanking, 0 = screen on)
+  >:in:    brightness  Screen brightness     0-15
+*/
+.define inidisp(blanking, brightness) (.lobyte(((~blanking & 1) << DISP_BLANKING_SHIFT) | (brightness & ~DISP_BRIGHTNESS_MASK)))
+
 
 ;-------------------------------------------------------------------------------
-;PPU Data Ports
+/**
+   Group: PPU Data Ports
+*/
+
+/**
+   Registers: PPU Data Port Registers
+
+   >VMAINC                  = $2115   ;VRAM Address Increment Mode
+   >VMADDL                  = $2116   ;VRAM Address (LSB)
+   >VMADDH                  = $2117   ;VRAM Address (MSB)
+   >VMDATAL                 = $2118   ;VRAM Data Write (LSB)
+   >VMDATAH                 = $2119   ;VRAM Data Write (MSB)
+   >VMDATALREAD             = $2139   ;PPU1 VRAM Data Read (LSB)
+   >VMDATAHREAD             = $213a   ;PPU1 VRAM Data Read (MSB)
+   >
+   >OAMADDL                 = $2102   ;OAM Address (LSB)
+   >OAMADDH                 = $2103   ;OAM Address (MSB) + Priority Rotation
+   >OAMDATA                 = $2104   ;OAM Data Write (WRx2)
+   >OAMDATAREAD             = $2138   ;PPU1 OAM Data Read
+   >
+   >CGADD                   = $2121   ;CGRAM Address
+   >CGDATA                  = $2122   ;CGRAM Data Write (WRx2)
+   >CGDATAREAD              = $213b   ;PPU2 CGRAM Data Read (WRx2)
+*/
 
 VMAINC                  = $2115 ;VRAM Address Increment Mode
 VMADDL                  = $2116 ;VRAM Address (LSB)
@@ -80,18 +126,65 @@ VMA_MODE_8x128          = $06
 
 OAMADDL                 = $2102 ;OAM Address (LSB)
 OAMADDH                 = $2103 ;OAM Address (MSB) + Priority Rotation
-OAMDATA                 = $2104 ;OAM Data Write (2x)
+OAMDATA                 = $2104 ;OAM Data Write (WRx2)
 OAMDATAREAD             = $2138 ;PPU1 OAM Data Read
 
 CGADD                   = $2121 ;CGRAM Address
-CGDATA                  = $2122 ;CGRAM Data Write (2x)
-CGDATAREAD              = $213b ;PPU2 CGRAM Data Read (2x)
+CGDATA                  = $2122 ;CGRAM Data Write (WRx2)
+CGDATAREAD              = $213b ;PPU2 CGRAM Data Read (WRx2)
 
+/**
+  Macro: rgb()
+
+  Encode RGB values into SNES color word
+
+  Parameters:
+  >:in:    r           Red                   0-15
+  >:in:    g           Green                 0-15
+  >:in:    b           Blue                  0-15
+*/
 .define rgb(r, g, b) (.loword(((b & $1f) << 10) | ((g & $1f) << 5) | (r & $1f)))
 
 
 ;-------------------------------------------------------------------------------
-;BG & OBJ Control
+/**
+   Group: BG & OBJ Control
+*/
+
+/**
+   Registers: BG & OBJ Control Registers
+
+   >OBJSEL                  = $2101   ;Object Size + Object Base
+   >BGMODE                  = $2105   ;BG Mode + BG Character Size
+   >
+   >BG1SC                   = $2107   ;BG1 Screen Base + Screen Size
+   >BG2SC                   = $2108   ;BG2 Screen Base + Screen Size
+   >BG3SC                   = $2109   ;BG3 Screen Base + Screen Size
+   >BG4SC                   = $210a   ;BG4 Screen Base + Screen Size
+   >
+   >BG12NBA                 = $210b   ;BG1/2 Character Data Area Designation
+   >BG34NBA                 = $210c   ;BG3/4 Character Data Area Designation
+   >
+   >BG1HOFS                 = $210d   ;BG1 Horizontal Scroll (WRx2)
+   >BG1VOFS                 = $210e   ;BG1 Vertical Scroll (WRx2)
+   >BG2HOFS                 = $210f   ;BG2 Horizontal Scroll (WRx2)
+   >BG2VOFS                 = $2110   ;BG2 Vertical Scroll (WRx2)
+   >BG3HOFS                 = $2111   ;BG3 Horizontal Scroll (WRx2)
+   >BG3VOFS                 = $2112   ;BG3 Vertical Scroll (WRx2)
+   >BG4HOFS                 = $2113   ;BG4 Horizontal Scroll (WRx2)
+   >BG4VOFS                 = $2114   ;BG4 Vertical Scroll (WRx2)
+   >
+   >MOSAIC                  = $2106   ;Mosaic Size + Mosaic Enable
+   >M7SEL                   = $211a   ;Rotation/Scaling Mode Settings
+   >M7HOFS                  = BG1HOFS ;Horizontal Scroll (WRx2)
+   >M7VOFS                  = BG1VOFS ;Vertical Scroll (WRx2)
+   >M7A                     = $211b   ;Rotation/Scaling Parameter A (WRx2)
+   >M7B                     = $211c   ;Rotation/Scaling Parameter B (WRx2)
+   >M7C                     = $211d   ;Rotation/Scaling Parameter C (WRx2)
+   >M7D                     = $211e   ;Rotation/Scaling Parameter D (WRx2)
+   >M7X                     = $211f   ;Rotation/Scaling Center Coordinate X (WRx2)
+   >M7Y                     = $2120   ;Rotation/Scaling Center Coordinate Y (WRx2)
+*/
 
 OBJSEL                  = $2101 ;Object Size + Object Base
 OBJ_NAME_MASK           = $e0
@@ -127,8 +220,6 @@ BG_SIZE_16X16           = $1
 BG3_PRIO_NORMAL         = $0
 BG3_PRIO_HIGH           = $1
 
-.define bgmode(mode, bg3_prio, bg1sz, bg2sz, bg3sz, bg4sz) (.lobyte((mode & ~BG_MODE_MASK) | ((bg3_prio & 1) << BG_BG3_MAX_PRIO_SHIFT) | ((bg1sz & 1) << 4) | ((bg2sz & 1) << 5) | ((bg3sz & 1) << 6) | ((bg4sz & 1) << 7)))
-
 BG1SC                   = $2107 ;BG1 Screen Base + Screen Size
 BG2SC                   = $2108 ;BG2 Screen Base + Screen Size
 BG3SC                   = $2109 ;BG3 Screen Base + Screen Size
@@ -146,8 +237,6 @@ SC_SIZE_32X64           = $02
 SC_SIZE_3               = $03
 SC_SIZE_64X64           = $03
 
-.define bgsc(base, size) (.lobyte(((base >> 11) << SC_BASE_SHIFT) | size))
-
 BG12NBA                 = $210b ;BG1/2 Character Data Area Designation
 BG34NBA                 = $210c ;BG3/4 Character Data Area Designation
 BG_NBA1_MASK            = $f0
@@ -155,18 +244,14 @@ BG_BNA2_MASK            = $0f
 BG_NBA1_SHIFT           = 0
 BG_NBA2_SHIFT           = 4
 
-.define bgnba(bg1, bg2, bg3, bg4) (.loword((bg1 >> 13) | ((bg2 >> 13) << 4) | ((bg3 >> 13) << 8) | ((bg4 >> 13) << 12)))
-.define bg12nba(bg1, bg2) (.lobyte((bg1 >> 13) | ((bg2 >> 13) << 4)))
-.define bg34nba(bg3, bg4) (.lobyte((bg3 >> 13) | ((bg4 >> 13) << 4)))
-
-BG1HOFS                 = $210d ;BG1 Horizontal Scroll (2x)
-BG1VOFS                 = $210e ;BG1 Vertical Scroll (2x)
-BG2HOFS                 = $210f ;BG2 Horizontal Scroll (2x)
-BG2VOFS                 = $2110 ;BG2 Vertical Scroll (2x)
-BG3HOFS                 = $2111 ;BG3 Horizontal Scroll (2x)
-BG3VOFS                 = $2112 ;BG3 Vertical Scroll (2x)
-BG4HOFS                 = $2113 ;BG4 Horizontal Scroll (2x)
-BG4VOFS                 = $2114 ;BG4 Vertical Scroll (2x)
+BG1HOFS                 = $210d ;BG1 Horizontal Scroll (WRx2)
+BG1VOFS                 = $210e ;BG1 Vertical Scroll (WRx2)
+BG2HOFS                 = $210f ;BG2 Horizontal Scroll (WRx2)
+BG2VOFS                 = $2110 ;BG2 Vertical Scroll (WRx2)
+BG3HOFS                 = $2111 ;BG3 Horizontal Scroll (WRx2)
+BG3VOFS                 = $2112 ;BG3 Vertical Scroll (WRx2)
+BG4HOFS                 = $2113 ;BG4 Horizontal Scroll (WRx2)
+BG4VOFS                 = $2114 ;BG4 Vertical Scroll (WRx2)
 
 MOSAIC                  = $2106 ;Mosaic Size + Mosaic Enable
 MOS_ENBL_MASK           = $f0
@@ -198,14 +283,75 @@ M7_OVER_SC_REP          = $00
 M7_OVER_CHR_REP         = $80
 M7_OVER_COL             = $c0
 
-M7HOFS                  = BG1HOFS ;Horizontal Scroll (2x)
-M7VOFS                  = BG1VOFS ;Vertical Scroll (2x)
-M7A                     = $211b   ;Rotation/Scaling Parameter A (2x)
-M7B                     = $211c   ;Rotation/Scaling Parameter B (2x)
-M7C                     = $211d   ;Rotation/Scaling Parameter C (2x)
-M7D                     = $211e   ;Rotation/Scaling Parameter D (2x)
-M7X                     = $211f   ;Rotation/Scaling Center Coordinate X (2x)
-M7Y                     = $2120   ;Rotation/Scaling Center Coordinate Y (2x)
+M7HOFS                  = BG1HOFS ;Horizontal Scroll (WRx2)
+M7VOFS                  = BG1VOFS ;Vertical Scroll (WRx2)
+M7A                     = $211b   ;Rotation/Scaling Parameter A (WRx2)
+M7B                     = $211c   ;Rotation/Scaling Parameter B (WRx2)
+M7C                     = $211d   ;Rotation/Scaling Parameter C (WRx2)
+M7D                     = $211e   ;Rotation/Scaling Parameter D (WRx2)
+M7X                     = $211f   ;Rotation/Scaling Center Coordinate X (WRx2)
+M7Y                     = $2120   ;Rotation/Scaling Center Coordinate Y (WRx2)
+
+/**
+  Macro: bgmode()
+
+  Encode value for BGMODE
+
+  Parameters:
+  >:in:    mode        Mode                  0-7
+  >:in:    bg3_prio    BG3 Priority          bool (0 = normal, 1 = high)
+  >:in:    bg1sz       BG1 Size              BG_SIZE_8X8 / BG_SIZE_16X16
+  >:in:    bg2sz       BG2 Size              BG_SIZE_8X8 / BG_SIZE_16X16
+  >:in:    bg3sz       BG3 Size              BG_SIZE_8X8 / BG_SIZE_16X16
+  >:in:    bg4sz       BG4 Size              BG_SIZE_8X8 / BG_SIZE_16X16
+*/
+.define bgmode(mode, bg3_prio, bg1sz, bg2sz, bg3sz, bg4sz) (.lobyte((mode & ~BG_MODE_MASK) | ((bg3_prio & 1) << BG_BG3_MAX_PRIO_SHIFT) | ((bg1sz & 1) << 4) | ((bg2sz & 1) << 5) | ((bg3sz & 1) << 6) | ((bg4sz & 1) << 7)))
+
+/**
+  Macro: bgsc()
+
+  Encode value for BGnSC
+
+  Parameters:
+  >:in:    base        VRAM Base Address     uint16 (truncated to 1K word alignment)
+  >:in:    size        BG Size               SC_SIZE_32X32 / SC_SIZE_64X32 / SC_SIZE_32X64 / SC_SIZE_64X64
+*/
+.define bgsc(base, size) (.lobyte(((base >> 11) << SC_BASE_SHIFT) | size))
+
+/**
+  Macro: bgnba()
+
+  Encode value for BG12NBA+BG34NBA
+
+  Parameters:
+  >:in:    bg1         BG1 Character Area    uint16 (truncated to 4K word alignment)
+  >:in:    bg2         BG2 Character Area    uint16 (truncated to 4K word alignment)
+  >:in:    bg3         BG3 Character Area    uint16 (truncated to 4K word alignment)
+  >:in:    bg4         BG4 Character Area    uint16 (truncated to 4K word alignment)
+*/
+.define bgnba(bg1, bg2, bg3, bg4) (.loword((bg1 >> 13) | ((bg2 >> 13) << 4) | ((bg3 >> 13) << 8) | ((bg4 >> 13) << 12)))
+
+/**
+  Macro: bg12nba()
+
+  Encode value for BG12NBA
+
+  Parameters:
+  >:in:    bg1         BG1 Character Area    uint16 (truncated to 4K word alignment)
+  >:in:    bg2         BG2 Character Area    uint16 (truncated to 4K word alignment)
+*/
+.define bg12nba(bg1, bg2) (.lobyte((bg1 >> 13) | ((bg2 >> 13) << 4)))
+
+/**
+  Macro: bg34nba()
+
+  Encode value for BG34NBA
+
+  Parameters:
+  >:in:    bg3         BG3 Character Area    uint16 (truncated to 4K word alignment)
+  >:in:    bg4         BG4 Character Area    uint16 (truncated to 4K word alignment)
+*/
+.define bg34nba(bg3, bg4) (.lobyte((bg3 >> 13) | ((bg4 >> 13) << 4)))
 
 
 ;-------------------------------------------------------------------------------
@@ -268,7 +414,25 @@ COLR_WHITE              = $7fff
 
 
 ;-------------------------------------------------------------------------------
-; Window mask
+/**
+   Group: Window Mask
+*/
+
+/**
+   Registers: Window Mask Registers
+
+   >W12SEL                  = $2123   ;Window Mask Settings (BG1/2)
+   >W34SEL                  = $2124   ;Window Mask Settings (BG3/4)
+   >WOBJSEL                 = $2125   ;Window Mask Settings (OBJ/COLOR)
+   >
+   >WH0                     = $2126   ;Window 1 Left Position
+   >WH1                     = $2127   ;Window 1 Right Position
+   >WH2                     = $2128   ;Window 2 Left Position
+   >WH3                     = $2129   ;Window 2 Right Position
+   >
+   >WBGLOG                  = $212a   ;Window 1/2 Mask Logic Settings (BG1-4)
+   >WOBJLOG                 = $212b   ;Window 1/2 Mask Logic Settings (OBJ/MATH)
+*/
 
 W12SEL                  = $2123 ;Window Mask Settings (BG1/2)
 W34SEL                  = $2124 ;Window Mask Settings (BG3/4)
@@ -359,7 +523,18 @@ WL_COLR_XNOR            = WL_XNOR<<WL_COLR_SHIFT
 
 
 ;-------------------------------------------------------------------------------
-; Screen designation
+/**
+   Group: Screen Designation
+*/
+
+/**
+   Registers: Screen Designation Registers
+
+   >TM                      = $212c   ;Main Screen Designation
+   >TS                      = $212d   ;Sub Screen Designation
+   >TMW                     = $212e   ;Window Mask Designation for Main Screen
+   >TSW                     = $212f   ;Window Mask Designation for Sub Screen
+*/
 
 TM                      = $212c ;Main Screen Designation
 TM_BG1_MASK             = $fe
@@ -382,8 +557,6 @@ TM_BG4_ON               = $08
 TM_BG4_OFF              = $00
 TM_OBJ_ON               = $10
 TM_OBJ_OFF              = $00
-
-.define tm(bg1, bg2, bg3, bg4, obj) (.lobyte((bg1 & 1) | ((bg2 & 1) << TM_BG2_SHIFT) | ((bg3 & 1) << TM_BG3_SHIFT) | ((bg4 & 1) << TM_BG4_SHIFT) | ((obj & 1) << TM_OBJ_SHIFT)))
 
 TS                      = $212d ;Sub Screen Designation
 TS_BG1_MASK             = $fe
@@ -451,9 +624,33 @@ TSW_BG4_OFF             = $00
 TSW_OBJ_ON              = $10
 TSW_OBJ_OFF             = $00
 
+/**
+  Macro: tm()
+
+  Encode value for TM/TS/TMW/TSW
+
+  Parameters:
+  >:in:    bg1         BG1 Enable            bool
+  >:in:    bg2         BG2 Enable            bool
+  >:in:    bg3         BG3 Enable            bool
+  >:in:    bg4         BG4 Enable            bool
+  >:in:    obj         OBJ Enable            bool
+*/
+.define tm(bg1, bg2, bg3, bg4, obj) (.lobyte((bg1 & 1) | ((bg2 & 1) << TM_BG2_SHIFT) | ((bg3 & 1) << TM_BG3_SHIFT) | ((bg4 & 1) << TM_BG4_SHIFT) | ((obj & 1) << TM_OBJ_SHIFT)))
+
 
 ;-------------------------------------------------------------------------------
-; Color math
+/**
+   Group: Color Math
+*/
+
+/**
+   Registers: Color Math Registers
+
+   >CGSWSEL                 = $2130   ;Initial settings for fixed color/screen addition
+   >CGADSUB                 = $2131   ;Addition/Subtraction Designation
+   >COLDATA                 = $2132   ;Fixed Color Data
+*/
 
 CGSWSEL                 = $2130 ;Initial settings for fixed color/screen addition
 CG_DIRECT_SELECT_MASK   = $fe
@@ -526,7 +723,31 @@ CDAT_BLUE               = $80
 
 
 ;-------------------------------------------------------------------------------
-; Maths
+/**
+   Group: MMIO Math
+*/
+
+/**
+   Registers: MMIO Math Registers
+
+   >MPYL                    = $2134   ;PPU1 Signed Multiply Result (lower 8-bit)
+   >MPYM                    = $2135   ;PPU1 Signed Multiply Result (middle 8-bit)
+   >MPYH                    = $2136   ;PPU1 Signed Multiply Result (upper 8-bit)
+   >
+   >WRMPYM7A                = M7A     ;PPU1 Signed 16-bit Multiplicand
+   >WRMPYM7B                = M7B     ;PPU1 Signed 8-bit Multiplier
+   >
+   >RDDIVL                  = $4214   ;Unsigned Division Result (Quotient) (LSB)
+   >RDDIVH                  = $4215   ;Unsigned Division Result (Quotient) (MSB)
+   >RDMPYL                  = $4216   ;Unsigned Division Remainder / Multiply Product (LSB)
+   >RDMPYH                  = $4217   ;Unsigned Division Remainder / Multiply Product (MSB)
+   >
+   >WRMPYA                  = $4202   ;Unsigned 8-bit Multiplicand
+   >WRMPYB                  = $4203   ;Unsigned 8-bit Multiplier
+   >WRDIVL                  = $4204   ;Unsigned 16-bit Dividend (LSB)
+   >WRDIVH                  = $4205   ;Unsigned 16-bit Dividend (MSB)
+   >WRDIVB                  = $4206   ;Unsigned 8-bit Divisor
+*/
 
 MPYL                    = $2134 ;PPU1 Signed Multiply Result (lower 8-bit)
 MPYM                    = $2135 ;PPU1 Signed Multiply Result (middle 8-bit)
@@ -548,35 +769,28 @@ WRDIVB                  = $4206 ;Unsigned 8-bit Divisor
 
 
 ;-------------------------------------------------------------------------------
-; Status Registers
+/**
+   Group: APU & WRAM Data Ports
+*/
 
-SLHV                    = $2137 ;PPU1 Latch H/V-Counter
-OPHCT                   = $213c ;PPU2 Horizontal Counter Latch (read-twice)
-OPVCT                   = $213d ;PPU2 Vertical Counter Latch (read-twice)
+/**
+   Registers: APU & WRAM Data Port Registers
 
-STAT77                  = $213e ;PPU1 Status/Versionr
-STAT77_5C77V_MASK       = $f0
-STAT77_MS_MODE_MASK     = $df
-STAT77_OBJSTAT_MASK     = $3f
-STAT77_5C77V_SHIFT      = 0
-STAT77_MS_MODE_SHIFT    = 5
-STAT77_OBJSTAT_SHIFT    = 6
-
-STAT78                  = $213f ;PPU2 Status/Version
-STAT78_5C78V_MASK       = $f0
-STAT78_VIDEOMODE_MASK   = $ef
-STAT78_EXT_MASK         = $bf
-STAT78_FIELD_MASK       = $7f
-STAT78_5C78V_SHIFT      = 0
-STAT78_VIDEOMODE_SHIFT  = 4
-STAT78_EXT_SHIFT        = 6
-STAT78_FIELD_SHIFT      = 7
-STAT78_VIDEOMODE_NTSC   = $00
-STAT78_VIDEOMODE_PAL    = $01
-
-
-;-------------------------------------------------------------------------------
-; APU & WRAM Data Ports
+   >APUIO0                  = $2140   ;Sound CPU Communication Port 0
+   >APUIO1                  = $2141   ;Sound CPU Communication Port 1
+   >APUIO2                  = $2142   ;Sound CPU Communication Port 2
+   >APUIO3                  = $2143   ;Sound CPU Communication Port 4
+   >
+   >SMPIO0                  = APUIO0  ;Aliases for APUIO
+   >SMPIO1                  = APUIO1
+   >SMPIO2                  = APUIO2
+   >SMPIO3                  = APUIO3
+   >
+   >WMDATA                  = $2180   ;WRAM Data Read/Write
+   >WMADDL                  = $2181   ;WRAM Address (lower 8-bit)
+   >WMADDM                  = $2182   ;WRAM Address (middle 8-bit)
+   >WMADDH                  = $2183   ;WRAM Address (upper 1-bit)
+*/
 
 APUIO0                  = $2140   ;Sound CPU Communication Port 0
 APUIO1                  = $2141   ;Sound CPU Communication Port 1
@@ -595,7 +809,31 @@ WMADDH                  = $2183 ;WRAM Address (upper 1-bit)
 
 
 ;-------------------------------------------------------------------------------
-; Joypad I/O Interrupts
+/**
+   Group: Joypad
+*/
+
+/**
+   Registers: Joypad Registers
+
+   >JOYFCL                  = $4016   ;Joypad Input Register (LSB)
+   >JOYFCH                  = $4017   ;Joypad Input Register (MSB)
+   >JOYWR                   = $4016   ;Joypad Output (W)
+   >JOYA                    = $4016   ;Joypad Input Register A (R)
+   >JOYB                    = $4017   ;Joypad Input Register B (R)
+   >
+   >WRIO                    = $4201   ;Joypad Programmable I/O Port
+   >RDIO                    = $4213   ;Joypad Programmable I/O Port
+   >
+   >JOY1L                   = $4218   ;Joypad 1 (LSB)
+   >JOY1H                   = $4219   ;Joypad 1 (MSB)
+   >JOY2L                   = $421a   ;Joypad 2 (LSB)
+   >JOY2H                   = $421b   ;Joypad 2 (MSB)
+   >JOY3L                   = $421c   ;Joypad 3 (LSB)
+   >JOY3H                   = $421d   ;Joypad 3 (MSB)
+   >JOY4L                   = $421e   ;Joypad 4 (LSB)
+   >JOY4H                   = $421f   ;Joypad 4 (MSB)
+*/
 
 JOYFCL                  = $4016 ;Joypad Input Register (LSB)
 JOYFCH                  = $4017 ;Joypad Input Register (MSB)
@@ -632,7 +870,33 @@ JOY_ALL_MASK            = JOY_BUTTON_MASK+JOY_KEY_MASK
 
 
 ;-------------------------------------------------------------------------------
-; Interrupt Control
+/**
+   Group: Interrupt & Status
+*/
+
+/**
+   Registers: Interrupt & Status Registers
+
+   >NMITIMEN                = $4200   ;Interrupt Enable / Joypad Request
+   >
+   >HTIMEL                  = $4207   ;H-Count Timer Setting (LSB)
+   >HTIMEH                  = $4208   ;H-Count Timer Setting (MSB)
+   >VTIMEL                  = $4209   ;V-Count Timer Setting (LSB)
+   >VTIMEH                  = $420a   ;V-Count Timer Setting (MSB)
+   >
+   >MEMSEL                  = $420d   ;Access Cycle Designation
+   >
+   >RDNMI                   = $4210   ;V-Blank NMI Flag / CPU Version Number
+   >TIMEUP                  = $4211   ;H/V-Timer IRQ Flag
+   >HVBJOY                  = $4212   ;H/V-Blank Flag / Joypad Busy Flag
+   >
+   >SLHV                    = $2137   ;PPU1 Latch H/V-Counter
+   >OPHCT                   = $213c   ;PPU2 Horizontal Counter Latch (read-twice)
+   >OPVCT                   = $213d   ;PPU2 Vertical Counter Latch (read-twice)
+   >
+   >STAT77                  = $213e   ;PPU1 Status/Version
+   >STAT78                  = $213f   ;PPU2 Status/Version
+*/
 
 NMITIMEN                = $4200 ;Interrupt Enable / Joypad Request
 NMI_JOY_MASK            = $fe
@@ -684,9 +948,55 @@ HVBJOY_JOY_BUSY         = $01
 HVBJOY_H_BLANK          = $40
 HVBJOY_V_BLANK          = $80
 
+SLHV                    = $2137 ;PPU1 Latch H/V-Counter
+OPHCT                   = $213c ;PPU2 Horizontal Counter Latch (read-twice)
+OPVCT                   = $213d ;PPU2 Vertical Counter Latch (read-twice)
+
+STAT77                  = $213e ;PPU1 Status/Version
+STAT77_5C77V_MASK       = $f0
+STAT77_MS_MODE_MASK     = $df
+STAT77_OBJSTAT_MASK     = $3f
+STAT77_5C77V_SHIFT      = 0
+STAT77_MS_MODE_SHIFT    = 5
+STAT77_OBJSTAT_SHIFT    = 6
+
+STAT78                  = $213f ;PPU2 Status/Version
+STAT78_5C78V_MASK       = $f0
+STAT78_VIDEOMODE_MASK   = $ef
+STAT78_EXT_MASK         = $bf
+STAT78_FIELD_MASK       = $7f
+STAT78_5C78V_SHIFT      = 0
+STAT78_VIDEOMODE_SHIFT  = 4
+STAT78_EXT_SHIFT        = 6
+STAT78_FIELD_SHIFT      = 7
+STAT78_VIDEOMODE_NTSC   = $00
+STAT78_VIDEOMODE_PAL    = $01
+
 
 ;-------------------------------------------------------------------------------
-; DMA
+/**
+   Group: DMA
+*/
+
+/**
+   Registers: DMA Registers
+
+   >MDMAEN                  = $420b   ;General Purpose DMA Channel Designation & Trigger
+   >HDMAEN                  = $420c   ;H-DMA Channel Designation
+   >
+   >DMA Control (channel n = 0-7)
+   >DMAPn                   = $43n0   ;DMA Parameters
+   >BBADn                   = $43n1   ;DMA I/O-Bus Address (B-Bus)
+   >A1TnL                   = $43n2   ;HDMA Table Start Address / DMA Current Address (LSB)
+   >A1TnH                   = $43n3   ;HDMA Table Start Address / DMA Current Address (MSB)
+   >A1Bn                    = $43n4   ;HDMA Table Start Address / DMA Current Address (BANK)
+   >DASnL                   = $43n5   ;Indirect HDMA Address / DMA Byte-Counter (LSB)
+   >DASnH                   = $43n6   ;Indirect HDMA Address / DMA Byte-Counter (MSB)
+   >DASBn                   = $43n7   ;Indirect HDMA Address (BANK)
+   >A2AnL                   = $43n8   ;HDMA Table Current Address (LSB)
+   >A2AnH                   = $43n9   ;HDMA Table Current Address (MSB)
+   >NTRLn                   = $43na   ;HDMA Line-Counter
+*/
 
 MDMAEN                  = $420b ;General Purpose DMA Channel Designation & Trigger
 HDMAEN                  = $420c ;H-DMA Channel Designation

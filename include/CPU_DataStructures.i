@@ -5,16 +5,38 @@
 ::__MBSFX_CPU_DataStructures__ = 1
 
 ;-------------------------------------------------------------------------------
+/**
+  Group: FIFO
+*/
 
 /**
-  FIFO_alloc
-  Allocate static FIFO buffer
+  Macro: FIFO_alloc
+  Allocate static FIFO (queue) buffer.
 
   Buffer is allocated in the LORAM segment.
   Implemented as a circular buffer without overrun protection.
 
-  :in:    name    Name                  identifier  Any string (without quotes)
-  :in:    size    Capacity in bytes     constant    Power of two integer up to 256 bytes
+  Parameters:
+  >:in:    name    Name                  identifier  Any string (without quotes)
+  >:in:    size    Capacity in bytes     constant    Power of two integer up to 256 bytes
+
+  Example:
+  (begin code)
+  FIFO_alloc    TestFIFO, 32
+
+  FIFO_enq      TestFIFO, $f
+  FIFO_enq      TestFIFO, $0
+  lda           #$0
+  FIFO_enq      TestFIFO, a
+  lda           #$d
+  FIFO_enq      TestFIFO, a
+
+  FIFO_deq      TestFIFO           ;y = #$0f, z = 0
+  FIFO_deq      TestFIFO, a        ;a = #$00, z = 0
+  FIFO_deq      TestFIFO           ;y = #$00, z = 0
+  FIFO_deq      TestFIFO           ;y = #$0d, z = 0
+  FIFO_deq      TestFIFO           ;z = 1 -> Buffer empty
+  (end)
 */
 .macro FIFO_alloc name, size
 .if .blank({size})
@@ -40,14 +62,15 @@
 
 
 /**
-  FIFO_enq
-  Write (enqueue) byte to FIFO buffer
+  Macro: FIFO_enq
+  Write (enqueue) byte to FIFO buffer.
 
   Destroys a and x.
 
-  :in:    name    Buffer name           identifier  Any string (without quotes)
-  :in:    data    Data (int8)           a           Enqueue value in accumulator
-                                        constant    Enqueue assemble-time constant
+  Parameters:
+  >:in:    name    Buffer name           identifier  Any string (without quotes)
+  >:in:    data    Data (int8)           a           Enqueue value in accumulator
+  >                                      constant    Enqueue assemble-time constant
 */
 .macro FIFO_enq name, data
 .if .blank({data})
@@ -75,16 +98,17 @@
 
 
 /**
-  FIFO_deq
-  Read (dequeue) byte from FIFO buffer
+  Macro: FIFO_deq
+  Read (dequeue) byte from FIFO buffer.
 
   Value is returned in 'outreg' (default y), z = 0.
   If queue is empty z = 1.
 
   Destroys a and x or y.
 
-  :in:    name    Buffer name           identifier  Any string (without quotes)
-  :out?:  outreg  Return register       identifier  y/x/a
+  Parameters:
+  >:in:    name    Buffer name           identifier  Any string (without quotes)
+  >:out?:  outreg  Return register       identifier  y/x/a
 */
 .macro FIFO_deq name, outreg
 .if .blank({name})
@@ -132,16 +156,39 @@
 .endif
 .endmac
 
+;-------------------------------------------------------------------------------
+/**
+  Group: FILO
+*/
 
 /**
-  FILO_alloc
-  Allocate static FILO (stack) buffer
+  Macro: FILO_alloc
+  Allocate static FILO (stack) buffer.
 
   Buffer is allocated in the LORAM segment.
   No overflow protection.
 
-  :in:    name    Name                  identifier  Any string (without quotes)
-  :in:    size    Capacity in bytes     constant    Power of two integer up to 256 bytes
+  Parameters:
+  >:in:    name    Name                  identifier  Any string (without quotes)
+  >:in:    size    Capacity in bytes     constant    Power of two integer up to 256 bytes
+
+  Example:
+  (begin code)
+  FILO_alloc  TestFILO, 32
+
+  FILO_push   TestFILO, $b
+  FILO_push   TestFILO, $e
+  lda         #$e
+  FILO_push   TestFILO, a
+  lda         #$f
+  FILO_push   TestFILO, a
+
+  FILO_pop    TestFILO            ;y = #$0f, z = 0
+  FILO_pop    TestFILO, a         ;a = #$0e, z = 0
+  FILO_pop    TestFILO            ;y = #$0e, z = 0
+  FILO_pop    TestFILO            ;y = #$0b, z = 0
+  FILO_pop    TestFILO            ;z = 1 -> Buffer empty
+  (end)
 */
 .macro FILO_alloc name, size
 .if .blank({size})
@@ -166,14 +213,15 @@
 
 
 /**
-  FILO_push
-  Write byte to FILO buffer
+  Macro: FILO_push
+  Write byte to FILO buffer.
 
   Destroys x.
 
-  :in:    name    Buffer name           identifier  Any string (without quotes)
-  :in:    data    Data (int8)           a           Push value in accumulator
-                                        constant    Push assemble-time constant
+  Parameters:
+  >:in:    name    Buffer name           identifier  Any string (without quotes)
+  >:in:    data    Data (int8)           a           Push value in accumulator
+  >                                      constant    Push assemble-time constant
 */
 .macro FILO_push name, data
 .if .blank({data})
@@ -204,16 +252,17 @@
 
 
 /**
-  FILO_pop
-  Read byte from FILO buffer
+  Macro: FILO_pop
+  Read byte from FILO buffer.
 
   Value is returned in 'outreg' (default y), z = 0.
   If stack is empty z = 1.
 
   Destroys a and x or y.
 
-  :in:    name    Buffer name           identifier  Any string (without quotes)
-  :out?:  outreg  Return register       identifier  y/x/a
+  Parameters:
+  >:in:    name    Buffer name           identifier  Any string (without quotes)
+  >:out?:  outreg  Return register       identifier  y/x/a
 */
 .macro FILO_pop name, outreg
 .if .blank({name})

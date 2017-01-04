@@ -43,10 +43,11 @@
 ;Interrupt handler macros
 
 /**
-  VBL_set
+  Macro: VBL_set
   Set software vblank interrupt
 
-  :in:    addr    Address (uint24)      constant
+  Parameter:
+  >:in:    addr      Address (uint24)        constant
 */
 .macro  VBL_set addr
         RW_push set:a8i16
@@ -58,7 +59,7 @@
 .endmac
 
 /**
-  VBL_clr
+  Macro: VBL_clr
   Clear software vblank interrupt
 */
 .macro  VBL_clr
@@ -71,7 +72,7 @@
 .endmac
 
 /**
-  VBL_on
+  Macro: VBL_on
   Enable vblank interrupt
 */
 .macro  VBL_on
@@ -88,7 +89,7 @@
 .endmac
 
 /**
-  VBL_off
+  Macro: VBL_off
   Disable vblank interrupt
 */
 .macro  VBL_off
@@ -101,11 +102,12 @@
 .endmac
 
 /**
-  IRQ_set
+  Macro: IRQ_set
   Set software vertical line interrupt
 
-  :in:    line    Trigger line (uint8)  constant
-  :in?:   addr    Address (uint24)      constant    If omitted, last registered address remains
+  Parameters:
+  >:in:    line      Trigger line (uint8)    constant
+  >:in?:   addr      Address (uint24)        constant    If omitted, last registered address remains
 */
 .macro  IRQ_set line, addr
         RW_push set:a8i16
@@ -121,7 +123,7 @@
 .endmac
 
 /**
-  IRQ_on
+  Macro: IRQ_on
   Enable vertical line interrupt
 */
 .macro  IRQ_on
@@ -135,7 +137,7 @@
 .endmac
 
 /**
-  IRQ_off
+  Macro: IRQ_off
   Disable vertical line interrupt
 */
 .macro  IRQ_off
@@ -149,7 +151,7 @@
 
 
 /**
-  IRQ_suspend
+  Macro: IRQ_suspend
   Suspend vertical line interrupt
 */
 .macro  IRQ_suspend
@@ -160,6 +162,7 @@
 .endmac
 
 /**
+  Macro: IRQ_release
   Release suspended vertical line interrupt
 */
 .macro  IRQ_release
@@ -184,7 +187,7 @@
 ;Initialization
 
 /**
-  CPU_init
+  Macro: CPU_init
   Initialize CPU state
 */
 .macro  CPU_init
@@ -205,7 +208,7 @@
 .endmac
 
 /**
-  REG_init
+  Macro: REG_init
   Initialize PPU & CPU I/O registers
 */
 .macro  REG_init

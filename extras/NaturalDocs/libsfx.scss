@@ -1,0 +1,746 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,600');
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
+
+$font-main: "Open Sans", sans-serif;
+$font-code: "Source Code Pro", monospace;
+
+$font-unit: 6pt;
+$font-size-normal: $font-unit * 2;
+$font-lead-normal: $font-size-normal * 1.35;
+$font-size-big: $font-unit * 3;
+$font-lead-big: $font-size-big * 1.25;
+$font-size-small: $font-unit * 1.5;
+$font-lead-small: $font-size-small * 1.25;
+
+$color-white: #eee;
+$color-black: #383838;
+$color-grey: #888;
+$color-lightgrey: #ccc;
+$color-red: #eb1028;
+$color-blue: #38abe2;
+$color-green: #1db377;
+$color-yellow: #facd2f;
+$color-purple: #5b3b94;
+
+$color-bg: $color-white;
+$color-text: $color-black;
+$color-link: $color-blue;
+$color-link-hover: $color-yellow;
+$color-link-active: $color-yellow;
+
+$ms: "only screen and (max-width : 700px)";
+
+body {
+  font-family: $font-main;
+  font-size: $font-size-normal;
+  line-height: $font-lead-normal;
+  color: $color-text;
+  background-color: $color-bg;
+  margin: 0;
+  padding: 0;
+}
+
+.ContentPage,
+.IndexPage {
+  background-color: $color-bg;
+}
+
+a:link,
+a:visited {
+  color: $color-link;
+  text-decoration: none
+}
+a:hover,
+a:active {
+  color: $color-link-hover;
+  text-decoration: none
+}
+
+td {
+  vertical-align: top
+}
+
+img {
+  border: 0;
+}
+
+p {
+  margin: 0 0 $font-lead-normal*0.5 0;
+}
+
+blockquote {
+  padding: 0;
+  margin: 0;
+  overflow: auto;
+}
+
+
+#Footer {
+  display: none;
+}
+
+.ContentPage #Footer,
+.IndexPage #Footer {
+  text-align: right;
+  margin: 2px;
+}
+
+
+.ContentPage #Content {
+  border-color: #333;
+  background-color: $color-bg;
+  width: 75%;
+  padding-left: 2%;
+  overflow: auto;
+  @media #{$ms} {
+    width: 96%;
+    padding: 0 2% 0 2%;
+  }
+}
+
+.CTopic {
+  margin-bottom: 15pt;
+}
+
+
+.CTitle {
+  font-size: $font-size-normal;
+  line-height: $font-lead-normal;
+  border-width: 0;
+  border-style: solid;
+  border-color: $color-black;
+  margin: 0
+}
+
+.CGroup {
+  .CTitle {
+    font-size: $font-size-normal;
+    line-height: $font-lead-normal;
+    color: $color-black;
+    border-width: 0 0 1px 0;
+    border-color: $color-black;
+    margin: $font-lead-normal 0 $font-lead-normal*0.5 0;
+    padding-bottom: 1px;
+    padding-top: $font-lead-normal;
+
+    .CClass, .CInterface, .CDatabase, .CDatabaseTable, .CSection {
+      font-size: $font-size-big;
+      color: $color-grey;
+      background-color: #A0A0A0;
+      padding: 100px 15px 10px 15px;
+      margin-left: 0; margin-right: 0
+    }
+  }
+
+}
+
+
+#MainTopic .CTitle {
+  font-family: $font-main;
+  font-size: $font-size-big;
+  line-height: $font-lead-big;
+  color: $color-green;
+  padding: $font-lead-normal 0 $font-lead-normal*0.25 0;
+  border-width: 0;
+  border-color: $color-black;
+  margin: 0;
+}
+/*
+#MainTopic .CTitle::before {
+  content: "libSFX : ";
+}
+*/
+
+.CBody {
+  margin: 0;
+
+  blockquote {
+    padding: $font-lead-normal*0.5 0 0 0;
+    margin: 0;
+    overflow: auto;
+  }
+  .CHeading + blockquote {
+    padding-top: 0;
+  }
+
+  pre {
+    font-family: $font-code;
+    font-size: $font-size-small;
+    line-height: $font-lead-small;
+    background-color: $color-yellow;
+    margin: 0 0 $font-lead-normal*0.5 $font-lead-normal;
+    padding: $font-lead-normal*0.5;
+    border-width: 0;
+  }
+
+  ul {
+    padding: 0 0 $font-lead-normal 0;
+    margin: 0 0 0 $font-lead-normal;
+  }
+}
+
+.CToolTip {
+  position: absolute; visibility: hidden;
+  left: 0; top: 0;
+  background-color: #FFFFE0;
+  padding: 5px;
+  border-width: 1px 2px 2px 1px; border-style: solid; border-color: #333;
+  font-size: 8pt;
+}
+
+
+.CToolTip blockquote {
+  overflow: hidden;
+}
+
+.CHeading {
+  margin: 0 0 $font-lead-normal*0.5 0;
+}
+
+h4.CHeading {
+  font-family: $font-code;
+  font-weight: normal;
+  font-size: $font-size-small;
+  line-height: $font-lead-small;
+  margin: 0 0 0 $font-lead-normal;
+}
+
+.CDescriptionList {
+  margin: .5em 5ex 0 5ex
+}
+
+.CDLEntry {
+  font-family: $font-code;
+  font-size: 10pt;
+  color: #808080;
+  padding-bottom: .25em;
+  white-space: nowrap
+}
+
+
+.CTopic img {
+  text-align: center;
+  display: block;
+  margin: 1em auto;
+}
+.CImageCaption {
+  font-variant: small-caps;
+  font-size: 8pt;
+  color: #808080;
+  text-align: center;
+  position: relative;
+  top: 1em;
+}
+
+.CImageLink {
+  color: #808080;
+  font-style: italic;
+}
+a.CImageLink:link,
+a.CImageLink:visited,
+a.CImageLink:hover { color: #808080 }
+
+
+.Prototype {
+  font-family: $font-code;
+  font-size: 10pt;
+  padding: 5px 3ex;
+  border-width: 1px; border-style: solid;
+  margin: 0 5ex 1.5em 5ex;
+}
+
+.Prototype td {
+  font-size: 10pt;
+}
+
+.PDefaultValue,
+.PDefaultValuePrefix,
+.PTypePrefix {
+  color: #8F8F8F;
+}
+.PTypePrefix {
+  text-align: right;
+}
+.PAfterParameters {
+  vertical-align: bottom;
+}
+
+.IE .Prototype table {
+  padding: 0;
+}
+
+.CFunction .Prototype {
+  background-color: #F4F4F4; border-color: #D0D0D0
+}
+.CProperty .Prototype {
+  background-color: #F4F4FF; border-color: #C0C0E8
+}
+.CVariable .Prototype {
+  background-color: #FFFFF0; border-color: #E0E0A0
+}
+
+.CClass .Prototype {
+  border-width: 1px 2px 2px 1px; border-style: solid; border-color: #A0A0A0;
+  background-color: #F4F4F4;
+}
+.CInterface .Prototype {
+  border-width: 1px 2px 2px 1px; border-style: solid; border-color: #A0A0D0;
+  background-color: #F4F4FF;
+}
+
+.CDatabaseIndex .Prototype,
+.CConstant .Prototype {
+  background-color: #D0D0D0; border-color: #333
+}
+.CType .Prototype,
+.CEnumeration .Prototype {
+  background-color: #FAF0F0; border-color: #E0B0B0;
+}
+.CDatabaseTrigger .Prototype,
+.CEvent .Prototype,
+.CDelegate .Prototype {
+  background-color: #F0FCF0; border-color: #B8E4B8
+}
+
+.CToolTip .Prototype {
+  margin: 0 0 .5em 0;
+  white-space: nowrap;
+}
+
+
+.Summary {
+  a:link,
+  a:visited {
+    color: $color-bg;
+    text-decoration: none
+  }
+  a:hover,
+  a:active {
+    color: $color-link-hover;
+    text-decoration: none
+  }
+
+  .STitle {
+    display: none;
+    font-size: $font-size-normal;
+    line-height: $font-lead-normal;
+    color: $color-green;
+    font-weight: bold;
+    margin-bottom: $font-lead-normal*0.5;
+    margin-top: $font-lead-normal;
+  }
+
+  .SBorder {
+    background-color: $color-green;
+    padding: 0 $font-lead-normal $font-lead-normal $font-lead-normal;
+    border: 0;
+    margin-bottom: $font-lead-normal;
+  }
+
+  .STable {
+    width: 100%;
+    color: $color-bg;
+  }
+
+  .SEntry {
+    width: 30%;
+  }
+  .SDescription {
+    width: 70%;
+  }
+
+  .SMarked {}
+
+  tr.SMain {
+    display: none;
+
+    td.SMain,
+    td.SClass,
+    td.SDatabase,
+    td.SDatabaseTable,
+    td.SSection {
+      //font-size: 10pt;
+      //padding-bottom: .25em
+    }
+  }
+
+  tr.SGroup {
+    td {
+      padding: $font-lead-normal 0 0 0;
+    }
+    .SEntry {
+      font-weight: bold;
+    }
+    .SDescription {
+      padding-left: $font-lead-normal;
+    }
+  }
+
+  .SDescription {
+    padding-left: $font-lead-normal;
+    /*
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 0;
+    */
+  }
+  .SIndent1 .SEntry { padding-left: 0; }  .SIndent1 .SDescription { padding-left: $font-lead-normal; }
+  .SIndent2 .SEntry { padding-left: 0; }  .SIndent2 .SDescription { padding-left: $font-lead-normal*1.25; }
+  .SIndent3 .SEntry { padding-left: 0; }  .SIndent3 .SDescription { padding-left: $font-lead-normal*1.5; }
+  .SIndent4 .SEntry { padding-left: 0; }  .SIndent4 .SDescription { padding-left: $font-lead-normal*1.75; }
+  .SIndent5 .SEntry { padding-left: 0; }  .SIndent5 .SDescription { padding-left: $font-lead-normal*2; }
+
+}
+
+
+
+.SClass td,
+.SDatabase td,
+.SDatabaseTable td,
+.SSection td {
+  padding-top: 1em
+}
+
+.SMain .SEntry,
+.SClass .SEntry,
+.SDatabase .SEntry,
+.SDatabaseTable .SEntry,
+.SSection .SEntry {
+  font-weight: bold;
+}
+
+.SMain .SEntry a,
+.SClass .SEntry a,
+.SDatabase .SEntry a,
+.SDatabaseTable .SEntry a,
+.SSection .SEntry a { color: #333 }
+
+.SMain .SEntry a:active,
+.SClass .SEntry a:active,
+.SDatabase .SEntry a:active,
+.SDatabaseTable .SEntry a:active,
+.SSection .SEntry a:active { color: #A00000 }
+
+
+
+.ClassHierarchy { margin: 0 15px 1em 15px }
+
+.CHEntry {
+  border-width: 1px 2px 2px 1px; border-style: solid; border-color: #A0A0A0;
+  margin-bottom: 3px;
+  padding: 2px 2ex;
+  font-size: 10pt;
+  background-color: #F4F4F4; color: #606060;
+}
+
+.CHCurrent .CHEntry {
+  font-weight: bold;
+  border-color: #333;
+  color: #333;
+}
+
+.CHChildNote .CHEntry {
+  font-style: italic;
+  font-size: 8pt;
+}
+
+.CHIndent {
+  margin-left: 3ex;
+}
+
+.CHEntry a:link,
+.CHEntry a:visited,
+.CHEntry a:hover {
+  color: #606060;
+}
+.CHEntry a:active {
+  color: #800000;
+}
+
+
+#Index {
+  background-color: #FFFFFF;
+}
+
+/*  As opposed to .PopupSearchResultsPage #Index  */
+.IndexPage #Index,
+.FramedIndexPage #Index,
+.FramedSearchResultsPage #Index {
+  padding: 15px;
+}
+
+.IndexPage #Index {
+  border-width: 0 0 1px 1px;
+  border-style: solid;
+  border-color: #333;
+  margin-left: 27ex;
+}
+
+
+.IPageTitle {
+  font-size: 20pt; font-weight: bold;
+  color: #FFFFFF;
+  background-color: #999;
+  padding: 10px 15px 10px 15px;
+  border-width: 0 0 3px 0; border-color: #333; border-style: solid;
+  margin: -15px -15px 0 -15px
+}
+
+.FramedSearchResultsPage .IPageTitle {
+  margin-bottom: 15px;
+}
+
+.INavigationBar {
+  font-size: 10pt;
+  text-align: center;
+  background-color: #FFFFF0;
+  padding: 5px;
+  border-bottom: solid 1px black;
+  margin: 0 -15px 15px -15px;
+}
+
+.INavigationBar a {
+  font-weight: bold
+}
+
+.IHeading {
+  font-size: 16pt; font-weight: bold;
+  padding: 2.5em 0 .5em 0;
+  text-align: center;
+  width: 3.5ex;
+}
+#IFirstHeading {
+  padding-top: 0;
+}
+
+.IEntry {
+  font-size: 10pt;
+  padding-left: 1ex;
+}
+.PopupSearchResultsPage .IEntry {
+  font-size: 8pt;
+  padding: 1px 5px;
+}
+.PopupSearchResultsPage .Opera9 .IEntry,
+.FramedSearchResultsPage .Opera9 .IEntry {
+  text-align: left;
+}
+.FramedSearchResultsPage .IEntry {
+  padding: 0;
+}
+
+.ISubIndex {
+  padding-left: 3ex; padding-bottom: .5em
+}
+.PopupSearchResultsPage .ISubIndex {
+  display: none;
+}
+
+/*  While it may cause some entries to look like links when they aren't, I found it's much easier to read the index if everything's the same color.  */
+.ISymbol {
+  font-weight: bold; color: #900000
+}
+
+.IndexPage .ISymbolPrefix,
+.FramedIndexPage .ISymbolPrefix {
+  font-size: 10pt;
+  text-align: right;
+  color: #C47C7C;
+  background-color: #F8F8F8;
+  border-right: 3px solid #E0E0E0;
+  border-left: 1px solid #E0E0E0;
+  padding: 0 1px 0 2px;
+}
+.PopupSearchResultsPage .ISymbolPrefix,
+.FramedSearchResultsPage .ISymbolPrefix {
+  color: #900000;
+}
+.PopupSearchResultsPage .ISymbolPrefix {
+  font-size: 8pt;
+}
+
+.IndexPage #IFirstSymbolPrefix,
+.FramedIndexPage #IFirstSymbolPrefix {
+  border-top: 1px solid #E0E0E0;
+}
+.IndexPage #ILastSymbolPrefix,
+.FramedIndexPage #ILastSymbolPrefix {
+  border-bottom: 1px solid #E0E0E0;
+}
+.IndexPage #IOnlySymbolPrefix,
+.FramedIndexPage #IOnlySymbolPrefix {
+  border-top: 1px solid #E0E0E0;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+a.IParent,
+a.IFile {
+  display: block;
+}
+
+
+#Menu {
+  font-family: $font-code;
+  font-size: $font-size-small;
+  line-height: $font-lead-small * 1.25;
+  text-align: right;
+  background-color: $color-grey;
+  color: $color-lightgrey;
+  padding: $font-lead-small*0.5 $font-lead-small*0.5 $font-size-small $font-lead-small*0.5;
+  @media #{$ms} {
+    text-align: left;
+  }
+}
+
+.ContentPage #Menu,
+.IndexPage #Menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 19%;
+  overflow: auto;
+  @media #{$ms} {
+    position: initial;
+    width: 100%;
+    padding: $font-lead-small*0.5;
+  }
+}
+
+.MTitle {
+  font-size: $font-size-normal;
+  line-height: $font-lead-normal;
+  padding: 5px 10px 15px 10px;
+  border-bottom: 0;
+  margin-bottom: 15px
+}
+
+.MEntry a:link,
+.MEntry a:visited { color: $color-lightgrey; }
+.MEntry a:hover,
+.MEntry a:active { color: $color-yellow; }
+
+.MGroup {
+  padding-top: $font-lead-small*0.5;
+
+  a:link::before {
+    content: "(";
+  }
+  a:link::after {
+    content: ")";
+  }
+}
+.MFile {
+  a:link::before {
+    content: none;
+  }
+  a:link::after {
+    content: none;
+  }
+}
+
+.MGroup a:link,
+.MGroup a:visited { color: $color-lightgrey; }
+.MGroup a:hover,
+.MGroup a:active { color: $color-yellow; }
+
+.MFile,
+.MText,
+.MLink,
+.MIndex {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.MText {
+  font-size: $font-size-small;
+  line-height: $font-lead-small;
+}
+
+.MLink {
+  font-style: italic
+}
+
+#MSelected {
+  color: $color-white;
+}
+
+/*
+.MGroup #MSelected {
+  padding-left: 9px; border-left-width: 1px
+}
+*/
+
+#MSearchPanel {
+  display: none;
+}
+
+
+#MSearchField {
+  font: italic 9pt Verdana, sans-serif;
+  color: #606060;
+  background-color: #E8E8E8;
+  border: none;
+  padding: 2px 4px;
+  width: 100%;
+}
+
+#MSearchPanel.MSearchPanelInactive:hover #MSearchField {
+  background-color: #FFFFFF;
+  border: 1px solid #C0C0C0;
+  padding: 1px 3px;
+}
+.MSearchPanelActive #MSearchField {
+  background-color: #FFFFFF;
+  border: 1px solid #C0C0C0;
+  font-style: normal;
+  padding: 1px 3px;
+}
+
+#MSearchType {
+  visibility: hidden;
+  font: 8pt Verdana, sans-serif;
+  width: 98%;
+  padding: 0;
+  border: 1px solid #C0C0C0;
+}
+
+.MSearchPanelActive #MSearchType,
+#MSearchPanel.MSearchPanelInactive:hover #MSearchType,
+#MSearchType:focus {
+  visibility: visible;
+  color: #606060;
+}
+#MSearchType option#MSearchEverything {
+  font-weight: bold;
+}
+
+
+iframe#MSearchResults {
+  width: 50pt;
+  height: 15em;
+}
+
+#MSearchResultsWindow {
+  display: none;
+}
+
+#MSearchResultsWindowClose {
+  display: none;
+}
+
+
+.PopupSearchResultsPage .SRStatus {
+  padding: 2px 5px;
+  font-size: 8pt;
+  font-style: italic;
+}
+.FramedSearchResultsPage .SRStatus {
+  font-size: 10pt;
+  font-style: italic;
+}
+
+.SRResult {
+  display: none;
+}

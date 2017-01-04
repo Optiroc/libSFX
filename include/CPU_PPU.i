@@ -11,17 +11,18 @@
 ;HDMA Macros
 
 /**
-  HDMA_set_absolute
+  Macro: HDMA_set_absolute
   Set up absolute mode HDMA
 
-  HDMA_setAbsolute #channel, #mode, #destination, #table_address (a8i16)
-
-  :in:    name    Name                  identifier  Any string (without quotes)
-  :in:    size    Capacity in bytes     constant    Power of two integer up to 256 bytes
+  Parameters:
+  >:in:    ch        Channel (0-7)                 constant
+  >:in:    mode      Mode (0-1)                    constant
+  >:in:    dest      Destination register (uint8)  constant
+  >:in:    table     Table location (uint24)       constant
 */
 .macro  HDMA_set_absolute ch, mode, dest, table
         RW_push set:a8i16
-        lda     #(HDMA_ABSOLUTE + mode)         ;A->B, absolute + mode
+        lda     #(HDMA_ABSOLUTE + (mode & 1))   ;A->B, absolute + mode
         sta     DMAP0 + (ch * $10)              ;DMAPx
         lda     #(dest & $00ff)                 ;Destination register
         sta     BBAD0 + (ch * $10)              ;BBADx
@@ -33,13 +34,15 @@
 .endmac
 
 /**
-  HDMA_set_indirect
+  Macro: HDMA_set_indirect
   Set up indirect mode HDMA
 
-  HDMA_setIndirect #channel, #mode, #destination, #a1_table_address, #a2_table_address (a8x16)
-
-  :in:    name    Name                  identifier  Any string (without quotes)
-  :in:    size    Capacity in bytes     constant    Power of two integer up to 256 bytes
+  Parameters:
+  >:in:    ch        Channel (0-7)                 constant
+  >:in:    mode      Mode (0-1)                    constant
+  >:in:    dest      Destination register (uint8)  constant
+  >:in:    a1_table  A1 Table location (uint24)    constant
+  >:in:    a2_table  A2 Table location (uint24)    constant
 */
 .macro  HDMA_set_indirect ch, mode, dest, a1_table, a2_table
         RW_push set:a8i16
@@ -61,13 +64,14 @@
 ;CGRAM Macros
 
 /**
-  CGRAM_setcolor
+  Macro: CGRAM_setcolor
   Set color at index with a 15 bit "packed" color
 
-  :in:    index   CGRAM index (uint8)     a
-                                          constant
-  :in:    color   Color (uint16)          x/y       0x0bbbbbgggggrrrrr
-                                          constant
+  Parameters:
+  >:in:    index     CGRAM index (uint8)           a
+  >                                                constant
+  >:in:    color     Color (uint16)                x/y         0x0bbbbbgggggrrrrr
+  >                                                constant
 */
 .macro  CGRAM_setcolor index, color
 .if (.blank({b}))
@@ -101,14 +105,15 @@
 .endmac
 
 /**
-  CGRAM_setcolor_rgb
+  Macro: CGRAM_setcolor_rgb
   Set color at index with an RGB constant triplet
 
-  :in:    index   CGRAM index (uint8)     a
-                                          constant
-  :in:    r       Red component (uint8)   constant  5 significant bits
-  :in:    g       Green component (uint8) constant  5 significant bits
-  :in:    b       Blue component (uint8)  constant  5 significant bits
+  Parameters:
+  >:in:    index     CGRAM index (uint8)           a
+  >                                                constant
+  >:in:    r         Red component (uint8)         constant    5 significant bits
+  >:in:    g         Green component (uint8)       constant    5 significant bits
+  >:in:    b         Blue component (uint8)        constant    5 significant bits
 */
 .macro  CGRAM_setcolor_rgb index, r, g, b
 .if (.blank({b}))
@@ -132,13 +137,14 @@
 ;OAM Macros
 
 /**
-  OAM_init
+  Macro: OAM_init
   Initialize OAM table in WRAM
 
-  :in:    table   Table address (uint24)  constant
-  :in:    xpos    X position (9 bits)     constant
-  :in:    ypos    Y position (8 bits)     constant
-  :in:    size    Size bit                constant
+  Parameters:
+  >:in:    table     Table address (uint24)        constant
+  >:in:    xpos      X position (9 bits)           constant
+  >:in:    ypos      Y position (8 bits)           constant
+  >:in:    size      Size bit                      constant
 */
 .macro  OAM_init table, xpos, ypos, size
         RW_push set:a8i16
@@ -152,12 +158,13 @@
 .endmac
 
 /**
-  OAM_memcpy
-  Copies a full OAM table (512+32 bytes) to the PPU
+  Macro: OAM_memcpy
+  Copies shadow OAM table (512+32 bytes) to the PPU
 
   Disables DMA and uses channel 7 for transfer.
 
-  :in:    table   Table address (uint24)  constant
+  Parameters:
+  >:in:    table     Table address (uint24)        constant
 */
 .macro  OAM_memcpy table
         RW_push set:a8i16
@@ -181,7 +188,7 @@
 ;Video Macros
 
 /**
-  WAIT_vbl
+  Macro: WAIT_vbl
   Wait furiously until next vertical blanking period
 */
 .macro  WAIT_vbl
@@ -191,10 +198,11 @@
 .endmac
 
 /**
-  WAIT_frames
+  Macro: WAIT_frames
   Wait for #num vertical blanking periods
 
-  :in:    num   Number of frames (uint16)       constant
+  Parameters:
+  >:in:    num       Number of frames (uint16)     constant
 */
 .macro  WAIT_frames num
         RW_push set:a8i16
@@ -206,10 +214,12 @@
 .endmac
 
 /**
-  PPU_is_ntsc
+  Macro: PPU_is_ntsc
   Check if system is NTSC
 
-  Returns with a = 0 / z = 1 if system passes as NTSC, otherwise a = 1 / z = 0
+  Returns:
+  >a = 0 / z = 1 if system passes as NTSC
+  >a = 1 / z = 0 otherwise
 */
 .macro  PPU_is_ntsc
         RW_push set:a8i16

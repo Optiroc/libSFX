@@ -6,26 +6,25 @@
 
 
 ;-------------------------------------------------------------------------------
-
 /**
-  Register width (RW*) macros
+  Group: RW* (register width macros)
 
   Instead of using ca65's .a* and .i* directives or the "smart" mode to set
   current register widths, libSFX uses these macros to track CPU state.
 
   The main advantage of this approach is that rep/sep instructions will be
   emitted only when necessary. When relying a lot on "function inlining" via
-  macros those tend to add up quickly.
+  macros those tend to add up quickly. A bonus is that the state can be
+  queried with the RW_a_size() and RW_i_size() macros, allowing for conditial
+  assembly depending on register widths.
 
-  A bonus is that this state can be queried with the RW_a_size/RW_i_size
-  macros, allowing for conditial assembly depending on register widths.
+  This tracking can only work within the same assembly unit, of course. When
+  calling function over unit barriers there's an RW stack and a couple of
+  helper macros to keep those pesky register sizes in sync.
 
-  Of course, the tracking can only work within one assembly unit. When
-  calling function over unit barriers there's a size stack and a couple of
-  helper macros to keep things in sync.
+  Example:
 
-  An example:
-
+  (start code)
   .macro call_external
         RW_push set:a16             ;Push current state and set accumlator
                                     ;width to 16 bits if necessary
@@ -46,17 +45,18 @@
         lda     #$f00d              ;So this will assemble nicely
         rtl
   .endproc
-
+  (end)
 */
 
 
 /**
-  RW
-  Set accumulator/index register widths
+  Macro: RW
+  Set accumulator/index register widths.
 
   No-op if current state == intended state.
 
-  :in:    widths  Register widths       identifier  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+  Parameter:
+  >:in:    widths    Register widths         a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
 */
 .macro RW widths
 .if .blank({widths})
@@ -101,10 +101,11 @@
 
 
 /**
-  RW_assume
+  Macro: RW_assume
   Assume known accumulator/index register widths without emitting any instructions.
 
-  :in:    widths  Register widths       identifier  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+  Parameter:
+  >:in:    widths    Register widths         a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
 */
 .macro RW_assume widths
 .if .blank({widths})
@@ -142,10 +143,11 @@
 
 
 /**
-  RW_forced
+  Macro: RW_forced
   Force set accumulator/index register widths (ie. always emit rep/sep instructions).
 
-  :in:    widths  Register widths       identifier  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+  Parameter:
+  >:in:    widths    Register widths         a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
 */
 .macro RW_forced widths
 .if .blank({widths})
@@ -170,12 +172,13 @@
 
 
 /**
-  RW_assert
+  Macro: RW_assert
   Assert (at assemble time) that the specified register widths
   match with the state of the register tracking logic.
 
-  :in:    widths  Register widths         identifier  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
-  :in:    message Error message           string
+  Parameters:
+  >:in:    widths    Register widths         a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+  >:in:    message   Error message           string
 */
 .macro RW_assert widths, message
 .if .blank({message})
@@ -219,13 +222,14 @@
 
 
 /**
-  RW_push
+  Macro: RW_push
   Push current register widths state to the RW stack,
   and optionally set new state.
 
   No-op if current state == intended state.
 
-  :in?:   widths  Register widths       identifier  a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
+  Parameter:
+  >:in?:   widths    Register widths         a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
 */
 .macro RW_push new
 .if SFX_RW_size_sp = 8
@@ -284,7 +288,7 @@
 .endmac
 
 /**
-  RW_pull
+  Macro: RW_pull
   Pull register widths state from the RW stack.
 
   No-op if current state == intended state.
@@ -331,7 +335,7 @@
 
 
 /**
-  RW_pull_forced
+  Macro: RW_pull_forced
   Pull register widths state from the RW stack,
   always emitting rep/sep instructions.
 
@@ -379,7 +383,7 @@
 .endmac
 
 /**
-  RW_print
+  Macro: RW_print
   Print (at assemble time) the current register widths state.
 */
 .macro RW_print
@@ -401,16 +405,22 @@
 
 
 /**
-  RW_a_size()
+  Macro: RW_a_size()
   Get the current accumlator register width.
-  0 = 16 bits / 1 = 8 bits
+
+  Returns:
+  >0 = 16 bits
+  >1 = 8 bits
 */
 .define RW_a_size SFX_RW_a_size
 
 /**
-  RW_i_size()
+  Macro: RW_i_size()
   Get the current index register width.
-  0 = 16 bits / 1 = 8 bits
+
+  Returns:
+  >0 = 16 bits
+  >1 = 8 bits
 */
 .define RW_i_size SFX_RW_i_size
 
@@ -432,11 +442,13 @@ SFX_RW_size_s8 .set %00
 
 
 ;-------------------------------------------------------------------------------
-;CPU register macros
+/**
+  Group: CPU register macros
+*/
 
 /**
-  push
-  Push CPU state to stack
+  Macro: push
+  Push CPU state to stack.
 */
 .macro  push
         php
@@ -451,8 +463,8 @@ SFX_RW_size_s8 .set %00
 
 
 /**
-  pull
-  Pull CPU state from stack
+  Macro: pull
+  Pull CPU state from stack.
 */
 .macro  pull
         rep     #$39
@@ -466,11 +478,12 @@ SFX_RW_size_s8 .set %00
 
 
 /**
-  dbank
-  Set data bank register (DB)
+  Macro: dbank
+  Set data bank register (DB).
 
-  :in:    bank  Bank (uint8)            a/x/y     Requires RW a8 or i8
-                                        constant  Using a
+  Parameter:
+  >:in:    bank      Bank (uint8)            a/x/y       Requires RW a8 or i8
+  >                                          constant    Using a
 */
 .macro  dbank   bank
 .if .xmatch({bank}, {a})
@@ -500,11 +513,12 @@ SFX_RW_size_s8 .set %00
 
 
 /**
-  dpage
-  Set direct page register (D)
+  Macro: dpage
+  Set direct page register (D).
 
-  :in:    offs  Offset (uint16)         a
-                                        constant  Using a
+  Parameter:
+  >:in:    offs      Offset (uint16)         a
+  >                                          constant    Using a
 */
 .macro  dpage   offs
         RW_push set:a16
@@ -525,25 +539,29 @@ SFX_RW_size_s8 .set %00
 
 
 /**
-  dpo()
-  Get address minus current direct page offset
+  Macro: dpo()
+  Get address minus current direct page offset.
 
   Calculates a byte offset using the latest value set by the 'dpage' macro.
 
-  :in:    addr  Address (uint16)        constant
+  Parameter:
+  >:in:    addr      Address (uint16)        constant
 */
 SFX_dp_offset .set 0
 .define dpo(addr) -SFX_dp_offset+(addr)
 
 
 ;-------------------------------------------------------------------------------
-;Meta instructions
+/**
+  Group: CPU meta instructions
+*/
 
 /**
-  bgt
-  Branch if greater than
+  Meta: bgt
+  Branch if greater than.
 
-  :in:    addr  Address
+  Parameter:
+  >:in:    addr      Address
 */
 .macro bgt addr
         beq     :+
@@ -552,10 +570,11 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
-  bsr
-  Relative subroutine call
+  Meta: bsr
+  Relative subroutine call.
 
-  :in:    addr  Address
+  Parameter:
+  >:in:    addr      Address
 */
 .macro  bsr     addr
         per     * + 4
@@ -563,10 +582,11 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
-  bsl
-  Relative long subroutine call
+  Meta: bsl
+  Relative long subroutine call.
 
-  :in:    addr  Address
+  Parameter:
+  >:in:    addr      Address
 */
 .macro  bsl     addr
         per     * + 5
@@ -574,11 +594,12 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
-  add
-  Add (without carry)
+  Meta: add
+  Add (without carry).
 
-  :in:    op    Operand
-  :in?:   ix    Index
+  Parameters:
+  >:in:    op        Operand
+  >:in?:   ix        Index
 */
 .macro add op, ix
   .if .blank({ix})
@@ -591,11 +612,12 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
-  sub
-  Subtract (without carry)
+  Meta: sub
+  Subtract (without carry).
 
-  :in:    op    Operand
-  :in?:   ix    Index
+  Parameters:
+  >:in:    op        Operand
+  >:in?:   ix        Index
 */
 .macro sub op, ix
   .if .blank({ix})
@@ -608,8 +630,8 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
-  asr
-  Arithmetic shift right
+  Meta: asr
+  Arithmetic shift right.
 */
 .macro asr
   .if RW_a_size = 1
@@ -622,8 +644,8 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
-  neg
-  Negate (signed integer)
+  Meta: neg
+  Negate (signed integer).
 */
 .macro neg
   .if RW_a_size = 1
@@ -643,7 +665,7 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
-  break
+  Meta: break
   If assembled with debug=1 the break macro emits a "wdm $00" instruction,
   which can be set to trigger a break in the bsnes+ debugger.
 */

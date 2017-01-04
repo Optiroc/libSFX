@@ -5,7 +5,35 @@
 ::__MBSFX_SMP_Def__ = 1
 
 ;-------------------------------------------------------------------------------
-;CPU Registers
+/**
+   Group: CPU Memory Map
+*/
+
+/**
+   Registers: CPU Memory Map / MMIO
+
+   >TEST                    = $f0     ;SPC700 testing functions
+   >CONTROL                 = $f1     ;Timer, I/O and ROM Control
+   >
+   >DSPADDR                 = $f2     ;DSP register address
+   >DSPDATA                 = $f3     ;DSP register data read/write
+   >
+   >CPUIO0                  = $f4     ;SNES CPU Communication Port 0
+   >CPUIO1                  = $f5     ;SNES CPU Communication Port 1
+   >CPUIO2                  = $f6     ;SNES CPU Communication Port 2
+   >CPUIO3                  = $f7     ;SNES CPU Communication Port 3
+   >
+   >T0DIV                   = $fa     ;Timer 0 divider
+   >T1DIV                   = $fb     ;Timer 1 divider
+   >T2DIV                   = $fc     ;Timer 2 divider
+   >T0OUT                   = $fd     ;Timer 0 output
+   >T1OUT                   = $fe     ;Timer 1 output
+   >T2OUT                   = $ff     ;Timer 2 output
+   >
+   >IPL entry points
+   >IPL_INIT                = $ffc0   ;Clear zero page and wait
+   >IPL_WAIT                = $ffc9   ;Wait for new transfer
+*/
 
 TEST                    = $f0 ;SPC700 testing functions
 
@@ -46,7 +74,51 @@ IPL_INIT                = $ffc0 ;Clear zero page and wait
 IPL_WAIT                = $ffc9 ;Wait for new transfer
 
 ;-------------------------------------------------------------------------------
-;DSP Registers
+/**
+   Group: S-DSP
+*/
+
+/**
+   Registers: S-DSP Registers
+
+   >MVOLL                   = $0c     ;Left channel master volume
+   >MVOLR                   = $1c     ;Right channel master volume
+   >EVOLL                   = $2c     ;Left channel echo volume
+   >EVOLR                   = $3c     ;Right channel echo volume
+   >KON                     = $4c     ;Key On Flags for Voice 0..7
+   >KOF                     = $5c     ;Key Off Flags for Voice 0..7
+   >
+   >FLG                     = $6c     ;Reset, Mute, Echo-Write Flags + Noise Clock
+   >
+   >ENDX                    = $7c     ;Voice End Flags for Voice 0..7
+   >EFB                     = $0d     ;Echo feedback volume
+   >PMON                    = $2d     ;Pitch Modulation Enable Flags for Voice 1..7
+   >NON                     = $3d     ;Noise Enable Flags for Voice 0..7
+   >EON                     = $4d     ;Echo Enable Flags for Voice 0..7
+   >DIR                     = $5d     ;Sample directory offset address
+   >ESA                     = $6d     ;Echo buffer offset address
+   >EDL                     = $7d     ;Echo delay (ring buffer size)
+   >FIR0                    = $0f     ;Echo FIR filter coefficient 0
+   >FIR1                    = $1f     ;Echo FIR filter coefficient 1
+   >FIR2                    = $2f     ;Echo FIR filter coefficient 2
+   >FIR3                    = $3f     ;Echo FIR filter coefficient 3
+   >FIR4                    = $4f     ;Echo FIR filter coefficient 4
+   >FIR5                    = $5f     ;Echo FIR filter coefficient 5
+   >FIR6                    = $6f     ;Echo FIR filter coefficient 6
+   >FIR7                    = $7f     ;Echo FIR filter coefficient 7
+   >
+   >Voice Control (n = 0-7)
+   >VnVOLL                  = $n0     ;Left volume
+   >VnVOLR                  = $n1     ;Right volume
+   >VnPITCHL                = $n2     ;Pitch (LSB)
+   >VnPITCHH                = $n3     ;Pitch (MSB)
+   >VnSRCN                  = $n4     ;Source number
+   >VnADSR1                 = $n5     ;ADSR settings 1
+   >VnADSR2                 = $n6     ;ADSR settings 2
+   >VnGAIN                  = $n7     ;Gain settings
+   >VnENVX                  = $n8     ;Current envelope value
+   >VnOUTX                  = $n9     ;Current sample value
+*/
 
 ;General
 MVOLL                   = $0c ;Left channel master volume

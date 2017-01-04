@@ -29,7 +29,7 @@
 
 /**
   incbin
-  Include binary file and create "name:" label and "sizeof_name" constant
+  Include binary file and create "name:" label and "sizeof_name" constant.
 
   :in:    name    Name         identifier
   :in:    file    Filename     string

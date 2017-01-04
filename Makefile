@@ -1,4 +1,4 @@
-.PHONY: clean submodules
+.PHONY: clean submodules docs
 
 default: cc65 superfamicheck brrtools lz4 usb2snes
 
@@ -21,6 +21,11 @@ usb2snes: submodules
 
 submodules:
 	git submodule update --init --recursive
+
+docs:
+	@mkdir -pv docs
+	python -m scss < extras/NaturalDocs/libsfx.scss -C >extras/NaturalDocs/libsfx.css
+	naturaldocs -r -i include -o HTML docs -p extras/NaturalDocs -s libsfx -t 2
 
 clean:
 	@$(MAKE) clean -C tools/cc65

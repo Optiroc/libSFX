@@ -4,11 +4,10 @@
 .ifndef ::__MBSFX_CPU_GSU__
 ::__MBSFX_CPU_GSU__ = 1
 
-;-------------------------------------------------------------------------------
-
 GSU_SRAM        = $700000
 
-;GSU I/O Map (mirrored in banks 00h-3Fh and 80h-BFh)
+;-------------------------------------------------------------------------------
+;GSU MMIO Registers (mirrored in banks 00h-3Fh and 80h-BFh)
 ;During GSU operation, only SFR, SCMR, and VCR may be accessed
 
 GSU_R0          = $3000 ;Default source/destination

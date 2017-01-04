@@ -20,12 +20,16 @@
 /**
   SFX_LZ4_decompress
   Decompress LZ4 frame
+
   [a8i16, ret:a16i16]
 
-  :in:  x       Source offset
-  :in:  y       Destination offset
-  :in:  b:a     Destination:Source banks
-  :out: a       Decompressed length
+  Parameters:
+  >:in:  x       Source offset
+  >:in:  y       Destination offset
+  >:in:  b:a     Destination:Source banks
+
+  Returns:
+  >:out: a       Decompressed length
 */
 SFX_LZ4_decompress:
         jsr     Setup

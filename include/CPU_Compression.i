@@ -7,15 +7,27 @@
 .global SFX_LZ4_decompress, SFX_LZ4_decompress_block
 
 ;-------------------------------------------------------------------------------
-;LZ4 decompression
+/**
+  Group: LZ4 decompression
+*/
 
 /**
-  Decompress LZ4 frame
+  Macro: LZ4_decompress
+  Decompress LZ4 frame.
 
-  :in:    source  LZ4 frame address (uint24)    constant
-  :in:    dest    Destination address (uint24)  ay/hi:y/ex:y
-                                                constant
-  :out?:  outlen  Decompressed length (uint16)  a/x/y
+  Parameters:
+  >:in:    source  LZ4 frame address (uint24)    constant
+  >:in:    dest    Destination address (uint24)  ay/hi:y/ex:y
+  >                                              constant
+  >:out?:  outlen  Decompressed length (uint16)  a/x/y
+
+  Example:
+  (begin code)
+  ;Decompress graphics and upload to VRAM
+
+  LZ4_decompress    Tilemap, EXRAM, y           ;Returns decompressed length in y
+  VRAM_memcpy       $2000, EXRAM, y             ;Copy y bytes to VRAM
+  (end)
 */
 .macro  LZ4_decompress source, dest, outlen
 .if (.blank({dest}))
@@ -58,12 +70,14 @@
 .endmac
 
 /**
-  Decompress LZ4 block
+  Macro: LZ4_decompress_block
+  Decompress LZ4 block.
 
-  :in:    source  LZ4 block address (uint24)    constant
-  :in:    dest    Destination address (uint24)  ay/hi:y/ex:y
-                                                constant
-  :out?:  outlen  Decompressed length (uint16)  a/x/y
+  Parameters:
+  >:in:    source  LZ4 block address (uint24)    constant
+  >:in:    dest    Destination address (uint24)  ay/hi:y/ex:y
+  >                                              constant
+  >:out?:  outlen  Decompressed length (uint16)  a/x/y
 */
 .macro  LZ4_decompress_block source, dest
 .if (.blank({dest}))

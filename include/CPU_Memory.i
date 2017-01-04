@@ -10,19 +10,20 @@
 ;-------------------------------------------------------------------------------
 
 /**
-  memset
+  Macro: memset
   Set CPU-bus memory to a given value
 
   Uses the 65816 block move instruction so its much slower than DMA
   for large blocks of memory. On the other hand it's quicker to setup
   doesn't interfere with DMA.
 
-  :in:    addr    Address (uint24)      ax/hi:x/ex:x
-                                        constant
-  :in:    length  Length (uint16)       y
-                                        constant
-  :in?:   value   Value (uint8)         a
-                                        constant
+  Parameters:
+  >:in:    addr      Address (uint24)        ax/hi:x/ex:x
+  >                                          constant
+  >:in:    length    Length (uint16)         y
+  >                                          constant
+  >:in?:   value     Value (uint8)           a
+  >                                          constant
 */
 .macro memset addr, length, value
 .if .blank({length})
@@ -110,19 +111,20 @@
 
 
 /**
-  memcpy
+  Macro: memcpy
   Copy bytes from/to CPU-bus
 
   Uses the 65816 block move instruction so its much slower than DMA
   for large transfers. On the other hand it's quicker to setup and
   doesn't interfere with DMA.
 
-  :in:    dest    Destination (uint24)  ay/hi:y/ex:y
-                                        constant
-  :in:    source  Source (uint24)       ax/hi:x/ex:x
-                                        constant
-  :in:    length  Length (uint16)       a
-                                        constant
+  Parameters:
+  >:in:    dest      Destination (uint24)    ay/hi:y/ex:y
+  >                                          constant
+  >:in:    source    Source (uint24)         ax/hi:x/ex:x
+  >                                          constant
+  >:in:    length    Length (uint16)         a
+  >                                          constant
 */
 .macro memcpy dest, source, length
 .if .blank({length})
@@ -207,17 +209,18 @@
 
 
 /**
-  WRAM_memset
+  Macro: WRAM_memset
   Set WRAM to a given value
 
   Disables DMA and uses channel 7 for transfer.
 
-  :in:    addr    Address (uint24)      hi:x/ex:x
-                                        constant
-  :in:    length  Length (uint16)       y
-                                        constant
-  :in?:   value   Value (uint8)         a
-                                        constant
+  Parameters:
+  >:in:    addr      Address (uint24)        hi:x/ex:x
+  >                                          constant
+  >:in:    length    Length (uint16)         y
+  >                                          constant
+  >:in?:   value     Value (uint8)           a
+  >                                          constant
 */
 .macro  WRAM_memset addr, length, value
 .if .blank({length})
@@ -258,26 +261,18 @@
 
 
 /**
-  WRAM_memcpy
+  Macro: WRAM_memcpy
   Copy bytes from CPU-bus to WRAM
 
   Disables DMA and uses channel 7 for transfer.
   WRAM to WRAM copy is not possible.
 
-
-
-  :in:    dest    Destination (uint24)  ay/hi:y/ex:y
-                                        constant
-  :in:    source  Source (uint24)       ax/hi:x/ex:x
-                                        constant
-  :in:    length  Length (uint16)       a
-                                        constant
-
-
-
-  :in:    dest    Destination address   uint24  ax/ay/hi:x/hi:y/ex:x/ex:y or value
-  :in:    source  Source address        uint24  value
-  :in:    length  Length                uint16  a/x/y or value
+  Parameters:
+  >:in:    dest      Destination (uint24)    ax/ay/hi:x/hi:y/ex:y
+  >                                          constant
+  >:in:    source    Source (uint24)         constant
+  >:in:    length    Length (uint16)         a
+  >                                          constant
 */
 .macro  WRAM_memcpy dest, source, length
 .if .blank({length})
@@ -362,14 +357,18 @@
 
 
 /**
-  VRAM_memset
+  Macro: VRAM_memset
 
   Set VRAM to a given value
   Disables DMA and uses channel 7 for transfer.
 
-  :in:    addr    Address               uint16  x (word address) or value (byte address)
-  :in:    length  Length                uint16  y (words) or value (bytes)
-  :in?:   value   Value                 uint8   a or value
+  Parameters:
+  >:in:    addr      Address (uint16)        x (word address)
+  >                                          constant (byte address)
+  >:in:    length    Length (uint16)         y (words)
+  >                                          constant (bytes)
+  >:in?:   value     Value (uint8)           a
+  >                                          constant
 */
 .macro  VRAM_memset addr, length, value
 .if .blank({length})
@@ -397,14 +396,19 @@
 
 
 /**
-  VRAM_memcpy
+  Macro: VRAM_memcpy
 
   Copy bytes from CPU-bus to VRAM.
   Disables DMA and uses channel 7 for transfer.
 
-  :in:    dest    Destination           uint16  y (word address) or value (byte address)
-  :in:    source  Source                uint24  ax/hi:x/ex:x or value
-  :in:    length  Length                uint16  y/a(<<8) or value
+  Parameters:
+  >:in:    dest      Destination (uint16)    y (word address)
+  >                                          constant (byte address)
+  >:in:    source    Source (uint24)         ax/hi:x/ex:x
+  >                                          constant
+  >:in:    length    Length (uint16)         y
+  >                                          a (<<8)
+  >                                          constant
 */
 .macro  VRAM_memcpy dest, source, length
 .if .blank({length})
@@ -463,14 +467,18 @@
 
 
 /**
-  CGRAM_memcpy
+  Macro: CGRAM_memcpy
 
   Copy bytes from CPU-bus to CGRAM.
   Disables DMA and uses channel 7 for transfer.
 
-  :in:    dest    Destination (word)    uint16  a or value
-  :in:    source  Source                uint24  ax/hi:x/ex:x or value
-  :in:    length  Length                uint16  y or value
+  Parameters:
+  >:in:    dest      Destination (uint16)    a
+  >                                          constant
+  >:in:    source    Source (uint24)         ax/hi:x/ex:x
+  >                                          constant
+  >:in:    length    Length (uint16)         y
+  >                                          constant
 */
 .macro  CGRAM_memcpy dest, source, length
 .if .blank({length})

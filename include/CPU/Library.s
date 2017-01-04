@@ -10,9 +10,10 @@
   SFX_WRAM_memset
   Set WRAM to a given value
 
-  :in:  b:a     Value:Bank
-  :in:  x       Offset
-  :in:  y       Length
+  Parameters:
+  >:in:  b:a     Value:Bank
+  >:in:  x       Offset
+  >:in:  y       Length
 */
 SFX_WRAM_memset:
         RW_assume a8i16
@@ -51,9 +52,10 @@ SFX_WRAM_memset:
 
   Assumes that destination registers have already been written.
 
-  :in:  a       Source bank
-  :in:  x       Source offset
-  :in:  y       Length
+  Parameters:
+  >:in:  a       Source bank
+  >:in:  x       Source offset
+  >:in:  y       Length
 */
 SFX_WRAM_memcpy:
         RW_assume a8i16
@@ -74,9 +76,10 @@ SFX_WRAM_memcpy:
   SFX_VRAM_memset
   Set VRAM to a given value
 
-  :in:  a       Value
-  :in:  x       Offset (words)
-  :in:  y       Length
+  Parameters:
+  >:in:  a       Value
+  >:in:  x       Offset (words)
+  >:in:  y       Length
 */
 SFX_VRAM_memset:
         RW_assume a8i16
@@ -103,9 +106,10 @@ SFX_VRAM_memset:
 
   Assumes that destination registers have already been written.
 
-  :in:  a       Source bank
-  :in:  x       Source offset
-  :in:  y       Length
+  Parameters:
+  >:in:  a       Source bank
+  >:in:  x       Source offset
+  >:in:  y       Length
 */
 SFX_VRAM_memcpy:
         RW_assume a8i16
@@ -130,9 +134,10 @@ SFX_VRAM_memcpy:
 
   Assumes that destination registers have already been written.
 
-  :in:  a       Source bank
-  :in:  x       Source offset
-  :in:  y       Length
+  Parameters:
+  >:in:  a       Source bank
+  >:in:  x       Source offset
+  >:in:  y       Length
 */
 SFX_CGRAM_memcpy:
         RW_assume a8i16
@@ -261,9 +266,10 @@ SFX_INIT_mmio:
 /**
   SFX_INIT_oam
 
-  :in:  a:x     Table address
-  :in:  y       X/Y-pos lo-byte
-  :in:  b       X-pos hi-bit (across whole byte)
+  Parameters:
+  >:in:  a:x     Table address
+  >:in:  y       X/Y-pos lo-byte
+  >:in:  b       X-pos hi-bit (across whole byte)
 */
 SFX_INIT_oam:
         RW_assume a8i16
@@ -314,7 +320,8 @@ SFX_WAIT_vbl:
 
   NB! Perform check with blank screen and with interrupts disabled.
 
-  :out: a/z     a=0 and z=1 if system passes as NTSC, otherwise a=1 and z=0
+  Returns:
+  >:out: a/z     a=0 and z=1 if system passes as NTSC, otherwise a=1 and z=0
 */
 NTSC_true       = $1918
 NTSC_margin     = $3
