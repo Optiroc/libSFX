@@ -23,11 +23,13 @@ submodules:
 	git submodule update --init --recursive
 
 docs:
+	@rm -frd docs
 	@mkdir -pv docs
 	python -m scss < extras/NaturalDocs/libsfx.scss -C >extras/NaturalDocs/libsfx.css
 	naturaldocs -r -i include -o HTML docs -p extras/NaturalDocs -s libsfx -t 2
 	./extras/NaturalDocs/wash.sh ./docs/files/*.html
 	@rm -frd ./docs/index && rm -frd ./docs/search
+	@cp ./extras/NaturalDocs/readme ./docs/README.md
 
 clean:
 	@$(MAKE) clean -C tools/cc65
