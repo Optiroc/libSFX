@@ -9,7 +9,7 @@
 
 /**
   Macro: DSP_set
-  Select DSP register.
+  Select DSP register
 
   Parameters:
   >:in:    reg     Register (uint8)        constant
@@ -57,7 +57,7 @@
 
 /**
   Macro: SMP_exit
-  Return to IPL (clears timers, zeropage).
+  Return to IPL (clears timers, zeropage)
 
 */
 .macro SMP_exit

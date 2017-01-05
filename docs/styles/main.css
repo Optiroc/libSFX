@@ -9,6 +9,11 @@ body {
   margin: 0;
   padding: 0;
 }
+@media only screen and (max-width : 700px) {
+  body {
+    -webkit-text-size-adjust: 80%;
+  }
+}
 .ContentPage, .IndexPage {
   background-color: #eee;
 }
@@ -113,6 +118,12 @@ blockquote {
   margin: 0 0 8.1pt 16.2pt;
   padding: 8.1pt;
   border-width: 0;
+  overflow: scroll;
+}
+@media only screen and (max-width : 700px) {
+  .CBody pre {
+    margin: 0 0 4.05pt 8.1pt;
+  }
 }
 .CBody ul {
   padding: 0 0 16.2pt 0;
@@ -142,6 +153,11 @@ h4.CHeading {
   font-size: 9pt;
   line-height: 11.25pt;
   margin: 0 0 0 16.2pt;
+}
+@media only screen and (max-width : 700px) {
+  h4.CHeading {
+    margin: 0 0 0 8.1pt;
+  }
 }
 .CDescriptionList {
   margin: 0.5em 5ex 0 5ex;
@@ -484,8 +500,8 @@ a.IParent, a.IFile {
 @media only screen and (max-width : 700px) {
   .ContentPage #Menu, .IndexPage #Menu {
     position: initial;
-    width: 100%;
-    padding: 5.625pt;
+    width: 96%;
+    padding: 2%;
   }
 }
 .MTitle {

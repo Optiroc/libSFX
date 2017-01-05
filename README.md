@@ -11,9 +11,7 @@ A Super Nintendo assembler development framework featuring:
 * ROM image validation via [SuperFamicheck](https://github.com/Optiroc/SuperFamicheck).
 * Sublime Text [syntax definitions](./extras/SublimeText).
 
-Full documentation of the macro library at [optiroc.github.io/libSFX](http://optiroc.github.io/libSFX).
-
-Also, feel free to take a closer look at the [libSFX/include](./include/) directory!
+Work-in-progress documentation at [optiroc.github.io/libSFX](http://optiroc.github.io/libSFX).
 
 libSFX is developed by David Lindecrantz and distributed under the terms of the [MIT license](./LICENSE).
 
@@ -36,7 +34,7 @@ For project customization – for example extending the ROM size, adding SRAM or
 To override the defaults, simply copy these two files into your project directory and edit them to your liking. In [include/Configurations](./include/Configurations/) there's a few additional Map.cfg examples. You may also check out the [example](./examples/SixteenMegaPower) [projects](./examples/SuperFX) to see how a project can be customized.
 
 
-##work in progress
+##planned features
 * Graphics conversion tools.
 * More fleshed out examples.
 * Automated testing.

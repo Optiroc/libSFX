@@ -10,7 +10,9 @@
 */
 
 /**
-  Variable: SFX_inidisp (byte)
+  Variable: SFX_inidisp
+  INIDISP shadow variable (byte)
+
   SFX_inidisp is a shadow for the PPU INIDISP register at $2100. Writes to
   SFX_inidisp will be written to $2100 at the next vertical blanking interval.
 
@@ -23,13 +25,16 @@
 */
 
 /**
-  Variable: SFX_nmitimen (byte)
+  Variable: SFX_nmitimen
+  NMITIMEN shadow variable (byte)
+
   Shadow variable for the NMITIMEN register at $4200. Used by the various
   interrupt control macros to enable suspension and enabling of interrupts.
 */
 
 /**
-  Variable: SFX_joy#cnt (word)
+  Variable: SFX_joy#cnt
+  Joypad continous readout (word)
 
   If so configured, libSFX enables automatic joypad readout and sets
   the 12 most significant bits in these variables continously as the
@@ -57,7 +62,8 @@
 */
 
 /**
-  Variable: SFX_joy#trg (word)
+  Variable: SFX_joy#trg
+  Joypad trigger readout (word)
 
   As opposed to SFX_joy#cnt, the bits in SFX_joy#trg are only set for
   one frame as a joypad button is pushed.
@@ -250,7 +256,7 @@
 
 /**
   Macro: CPU_init
-  Initialize CPU state.
+  Initialize CPU state
 */
 .macro  CPU_init
         RW_push set:a8
@@ -271,7 +277,7 @@
 
 /**
   Macro: REG_init
-  Initialize PPU & CPU I/O registers.
+  Initialize PPU & CPU MMIO registers
 */
 .macro  REG_init
         RW_push set:a8i16

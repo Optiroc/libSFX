@@ -38,6 +38,9 @@ body {
   background-color: $color-bg;
   margin: 0;
   padding: 0;
+  @media #{$ms} {
+    -webkit-text-size-adjust: 80%;
+  }
 }
 
 .ContentPage,
@@ -171,6 +174,10 @@ blockquote {
     margin: 0 0 $font-lead-normal*0.5 $font-lead-normal;
     padding: $font-lead-normal*0.5;
     border-width: 0;
+    overflow: scroll;
+    @media #{$ms} {
+      margin: 0 0 $font-lead-normal*0.25 $font-lead-normal*0.5;
+    }
   }
 
   ul {
@@ -203,6 +210,9 @@ h4.CHeading {
   font-size: $font-size-small;
   line-height: $font-lead-small;
   margin: 0 0 0 $font-lead-normal;
+  @media #{$ms} {
+    margin: 0 0 0 $font-lead-normal*0.5;
+  }
 }
 
 .CDescriptionList {
@@ -602,8 +612,8 @@ a.IFile {
   overflow: auto;
   @media #{$ms} {
     position: initial;
-    width: 100%;
-    padding: $font-lead-small*0.5;
+    width: 96%;
+    padding: 2%;
   }
 }
 

@@ -11,7 +11,7 @@
 
 /**
   Macro: FIFO_alloc
-  Allocate static FIFO (queue) buffer.
+  Allocate static FIFO (queue) buffer
 
   Buffer is allocated in the LORAM segment.
   Implemented as a circular buffer without overrun protection.
@@ -63,7 +63,7 @@
 
 /**
   Macro: FIFO_enq
-  Write (enqueue) byte to FIFO buffer.
+  Write (enqueue) byte to FIFO buffer
 
   Destroys a and x.
 
@@ -99,7 +99,7 @@
 
 /**
   Macro: FIFO_deq
-  Read (dequeue) byte from FIFO buffer.
+  Read (dequeue) byte from FIFO buffer
 
   Value is returned in 'outreg' (default y), z = 0.
   If queue is empty z = 1.
@@ -163,7 +163,7 @@
 
 /**
   Macro: FILO_alloc
-  Allocate static FILO (stack) buffer.
+  Allocate static FILO (stack) buffer
 
   Buffer is allocated in the LORAM segment.
   No overflow protection.
@@ -214,7 +214,7 @@
 
 /**
   Macro: FILO_push
-  Write byte to FILO buffer.
+  Write byte to FILO buffer
 
   Destroys x.
 
@@ -253,7 +253,7 @@
 
 /**
   Macro: FILO_pop
-  Read byte from FILO buffer.
+  Read byte from FILO buffer
 
   Value is returned in 'outreg' (default y), z = 0.
   If stack is empty z = 1.

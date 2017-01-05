@@ -42,6 +42,14 @@ SFX_SPC_IMAGE = EXRAM
   >:in:    source    Source address (uint24)         constant
   >:in:    length    Length (uint16)                 constant
   >:in:    exec      Jump address (uint16)           constant
+
+  Example:
+  (start code)
+  ;Transfer and execute SMP code
+  ;The __SMPCODE_***__ symbols are exported from Map.cfg
+  SMP_ready
+  SMP_exec          __SMPCODE_RUN__, __SMPCODE_LOAD__, __SMPCODE_SIZE__, __SMPCODE_RUN__
+  (end)
 */
 .macro  SMP_exec dest, source, length, exec
         RW_push set:a8i16
@@ -65,6 +73,13 @@ SFX_SPC_IMAGE = EXRAM
   >:in:    dest      Destination address (uint16)    constant
   >:in:    source    Source address (uint24)         constant
   >:in:    length    Length (uint16)                 constant
+
+  Example:
+  (start code)
+  ;Transfer data to SMP
+  SMP_ready
+  SMP_memcpy        $2000, Sample1, sizeof_Sample1
+  (end)
 */
 .macro  SMP_memcpy dest, source, length
         RW_push set:a8i16
@@ -97,7 +112,7 @@ SFX_SPC_IMAGE = EXRAM
 
 /**
   Macro: SMP_playspc
-  Transfer & start SPC music file
+  Transfer & start SPC music file using custom (fast!) transfer
 
   If ROM_MAPMODE == 0 ("LoROM") both ram and ram_hi parameters are required.
 
@@ -106,6 +121,21 @@ SFX_SPC_IMAGE = EXRAM
   >:in:    ram       Address to full 64kB SPC RAM dump (uint24)   constant
   >                  Address to lower 32kB SPC RAM dump (uint24)  constant
   >:in?:   ram_hi    Address to upper 32kB SPC RAM dump (uint24)  constant
+
+  Example:
+  (start code)
+  ;Transfer and execute SPC file
+  SMP_playspc       SPC_State, SPC_Image_Lo, SPC_Image_Hi
+
+  ;Import music
+  .define spc_file  "Data/Music.spc"
+  .segment "RODATA"
+  SPC_State:        SPC_incbin_state spc_file
+  .segment "ROM2"
+  SPC_Image_Lo:     SPC_incbin_lo spc_file
+  .segment "ROM3"
+  SPC_Image_Hi:     SPC_incbin_hi spc_file
+  (end)
 */
 .macro  SMP_playspc state, ram, ram_hi
   .if ((ROM_MAPMODE = $0) && (.blank({ram_hi})))
@@ -132,7 +162,7 @@ SFX_SPC_IMAGE = EXRAM
 
 /**
   Macro: SPC_incbin
-  Import SPC RAM image (64k)
+  Import 64KB SPC RAM image
 
   Parameters:
   >:in:    filename  SPC File                path
@@ -143,7 +173,7 @@ SFX_SPC_IMAGE = EXRAM
 
 /**
   Macro: SPC_incbin_lo
-  Import SPC RAM image (lower 32k)
+  Import lower 32KB of SPC RAM image
 
   Parameters:
   >:in:    filename  SPC File                path
@@ -154,7 +184,7 @@ SFX_SPC_IMAGE = EXRAM
 
 /**
   Macro: SPC_incbin_hi
-  Import SPC RAM image (upper 32k)
+  Import upper 32KB of SPC RAM image
 
   Parameters:
   >:in:    filename  SPC File                path

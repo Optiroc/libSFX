@@ -106,7 +106,7 @@
 
 /**
   Macro: CGRAM_setcolor_rgb
-  Set color at index with an RGB constant triplet
+  Set color at index with a constant RGB triplet
 
   Parameters:
   >:in:    index     CGRAM index (uint8)           a
@@ -138,7 +138,7 @@
 
 /**
   Macro: OAM_init
-  Initialize OAM table in WRAM
+  Initialize shadow OAM table in WRAM
 
   Parameters:
   >:in:    table     Table address (uint24)        constant

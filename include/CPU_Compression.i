@@ -13,7 +13,7 @@
 
 /**
   Macro: LZ4_decompress
-  Decompress LZ4 frame.
+  Decompress LZ4 frame
 
   Parameters:
   >:in:    source  LZ4 frame address (uint24)    constant
@@ -71,7 +71,7 @@
 
 /**
   Macro: LZ4_decompress_block
-  Decompress LZ4 block.
+  Decompress LZ4 block
 
   Parameters:
   >:in:    source  LZ4 block address (uint24)    constant

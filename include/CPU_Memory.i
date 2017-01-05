@@ -11,7 +11,7 @@
 
 /**
   Macro: memset
-  Set CPU-bus memory to a given value
+  Fill block of memory (CPU-bus)
 
   Uses the 65816 block move instruction so its much slower than DMA
   for large blocks of memory. On the other hand it's quicker to setup
@@ -118,7 +118,7 @@
 
 /**
   Macro: memcpy
-  Copy bytes from/to CPU-bus
+  Copy block of memory (from/to CPU-bus)
 
   Uses the 65816 block move instruction so its much slower than DMA
   for large transfers. On the other hand it's quicker to setup and
@@ -220,7 +220,7 @@
 
 /**
   Macro: WRAM_memset
-  Set WRAM to a given value
+  Fill block of memory (WRAM)
 
   Disables DMA and uses channel 7 for transfer.
 
@@ -280,7 +280,7 @@
 
 /**
   Macro: WRAM_memcpy
-  Copy bytes from CPU-bus to WRAM
+  Copy block of memory (from CPU-bus to WRAM)
 
   Disables DMA and uses channel 7 for transfer.
   WRAM to WRAM copy is not possible.
@@ -376,8 +376,8 @@
 
 /**
   Macro: VRAM_memset
+  Fill block of memory (VRAM)
 
-  Set VRAM to a given value
   Disables DMA and uses channel 7 for transfer.
 
   Parameters:
@@ -415,8 +415,8 @@
 
 /**
   Macro: VRAM_memcpy
+  Copy block of memory (from CPU-bus to VRAM)
 
-  Copy bytes from CPU-bus to VRAM.
   Disables DMA and uses channel 7 for transfer.
 
   Parameters:
@@ -494,8 +494,8 @@
 
 /**
   Macro: CGRAM_memcpy
+  Copy block of memory (from CPU-bus to CGRAM)
 
-  Copy bytes from CPU-bus to CGRAM.
   Disables DMA and uses channel 7 for transfer.
 
   Parameters:

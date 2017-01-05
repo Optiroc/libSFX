@@ -67,7 +67,6 @@ SET_EXT_SYNC_OFF        = $00
 
 /**
   Macro: inidisp()
-
   Encode value for INIDISP
 
   Parameters:
@@ -135,8 +134,7 @@ CGDATAREAD              = $213b ;PPU2 CGRAM Data Read (WRx2)
 
 /**
   Macro: rgb()
-
-  Encode RGB values into SNES color word
+  Encode RGB values to SNES color word
 
   Parameters:
   >:in:    r           Red                   0-15
@@ -294,7 +292,6 @@ M7Y                     = $2120   ;Rotation/Scaling Center Coordinate Y (WRx2)
 
 /**
   Macro: bgmode()
-
   Encode value for BGMODE
 
   Parameters:
@@ -309,7 +306,6 @@ M7Y                     = $2120   ;Rotation/Scaling Center Coordinate Y (WRx2)
 
 /**
   Macro: bgsc()
-
   Encode value for BGnSC
 
   Parameters:
@@ -320,7 +316,6 @@ M7Y                     = $2120   ;Rotation/Scaling Center Coordinate Y (WRx2)
 
 /**
   Macro: bgnba()
-
   Encode value for BG12NBA+BG34NBA
 
   Parameters:
@@ -333,7 +328,6 @@ M7Y                     = $2120   ;Rotation/Scaling Center Coordinate Y (WRx2)
 
 /**
   Macro: bg12nba()
-
   Encode value for BG12NBA
 
   Parameters:
@@ -344,7 +338,6 @@ M7Y                     = $2120   ;Rotation/Scaling Center Coordinate Y (WRx2)
 
 /**
   Macro: bg34nba()
-
   Encode value for BG34NBA
 
   Parameters:
@@ -626,7 +619,6 @@ TSW_OBJ_OFF             = $00
 
 /**
   Macro: tm()
-
   Encode value for TM/TS/TMW/TSW
 
   Parameters:
