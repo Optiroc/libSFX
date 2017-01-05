@@ -138,7 +138,7 @@
 .macro  VBL_on
         RW_push set:a8
         lda     SFX_nmitimen
-.if SFX_AUTOJOY = ENABLE
+.if SFX_AUTOJOY <> DISABLE
         ora     #NMI_NMI_ON + NMI_JOY_ON
 .else
         ora     #NMI_NMI_ON
