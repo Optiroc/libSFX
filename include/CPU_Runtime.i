@@ -1,9 +1,67 @@
 ; libSFX S-CPU NMI/IRQ Vector Macros
 ; David Lindecrantz <optiroc@gmail.com>
 
-
 .ifndef ::__MBSFX_CPU_Runtime__
 ::__MBSFX_CPU_Runtime__ = 1
+
+;-------------------------------------------------------------------------------
+/**
+  Group: libSFX zero-page variables
+*/
+
+/**
+  Variable: SFX_inidisp (byte)
+  SFX_inidisp is a shadow for the PPU INIDISP register at $2100. Writes to
+  SFX_inidisp will be written to $2100 at the next vertical blanking interval.
+
+  Example:
+  (start code)
+  ;Turn on screen
+  lda          #inidisp(ON, DISP_BRIGHTNESS_MAX)
+  sta          SFX_inidisp
+  VBL_on
+*/
+
+/**
+  Variable: SFX_nmitimen (byte)
+  Shadow variable for the NMITIMEN register at $4200. Used by the various
+  interrupt control macros to enable suspension and enabling of interrupts.
+*/
+
+/**
+  Variable: SFX_joy#cnt (word)
+
+  If so configured, libSFX enables automatic joypad readout and sets
+  the 12 most significant bits in these variables continously as the
+  joypad buttons are pushed.
+
+  Depending on how many joypads are enabled for automatic readout in
+  libSFX.cfg, SFX_joy1cnt to SFX_joy4cnt are available.
+
+  Description:
+  (start code)
+  Bit       Button
+  15        B
+  14        Y
+  13        Select
+  12        Start
+  11        Up
+  10        Down
+  09        Left
+  08        Right
+  07        A
+  06        X
+  05        L
+  04        R
+  (end)
+*/
+
+/**
+  Variable: SFX_joy#trg (word)
+
+  As opposed to SFX_joy#cnt, the bits in SFX_joy#trg are only set for
+  one frame as a joypad button is pushed.
+*/
 
 ;Default settings for joypad polling
 .ifndef SFX_AUTOJOY
@@ -40,7 +98,9 @@
 .endif
 
 ;-------------------------------------------------------------------------------
-;Interrupt handler macros
+/**
+  Group: Interrupt handling
+*/
 
 /**
   Macro: VBL_set
@@ -184,11 +244,13 @@
 
 
 ;-------------------------------------------------------------------------------
-;Initialization
+/**
+  Group: System initialization
+*/
 
 /**
   Macro: CPU_init
-  Initialize CPU state
+  Initialize CPU state.
 */
 .macro  CPU_init
         RW_push set:a8
@@ -209,7 +271,7 @@
 
 /**
   Macro: REG_init
-  Initialize PPU & CPU I/O registers
+  Initialize PPU & CPU I/O registers.
 */
 .macro  REG_init
         RW_push set:a8i16
