@@ -1,6 +1,6 @@
 .PHONY: clean submodules docs
 
-default: cc65 superfamicheck brrtools lz4 usb2snes
+default: cc65 superfamicheck brrtools lz4
 
 all: clean default
 
@@ -15,9 +15,6 @@ brrtools: submodules
 
 lz4: submodules
 	@$(MAKE) lz4 -C tools/lz4/programs
-
-usb2snes: submodules
-	@$(MAKE) -C tools/usb2snes
 
 submodules:
 	git submodule update --init --recursive
@@ -36,4 +33,3 @@ clean:
 	@$(MAKE) clean -C tools/superfamicheck
 	@$(MAKE) clean -C tools/brrtools
 	@$(MAKE) clean -C tools/lz4/programs
-	@$(MAKE) clean -C tools/usb2snes
