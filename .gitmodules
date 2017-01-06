@@ -7,9 +7,6 @@
 [submodule "tools/brrtools"]
 	path = tools/brrtools
 	url = https://github.com/Optiroc/BRRtools.git
-[submodule "tools/usb2snes"]
-	path = tools/usb2snes
-	url = https://github.com/Optiroc/usb2snes
 [submodule "tools/lz4"]
 	path = tools/lz4
 	url = https://github.com/lz4/lz4.git
