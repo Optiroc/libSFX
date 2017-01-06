@@ -6,9 +6,9 @@
 
 ;Locations and sizes for relocatable SMP routines
 .import SMP_Burst, SMP_Burst_END, SMP_SetDSP, SMP_SetDSP_END
-SMP_Burst_OFFSET = __SMPLIBSFX_LOAD__ + SMP_Burst - $02
+SMP_Burst_OFFSET = __LIBSFX_SMP_LOAD__ + SMP_Burst - $02
 SMP_Burst_LENGTH = SMP_Burst_END - SMP_Burst
-SMP_SetDSP_OFFSET = __SMPLIBSFX_LOAD__ + SMP_SetDSP - $02
+SMP_SetDSP_OFFSET = __LIBSFX_SMP_LOAD__ + SMP_SetDSP - $02
 SMP_SetDSP_LENGTH = SMP_SetDSP_END - SMP_SetDSP
 
 ;RAM locations for SPC burst transfer

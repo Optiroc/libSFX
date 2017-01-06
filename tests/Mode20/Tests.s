@@ -424,8 +424,8 @@ test_is_ntsc:
 
 ;Import lz4 textfile
 .segment "RODATA"
-incbin  text_lz4,       "Data/The Eyes Have It.txt.lz4"
-incbin  repetetive_lz4, "Data/The Eyes Have It.txt.lz4"
+incbin  text_lz4,       "Data/TheEyesHaveIt.txt.lz4"
+incbin  repetetive_lz4, "Data/Repetetive.bin.lz4"
 
 ;Import graphics
 .segment "ROM1"

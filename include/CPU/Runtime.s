@@ -126,6 +126,9 @@ VBlankVector:
         sta     a:SFX_joy4trg
         stx     a:SFX_joy4cnt
 .endif
+.if .defined(SFXPKG_MOUSE)
+        SFX_MOUSE_nmi_hook
+.endif
 
 .if SFX_AUTOJOY_FIRST = YES
         jsl     SFX_nmi_jml             ;Call trampoline

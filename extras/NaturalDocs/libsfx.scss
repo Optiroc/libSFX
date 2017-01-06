@@ -157,6 +157,22 @@ blockquote {
 .CBody {
   margin: 0;
 
+  p {
+    b:first-child {
+      display: block;
+      font-size: $font-size-normal;
+      line-height: $font-lead-normal;
+      color: $color-black;
+      border-style: solid;
+      border-width: 0 0 1px 0;
+      border-color: $color-black;
+      margin: 0 0 $font-lead-normal*0.5 0;
+      padding-bottom: 1px;
+      padding-top: $font-lead-normal*0.5;
+
+    }
+  }
+
   blockquote {
     padding: $font-lead-normal*0.5 0 0 0;
     margin: 0;
@@ -171,7 +187,7 @@ blockquote {
     font-size: $font-size-small;
     line-height: $font-lead-small;
     background-color: $color-yellow;
-    margin: 0 0 $font-lead-normal*0.5 $font-lead-normal;
+    margin: 0 0 $font-lead-normal*0.75 $font-lead-normal;
     padding: $font-lead-normal*0.5;
     border-width: 0;
     overflow: scroll;
@@ -600,6 +616,8 @@ a.IFile {
   padding: $font-lead-small*0.5 $font-lead-small*0.5 $font-size-small $font-lead-small*0.5;
   @media #{$ms} {
     text-align: left;
+    font-size: $font-size-normal;
+    line-height: $font-lead-normal * 1.25;
   }
 }
 

@@ -1,7 +1,7 @@
 ; Relocatable snippets that will load into $0002 of SPC700 RAM
 
 .include "../libSFX.i"
-.segment "SMPLIBSFX"
+.segment "LIBSFX_SMP"
 
 .export SMP_Burst, SMP_Burst_END, SMP_SetDSP, SMP_SetDSP_END
 

@@ -1,22 +1,10 @@
 ; libSFX LZ4 Decompression
 ; David Lindecrantz <optiroc@gmail.com>
-;
-; LZ4 homepage:
-; https://github.com/Cyan4973/lz4
-;
-; Another 65816 implementation by Olivier Zardini:
-; http://www.brutaldeluxe.fr/products/crossdevtools/lz4/
-;   Relying heavily on self-modification, this implementation is
-;   faster and smaller. But for SNES use it has its limits:
-;   - Can't run from ROM
-;   - Fixed source and destination offsets
-;   - Compressed size needed as parameter
 
-.include "../libSFX.i"
-.segment "LIBSFX"
+.include "../../libSFX.i"
+.segment "LIBSFX_PKG"
 
 ;-------------------------------------------------------------------------------
-
 /**
   SFX_LZ4_decompress
   Decompress LZ4 frame

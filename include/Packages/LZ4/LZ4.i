@@ -7,8 +7,54 @@
 .global SFX_LZ4_decompress, SFX_LZ4_decompress_block
 
 ;-------------------------------------------------------------------------------
+;
+;
+
 /**
-  Group: LZ4 decompression
+  Group: LZ4
+  Optional package adding LZ4 decompression
+
+  <LZ4 at http://www.lz4.org> is an extremely simple compression algorithm,
+  that still outperforms algorithms traditionally most popular on consoles – like
+  LZSS and its derivatives – both in compression ratio and decoding speed.
+
+  Olivier Zardini has published a popular <65816 implementation at http://www.brutaldeluxe.fr/products/crossdevtools/lz4/>
+  relying heavily on self-modification. His implementation is very fast
+  and small, and suits 65816-equipped home computers perfectly. Though
+  it has some limitations for SNES use∶
+
+  * Can't run from ROM
+  * Fixed source and destination offsets
+  * Compressed size needed as parameter
+
+  The implementation included in libSFX overcome these limits, but the
+  performance penalty is certainly measurable. It's still plenty fast!
+
+  Decompression from any memory region to RAM is performed with
+  the <LZ4_decompress> macro. To link LZ4 support in a project, add LZ4
+  to libsfx_packages in the project makefile.
+
+  Makefile:
+  (start code)
+  # Use packages
+  libsfx_packages := LZ4
+  (end)
+
+  The lz4 encoder is included in the toolchain. To automatically derive
+  lz4 compressed files add them to the project makefile.
+
+  Makefile:
+  (start code)
+  # Derived data files
+  derived_files := Data/SNES.png.tiles.lz4
+  (end)
+
+  This will compress "Data/SNES.png.tiles" to "Data/SNES.png.tiles.lz4" during build.
+*/
+
+;-------------------------------------------------------------------------------
+/**
+  Group: Macros
 */
 
 /**

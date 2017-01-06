@@ -14,21 +14,40 @@
 /**
   Group: libSFX documentation
 
-  libSFX is a Super Nintendo assembler development framework. By leveraging the
-  ca65 assembler and several macro packs it can create object code for∶
+  libSFX is a Super Nintendo assembler development framework. It aims to
+  add as little magic and abstraction to the programming as possible while
+  removing the tedium of boilerplate and mandatory micro management of
+  configuration files.
+
+  By leveraging the ca65 assembler and several macro packs it can
+  create object code for∶
 
   * WDC65816 - also known as S-CPU, the main processor
   * SPC700 - the Sony 8-bit CPU controlling the sound DSP (S-SMP)
   * GSU - Graphics Support Unit, also known as "SuperFX"
 
   Using (and optionally extending) the included makefiles and configurations
-  it's a relative breeze to get "full stack" SNES code up and running.
+  it's a relative breeze to get _full stack_ SNES code up and running!
 
+  *Anatomy*
   libSFX consists of a small runtime that mainly initializes the system and
   handles hardware interrupts (which can be redirected in software). The real
   rice of the library are the macros included and documented here.
 
-  To get started clone or download at <github.com/Optiroc/libSFX at https://github.com/Optiroc/libSFX>, and dive into the <CPU.i> documentation!
+  *Packages*
+  There are also opt-in packages that add a bit more to the code size for
+  non-core features like input peripherals and data decompression.
+  These are documented in the "Packages" section.
+
+  *Tools*
+  The ca65 toolchain and a couple of support tools are included as submodules
+  in the libSFX/tools directory. These are the only tools used by the libSFX.make
+  makefile, making libSFX pretty much self contained. Running make from the
+  repository root will sync the submodules and build the tools.
+
+  *Get started*
+  Clone, fork or download the repository at <github.com/Optiroc/libSFX at https://github.com/Optiroc/libSFX>
+  and dive into the <CPU.i> documentation.
 
   libSFX is developed by David Lindecrantz and distributed under the terms of
   the <MIT license at https://raw.githubusercontent.com/Optiroc/libSFX/master/LICENSE>.
@@ -57,10 +76,17 @@
   .include "CPU_PPU.i"
   .include "CPU_Math.i"
   .include "CPU_DataStructures.i"
-  .include "CPU_Compression.i"
   .include "CPU_SMP.i"
   .include "CPU_DSP.i"
   .include "CPU_GSU.i"
+
+  ;S-CPU optional packages
+  .if .defined(SFXPKG_LZ4)
+    .include "Packages/LZ4/LZ4.i"
+  .endif
+  .if .defined(SFXPKG_MOUSE)
+    .include "Packages/Mouse/Mouse.i"
+  .endif
 
   ;Initial register widths
   RW_assume a8i16
