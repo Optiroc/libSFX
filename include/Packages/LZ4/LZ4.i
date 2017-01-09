@@ -14,21 +14,24 @@
   Group: LZ4
   Optional package adding LZ4 decompression
 
-  <LZ4 at http://www.lz4.org> is an extremely simple compression algorithm,
+  <LZ4 at http://www.lz4.org> is an extremely simple compression algorithm
   that still outperforms algorithms traditionally most popular on consoles – like
   LZSS and its derivatives – both in compression ratio and decoding speed.
 
   Olivier Zardini has published a popular <65816 implementation at http://www.brutaldeluxe.fr/products/crossdevtools/lz4/>
-  relying heavily on self-modification. His implementation is very fast
-  and small, and suits 65816-equipped home computers perfectly. Though
-  it has some limitations for SNES use∶
+  which relies heavily on self-modifying code. That makes it very fast and
+  small, and it suits 65816-equipped home computers perfectly. It does have
+  some drawbacks, though∶
 
-  * Can't run from ROM
-  * Fixed source and destination offsets
-  * Compressed size needed as parameter
+  * It can't run from read only memory regions
+  * It uses fixed source and destination offsets
+  * The compressed stream size is needed as parameter
 
-  The implementation included in libSFX overcome these limits, but the
-  performance penalty is certainly measurable. It's still plenty fast!
+  The implementation included in libSFX overcome all these limitations with
+  a slight (or even moderate!) performancy penalty. I haven't benchmarked the
+  two under controlled circumstances, but the libSFX implementation shouldn't
+  be much of a bottleneck at between 200-300KB/s (decoding 32-48KB blocks of
+  raw image and text data from ROM to WRAM).
 
   Decompression from any memory region to RAM is performed with
   the <LZ4_decompress> macro. To link LZ4 support in a project, add LZ4
@@ -49,7 +52,8 @@
   derived_files := Data/SNES.png.tiles.lz4
   (end)
 
-  This will compress "Data/SNES.png.tiles" to "Data/SNES.png.tiles.lz4" during build.
+  This will compress "Data/SNES.png.tiles" to "Data/SNES.png.tiles.lz4" during build,
+  before any source files are assembled.
 */
 
 ;-------------------------------------------------------------------------------

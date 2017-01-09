@@ -114,6 +114,16 @@ blockquote {
   padding-bottom: 1px;
   padding-top: 8.1pt;
 }
+.CBody p u:first-child {
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  font-size: 12pt;
+  line-height: 16.2pt;
+  color: #383838;
+  margin: 0;
+  padding-top: 8.1pt;
+}
 .CBody blockquote {
   padding: 8.1pt 0 0 0;
   margin: 0;

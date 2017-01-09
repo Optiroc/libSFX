@@ -27,19 +27,19 @@
   * GSU - Graphics Support Unit, also known as "SuperFX"
 
   Using (and optionally extending) the included makefiles and configurations
-  it's a relative breeze to get _full stack_ SNES code up and running!
+  it's a relative breeze to get SNES code up and running!
 
   *Anatomy*
   libSFX consists of a small runtime that mainly initializes the system and
   handles hardware interrupts (which can be redirected in software). The real
   rice of the library are the macros included and documented here.
 
-  *Packages*
-  There are also opt-in packages that add a bit more to the code size for
-  non-core features like input peripherals and data decompression.
+  _Packages_
+  There are also opt-in packages, adding a bit more to the object code size,
+  for non-core features like input peripherals and data decompression.
   These are documented in the "Packages" section.
 
-  *Tools*
+  _Tools_
   The ca65 toolchain and a couple of support tools are included as submodules
   in the libSFX/tools directory. These are the only tools used by the libSFX.make
   makefile, making libSFX pretty much self contained. Running make from the
