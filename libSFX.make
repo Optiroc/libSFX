@@ -20,7 +20,7 @@ rwildcard		= $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(sub
 
 # Set defaults
 ifndef obj_dir
-	obj_dir		:= .o
+	obj_dir		:= .build
 endif
 ifndef stack_size
 	stack_size	:= 100
@@ -31,6 +31,8 @@ endif
 ifndef rpad_size
 	rpad_size  := 100
 endif
+
+obj_dir_sfx		:= $(obj_dir)_libsfx
 
 # Flags
 libsfx_inc		:= $(libsfx_dir)/include
@@ -63,7 +65,6 @@ endif
 
 derived_files	+=
 
-
 # libSFX
 libsfx_src		:= $(wildcard $(libsfx_inc)/CPU/*.s)
 libsfx_src_smp	:= $(wildcard $(libsfx_inc)/SMP/*.s700)
@@ -82,9 +83,9 @@ ifneq ("$(wildcard Map.cfg)","")
 endif
 
 # Source -> obj targets
-obj				:= $(patsubst $(libsfx_inc)%,$(obj_dir)/__LIBSFX__%,$(patsubst %.s,%.o,$(libsfx_src)))
-obj				+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s,%.o,$(src)))
-obj_smp			:= $(patsubst $(libsfx_inc)%,$(obj_dir)/__LIBSFX__%,$(patsubst %.s700,%.o700,$(libsfx_src_smp)))
+obj_sfx			:= $(patsubst $(libsfx_inc)%,$(obj_dir_sfx)%,$(patsubst %.s,%.o,$(libsfx_src)))
+obj_smp_sfx		:= $(patsubst $(libsfx_inc)%,$(obj_dir_sfx)%,$(patsubst %.s700,%.o700,$(libsfx_src_smp)))
+obj				:= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s,%.o,$(src)))
 obj_smp			+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s700,%.o700,$(src_smp)))
 obj_gsu			:= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.sgs,%.ogs,$(src_gsu)))
 
@@ -101,50 +102,55 @@ run: $(rom)
 ifdef LIBSFX_RUNCMD
 	$(LIBSFX_RUNCMD)
 else
-	@echo NB! To enable running set LIBSFX_RUNCMD, for example:
+	@echo NB! To enable running set LIBSFX_RUNCMD, for example \(macOS\):
 	@echo \ \ \ \ export LIBSFX_RUNCMD\=\'open -a \~/bsnes/bsnes+.app --args \$$\(realpath \$$\(rom\)\)\'
 endif
 
-$(obj): $(derived_files) $(cfg_files)
-$(obj_gsu): $(derived_files) $(cfg_files)
-$(obj_smp): $(derived_files) $(cfg_files)
-$(derived_files): $(cfg_files)
+clean:
+	@rm -f $(rom) $(debug_sym) $(debug_map) $(derived_files)
+	@rm -frd $(obj_dir) $(obj_dir_sfx)
+
+
+# Data/configuration files as prerequisites
+$(obj_sfx) : $(cfg_files)
+$(obj_smp_sfx) : $(cfg_files)
+$(obj) : $(derived_files) $(cfg_files)
+$(obj_gsu) : $(derived_files) $(cfg_files)
+$(obj_smp) : $(derived_files) $(cfg_files)
+$(derived_files) : $(cfg_files)
 
 # Link
-$(rom): $(obj) $(obj_smp) $(obj_gsu)
+$(rom) : $(obj_sfx) $(obj_smp_sfx) $(obj) $(obj_smp) $(obj_gsu)
 	$(ld) $(ldflags) -C Map.cfg -o $@ $^
 	$(sfcheck) $@ -f
 
-# libSFX obj : src
-$(obj_dir)/__LIBSFX__/%.o: $(libsfx_inc)/%.s
-	@mkdir -pv $(dir $@)
-	$(as) $(asflags) -o $@ $<
-
-$(obj_dir)/__LIBSFX__/%.o700: $(libsfx_inc)/%.s700
-	@mkdir -pv $(dir $@)
-	$(as) $(asflags) -D TARGET_SMP -o $@ $<
-
 # Project obj : src
-$(obj_dir)/%.o: %.s
+$(obj_dir)/%.o : %.s
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) -o $@ $<
 
-$(obj_dir)/%.o700: %.s700
+$(obj_dir)/%.o700 : %.s700
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) -D TARGET_SMP -o $@ $<
 
-$(obj_dir)/%.ogs: %.sgs
+$(obj_dir)/%.ogs : %.sgs
 	@mkdir -pv $(dir $@)
 	$(as) $(asflags) -D TARGET_GSU -o $@ $<
 
-# Derived file transformations
-$(filter %.lz4,$(derived_files)): %.lz4: %
-	$(lz4_compress) $(lz4flags) $< $@
+# libSFX obj : src
+$(obj_dir_sfx)/%.o : $(libsfx_inc)/%.s
+	@mkdir -pv $(dir $@)
+	$(as) $(asflags) -o $@ $<
 
-$(filter %.brr,$(derived_files)): %.brr: %.wav
+$(obj_dir_sfx)/%.o700 : $(libsfx_inc)/%.s700
+	@mkdir -pv $(dir $@)
+	$(as) $(asflags) -D TARGET_SMP -o $@ $<
+
+# Derived file transformations
+$(derived_files) : %.lz4 : %
+	$(lz4_compress) $(lz4flags) $* $@
+	@touch $@
+
+$(filter %.brr,$(derived_files)): %.brr : %.wav
 	@rm -f $@
 	$(brr_enc) $(brrflags) $< $@
-
-clean:
-	@rm -f $(rom) $(debug_sym) $(debug_map) $(derived_files)
-	@rm -frd $(obj_dir)
