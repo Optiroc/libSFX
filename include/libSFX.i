@@ -23,7 +23,7 @@
   create object code for∶
 
   * WDC65816 - also known as S-CPU, the main processor
-  * SPC700 - the Sony 8-bit CPU controlling the sound DSP (S-SMP)
+  * SPC700 - the Sony 8-bit CPU (S-SMP) controlling the sound DSP (S-DSP)
   * GSU - Graphics Support Unit, also known as "SuperFX"
 
   Using (and optionally extending) the included makefiles and configurations

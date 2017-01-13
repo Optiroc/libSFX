@@ -427,6 +427,7 @@
   >:in:    length    Length (uint16)         y
   >                                          a (<<8)
   >                                          constant
+  >:in?:   increment Increment mode (uint8)  constant
 
   Example:
   (begin code)
@@ -436,7 +437,7 @@
   VRAM_memcpy       $2000, EXRAM, y             ;Copy y bytes to VRAM
   (end)
 */
-.macro  VRAM_memcpy dest, source, length
+.macro  VRAM_memcpy dest, source, length, increment
 .if .blank({length})
   SFX_error "VRAM_memcpy: Missing required parameter(s)"
 .elseif (.xmatch({source}, {ax}) .and .xmatch({length}, {a}))
@@ -474,6 +475,13 @@
   .else
         ldy     #length                         ;Load length
   .endif
+
+  .if (.blank({increment}))
+        lda     #$80                            ;VRAM transfer mode word access, increment by 1
+  .else
+        lda     #increment
+  .endif
+        sta     VMAINC
 
   .if .xmatch({source},{ax})
         ;nop

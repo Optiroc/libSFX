@@ -117,8 +117,6 @@ SFX_VRAM_memcpy:
         stx     A1T7L           ;Data offset
         sta     A1B7            ;Data bank
         sty     DAS7L           ;Size
-        lda     #$80
-        sta     VMAINC          ;VRAM transfer mode word access, increment by 1
         lda     #$01
         sta     DMAP7           ;DMA mode (word, normal, increment)
         lda     #$18
