@@ -12,6 +12,7 @@ libsfx_bin		:= $(libsfx_dir)/tools
 as				:= $(libsfx_bin)/cc65/bin/ca65
 ld				:= $(libsfx_bin)/cc65/bin/ld65
 sfcheck			:= $(libsfx_bin)/superfamicheck/bin/superfamicheck
+superfamiconv	:= $(libsfx_bin)/superfamiconv/bin/superfamiconv
 brr_enc			:= $(libsfx_bin)/brrtools/bin/brr_encoder
 lz4_compress	:= $(libsfx_bin)/lz4/programs/lz4
 usb2snes		:= $(libsfx_bin)/usb2snes/bin/usb2snes
@@ -48,8 +49,11 @@ endif
 
 asflags			+= -g -U -I ./ -I $(libsfx_inc) -I $(libsfx_inc)/Configurations
 ldflags			+= --cfg-path ./ --cfg-path $(libsfx_inc)/Configurations/
-brrflags		:= -rn1.0 -g
-lz4flags		:= -f -9
+brr_flags		:= -rn1.0 -g
+lz4_flags		:= -f -9
+palette_flags   := -v
+tiles_flags     := -v
+map_flags       := -v
 
 
 # Include all source files under working directory if $(src) isn't set
@@ -147,10 +151,22 @@ $(obj_dir_sfx)/%.o700 : $(libsfx_inc)/%.s700
 	$(as) $(asflags) -D TARGET_SMP -o $@ $<
 
 # Derived file transformations
-$(derived_files) : %.lz4 : %
-	$(lz4_compress) $(lz4flags) $* $@
-	@touch $@
+$(filter %.palette,$(derived_files)) : %.palette : %
+	$(superfamiconv) palette $(palette_flags) --in-image $* --out-data $@
+
+$(filter %.tiles,$(derived_files)) : %.tiles : % %.palette
+	$(superfamiconv) tiles $(tiles_flags) --in-image $* --in-palette $*.palette --out-data $@
+
+$(filter %.map,$(derived_files)) : %.map : % %.palette %.tiles
+	$(superfamiconv) map $(map_flags) --in-image $* --in-palette $*.palette --in-tiles $*.tiles --out-data $@
+
+$(filter %.m7d,$(derived_files)) : %.m7d : % %.palette %.tiles
+	$(superfamiconv) map $(map_flags) --mode snes_mode7 --in-image $* --in-palette $*.palette --in-tiles $*.tiles --out-m7-data $@
 
 $(filter %.brr,$(derived_files)): %.brr : %.wav
 	@rm -f $@
-	$(brr_enc) $(brrflags) $< $@
+	$(brr_enc) $(brr_flags) $< $@
+
+$(filter %.lz4,$(derived_files)) : %.lz4 : %
+	$(lz4_compress) $(lz4_flags) $* $@
+	@touch $@

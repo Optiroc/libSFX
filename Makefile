@@ -1,11 +1,14 @@
 .PHONY: clean submodules docs
 
-default: cc65 superfamicheck brrtools lz4
+default: cc65 superfamiconv superfamicheck brrtools lz4
 
 all: clean default
 
 cc65: submodules
-	@$(MAKE) -C tools/cc65 bin
+	@$(MAKE) -C tools/cc65 bin -j4
+
+superfamiconv: submodules
+	@$(MAKE) -C tools/superfamiconv -j4
 
 superfamicheck: submodules
 	@$(MAKE) -C tools/superfamicheck
@@ -14,7 +17,7 @@ brrtools: submodules
 	@$(MAKE) -C tools/brrtools
 
 lz4: submodules
-	@$(MAKE) lz4 -C tools/lz4/programs
+	@$(MAKE) lz4 -C tools/lz4/programs -j4
 
 submodules:
 	git submodule update --init --recursive
@@ -30,6 +33,7 @@ docs:
 
 clean:
 	@$(MAKE) clean -C tools/cc65
+	@$(MAKE) clean -C tools/superfamiconv
 	@$(MAKE) clean -C tools/superfamicheck
 	@$(MAKE) clean -C tools/brrtools
 	@$(MAKE) clean -C tools/lz4/programs

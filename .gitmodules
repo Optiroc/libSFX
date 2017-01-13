@@ -10,3 +10,6 @@
 [submodule "tools/lz4"]
 	path = tools/lz4
 	url = https://github.com/lz4/lz4.git
+[submodule "tools/superfamiconv"]
+	path = tools/superfamiconv
+	url = https://github.com/Optiroc/SuperFamiconv.git
