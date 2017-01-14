@@ -20,7 +20,9 @@
   >:out: a       Decompressed length
 */
 SFX_LZ4_decompress:
+        RW_assume a8i16
         jsr     Setup
+        RW a16i16
         jsr     ReadHeader
         jsr     DecodeBlock
         rtl
@@ -37,7 +39,9 @@ SFX_LZ4_decompress:
   :out: a       Decompressed length
 */
 SFX_LZ4_decompress_block:
+        RW_assume a8i16
         jsr     Setup
+        RW a16i16
         jsr     DecodeBlock
         rtl
 
@@ -51,6 +55,7 @@ SFX_LZ4_decompress_block:
 .define LZ_blockend _ZPAD_+$0e  ;End address for current block
 
 Setup:
+        RW_assume a8i16
         stx     LZ_source+$00   ;Set source for indirect and block move addressing
         sta     LZ_source+$02
         sta     LZ_mvl+$02
@@ -75,11 +80,12 @@ Setup:
         rts
 
 ReadHeader:
+        RW_assume a16i16
         jsr     Skip4           ;Skip LZ4 Magic number
         lda     [LZ_source]     ;Read FLG byte
         inc     LZ_source       ;Skip FLG+BD bytes
         inc     LZ_source
-        and     #%00001000      ;Check content size bit
+        and     #$0008          ;Check content size bit
                                 ;b2 = Content checksum
                                 ;b3 = Content size
                                 ;b4 = Block checksum
@@ -90,7 +96,7 @@ ReadHeader:
         rts
 
 DecodeBlock:
-        RW a16
+        RW_assume a16i16
         ldy     LZ_dest         ;Store destination offset for decompressed size calculation
         phy
         lda     [LZ_source]     ;Read lower 16 bits of block size
