@@ -7,6 +7,7 @@ A Super Nintendo assembler development framework featuring:
 * Some useful data structures with allocation and accessor macros (FIFO and FILO are currently implemented).
 * S-SMP communication and SPC playing routines.
 * LZ4 decompression.
+* Graphics conversion via [SuperFamiconv](https://github.com/Optiroc/SuperFamiconv).
 * BRR audio encoding using [BRRtools](https://github.com/Optiroc/BRRtools).
 * ROM image validation via [SuperFamicheck](https://github.com/Optiroc/SuperFamicheck).
 * Sublime Text [syntax definitions](./extras/SublimeText).
@@ -35,7 +36,6 @@ To override the defaults, simply copy these two files into your project director
 
 
 ##planned features
-* Graphics conversion tools.
 * More fleshed out examples.
 * Automated testing.
 
