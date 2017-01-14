@@ -1,11 +1,14 @@
 **/.o
+**/.build
+**/.build_libsfx
 examples/**/*.sfc
-examples/**/*.sym
+examples/**/*.dsym
+examples/**/*.dmap
 examples/**/*.srm
 tests/**/*.sfc
-tests/**/*.sym
+tests/**/*.dsym
+tests/**/*.dmap
 tests/**/*.srm
-examples/SixteenMegaPower/_build_
 _research
 extras/NaturalDocs/Data
 extras/NaturalDocs/libsfx.css
