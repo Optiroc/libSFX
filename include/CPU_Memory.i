@@ -427,7 +427,9 @@
   >:in:    length    Length (uint16)         y
   >                                          a (<<8)
   >                                          constant
-  >:in?:   increment Increment mode (uint8)  constant
+  >:in?:   vmainc    VRAM increment          constant
+  >:in?:   dmap      DMA mode                constant
+  >:in?:   bbad      DMA B-bus address       constant
 
   Example:
   (begin code)
@@ -437,13 +439,14 @@
   VRAM_memcpy       $2000, EXRAM, y             ;Copy y bytes to VRAM
   (end)
 */
-.macro  VRAM_memcpy dest, source, length, increment
+.macro  VRAM_memcpy dest, source, length, vmainc, dmap, bbad
 .if .blank({length})
   SFX_error "VRAM_memcpy: Missing required parameter(s)"
 .elseif (.xmatch({source}, {ax}) .and .xmatch({length}, {a}))
   SFX_error "VRAM_memcpy: Can't use register a for both source and length"
 .else
         RW_push set:a8i16
+        stz     MDMAEN                          ;Disable DMA
 
   .if .xmatch({dest},{y})
         sty     VMADDL                          ;Set VRAM destination (in words)
@@ -465,36 +468,58 @@
   .endif
 
   .if .xmatch({length},{y})
-        ;no-op
+        sty     DAS7L                           ;Size
   .elseif .xmatch({length},{a})
         RW a16
         and     #$00ff
         xba
-        tay
+        sta     DAS7L
         RW a8
   .else
         ldy     #length                         ;Load length
+        sty     DAS7L
   .endif
-
-  .if (.blank({increment}))
-        lda     #$80                            ;VRAM transfer mode word access, increment by 1
-  .else
-        lda     #increment
-  .endif
-        sta     VMAINC
 
   .if .xmatch({source},{ax})
-        ;nop
+        stx     A1T7L                           ;Data offset
+        sta     A1B7                            ;Data bank
   .elseif .xmatch({source},{hi:x})
         lda     #$7e                            ;Load source bank
+        sta     A1B7                            ;Data bank
   .elseif .xmatch({source},{ex:x})
         lda     #$7f                            ;Load source bank
+        sta     A1B7                            ;Data bank
   .else
         ldx     #.loword(source)                ;Load source offset
         lda     #^source                        ;Load source bank
+        stx     A1T7L                           ;Data offset
+        sta     A1B7                            ;Data bank
   .endif
 
-        jsl     SFX_VRAM_memcpy
+  .if (.blank({vmainc}))
+        lda     #$80                            ;VRAM transfer mode word access, increment by 1
+  .else
+        lda     #vmainc
+  .endif
+        sta     VMAINC
+
+  .if (.blank({dmap}))
+        lda     #$01                            ;DMA mode (word, normal, increment)
+  .else
+        lda     #dmap
+  .endif
+        sta     DMAP7
+
+  .if (.blank({bbad}))
+        lda     #$18                            ;Destination register = VMDATA ($2118/19)
+  .else
+        lda     #bbad
+  .endif
+        sta     BBAD7
+
+        lda     #%10000000                      ;Start DMA transfer
+        sta     MDMAEN
+
         RW_pull
 .endif
 .endmac
