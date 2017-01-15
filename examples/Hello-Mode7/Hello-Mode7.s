@@ -80,16 +80,18 @@ VBL:
         add     speed
         sta     scale
 
-        and     #$007f          ;Increase speed every 256 frames
+        and     #$003f          ;Increase speed every 64 frames
         bne     :+
         inc     speed
 :
         lda     speed           ;Start flashing after a while
-        and     #$fff8
+        and     #$fff0
         beq     :+
 
+        inc     speed
         lda     color
         sub     speed
+        and     #%0011110011101111
         sta     color
         tax
         CGRAM_setcolor 0, x
