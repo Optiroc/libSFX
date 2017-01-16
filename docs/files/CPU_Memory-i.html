@@ -60,7 +60,9 @@ WRAM_memset       ex:x, y, a              ;Set $7f:4000-5fff to #$40</pre></bloc
 :in:    length    Length (uint16)         y
                                           a (&lt;&lt;8)
                                           constant
-:in?:   increment Increment mode (uint8)  constant</pre></blockquote><h4 class=CHeading>Example</h4><blockquote><pre class="prettyprint">;Decompress graphics and upload to VRAM
+:in?:   vmainc    VRAM increment          constant
+:in?:   dmap      DMA mode                constant
+:in?:   bbad      DMA B-bus address       constant</pre></blockquote><h4 class=CHeading>Example</h4><blockquote><pre class="prettyprint">;Decompress graphics and upload to VRAM
 
 LZ4_decompress    Tilemap, EXRAM, y           ;Returns decompressed length in y
 VRAM_memcpy       $2000, EXRAM, y             ;Copy y bytes to VRAM</pre></blockquote></div></div></div>
