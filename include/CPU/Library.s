@@ -86,14 +86,14 @@ SFX_VRAM_memset:
         stz     MDMAEN          ;Disable DMA
         stx     VMADDL          ;Destination offset
         sty     DAS7L           ;Length
-        sta     SFX_word        ;Source value
+        sta     _ZPAD_          ;Source value
         lda     #VMA_TIMING_1   ;VRAM transfer mode
         sta     VMAINC
         ldx     #$1809          ;Mode: DMA_DIR_MEM_TO_PPU + DMA_FIXED + DMA_TRANS_2_LH, Destination: $4218
         stx     DMAP7
-        ldx     #SFX_word       ;Source offset
+        ldx     #_ZPAD_         ;Source offset
         stx     A1T7L
-        lda     #^SFX_word      ;Source bank
+        lda     #^_ZPAD_        ;Source bank
         sta     A1B7
         lda     #%10000000
         sta     MDMAEN
@@ -271,8 +271,8 @@ SFX_INIT_mmio:
 */
 SFX_INIT_oam:
         RW_assume a8i16
-        stx     a:SFX_addr      ;Set up direct page indirect addressing
-        sta     a:SFX_addr+2
+        stx     a:_ZPAD_        ;Set up direct page indirect addressing
+        sta     a:_ZPAD_+2
         xba                     ;Save msb
         pha
 
@@ -280,11 +280,11 @@ SFX_INIT_oam:
         tyx
         ldy     #$0000
 :       txa
-        sta     [SFX_addr],y
+        sta     [_ZPAD_],y
         iny
         iny
         lda     #$0000
-        sta     [SFX_addr],y
+        sta     [_ZPAD_],y
         iny
         iny
         cpy     #$0200
@@ -292,7 +292,7 @@ SFX_INIT_oam:
 
         RW a8                    ;Restore msb
         pla
-:       sta     [SFX_addr],y     ;Set hi-bits
+:       sta     [_ZPAD_],y       ;Set hi-bits
         iny
         cpy     #$0220
         bne     :-

@@ -1,0 +1,2 @@
+libsfx_src += $(libsfx_inc)/Packages/Mouse/Mouse.s
+asflags += -D SFXPKG_MOUSE

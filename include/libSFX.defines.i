@@ -1,8 +1,8 @@
-; libSFX Meta Macros
+; libSFX Global Defines
 ; David Lindecrantz <optiroc@gmail.com>
 
-.ifndef ::__MBSFX_META__
-::__MBSFX_META__ = 1
+.ifndef ::__MBSFX_DEFINES__
+::__MBSFX_DEFINES__ = 1
 
 .define ON              1
 .define OFF             0
@@ -15,6 +15,9 @@
 .define JOY2    %00000010
 .define JOY3    %00000100
 .define JOY4    %00001000
+
+.define MOUSE1  %00000001
+.define MOUSE2  %00000010
 
 .macro SFX_warning description
   .assert 0, warning, description
@@ -64,4 +67,4 @@
 .endmacro
 
 
-.endif;__MBSFX_META__
+.endif;__MBSFX_DEFINES__

@@ -1,16 +1,17 @@
 #libSFX
 A Super Nintendo assembler development framework featuring:
 
-* Basic system runtime for initialization and interrupt handling.
-* 65816 register size tracking macros to minimize rep/sep instructions (and mental overhead).
-* Full set of memcpy/memset routines for efficiently transferring data to different parts of the system.
-* Some useful data structures with allocation and accessor macros (FIFO and FILO are currently implemented).
+* Basic system runtime for initialization and interrupt handling
+* 65816 register size tracking macros to minimize rep/sep instructions (and mental overhead)
+* Full set of memcpy/memset routines for efficiently transferring data to different parts of the system
+* Some useful data structures with allocation and accessor macros (FIFO and FILO are currently implemented)
 * S-SMP communication and SPC playing routines.
-* LZ4 decompression.
-* Graphics conversion via [SuperFamiconv](https://github.com/Optiroc/SuperFamiconv).
-* BRR audio encoding using [BRRtools](https://github.com/Optiroc/BRRtools).
-* ROM image validation via [SuperFamicheck](https://github.com/Optiroc/SuperFamicheck).
-* Sublime Text [syntax definitions](./extras/SublimeText).
+* LZ4 decompression
+* Mouse driver
+* Graphics conversion via [SuperFamiconv](https://github.com/Optiroc/SuperFamiconv)
+* BRR audio encoding using [BRRtools](https://github.com/Optiroc/BRRtools)
+* ROM image validation via [SuperFamicheck](https://github.com/Optiroc/SuperFamicheck)
+* Sublime Text [syntax definitions](./extras/SublimeText)
 
 Work-in-progress documentation at [optiroc.github.io/libSFX](http://optiroc.github.io/libSFX).
 

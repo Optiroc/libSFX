@@ -27,7 +27,10 @@ ifndef stack_size
 	stack_size	:= 100
 endif
 ifndef zpad_size
-	zpad_size	:= 20
+	zpad_size	:= 10
+endif
+ifndef znmi_size
+	znmi_size	:= 10
 endif
 ifndef rpad_size
 	rpad_size  := 100
@@ -37,7 +40,7 @@ obj_dir_sfx		:= $(obj_dir)_libsfx
 
 # Flags
 libsfx_inc		:= $(libsfx_dir)/include
-asflags			:= -D __STACKSIZE__=\$$$(stack_size) -D __ZPADSIZE__=\$$$(zpad_size) -D __RPADSIZE__=\$$$(rpad_size)
+asflags			:= -D __STACKSIZE__=\$$$(stack_size) -D __ZPADSIZE__=\$$$(zpad_size) -D __ZNMISIZE__=\$$$(znmi_size) -D __RPADSIZE__=\$$$(rpad_size)
 ldflags       	:=
 
 ifdef debug

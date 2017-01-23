@@ -195,7 +195,6 @@ OBJ_8x8_64x64           = $40
 OBJ_16x16_32x32         = $60
 OBJ_16x16_64x64         = $80
 OBJ_32x32_64x64         = $a0
-;.define objsel()
 
 BGMODE                  = $2105 ;BG Mode + BG Character Size
 BG_MODE_MASK            = $f8
@@ -289,6 +288,19 @@ M7C                     = $211d   ;Rotation/Scaling Parameter C (WRx2)
 M7D                     = $211e   ;Rotation/Scaling Parameter D (WRx2)
 M7X                     = $211f   ;Rotation/Scaling Center Coordinate X (WRx2)
 M7Y                     = $2120   ;Rotation/Scaling Center Coordinate Y (WRx2)
+
+
+/**
+  Macro: objsel()
+  Encode value for OBJSEL
+
+  Parameters:
+  >:in:    base        VRAM Base Address     uint16 (truncated to 8K word alignment)
+  >:in:    size        OBJ Size              OBJ_8x8_16x16   / OBJ_8x8_32x32   / OBJ_8x8_64x64 /
+  >                                          OBJ_16x16_32x32 / OBJ_16x16_64x64 / OBJ_32x32_64x64
+  >:in:    gap         Gap between OBJ sets  uint16 (truncated to 4K word alignment)
+*/
+.define objsel(base, size, gap) (.lobyte(((base >> 14) << OBJ_NAME_SHIFT) | ((gap >> 13) << 3) | (size & (-OBJ_SIZE_MASK))))
 
 /**
   Macro: bgmode()
@@ -1130,6 +1142,5 @@ DASB7                   = $4377
 A2A7L                   = $4378
 A2A7H                   = $4379
 NTRL7                   = $437a
-
 
 .endif; __MBSFX_CPU_Def__

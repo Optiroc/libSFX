@@ -54,8 +54,9 @@
 */
 ;-------------------------------------------------------------------------------
 
-.include "Meta.i"
+.include "libSFX.defines.i"
 .include "libSFX.cfg"
+.include "libSFX.defaults.i"
 
 .if .defined(TARGET_SMP)
   ;S-SMP includes

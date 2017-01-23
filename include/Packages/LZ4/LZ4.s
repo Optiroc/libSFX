@@ -48,10 +48,10 @@ SFX_LZ4_decompress_block:
 
 ;-------------------------------------------------------------------------------
 ;Scratch pad usage
-.define LZ_source _ZPAD_+$00    ;Source (indirect long)
-.define LZ_dest _ZPAD_+$03      ;Destination (indirect long)
-.define LZ_mvl _ZPAD_+$06       ;Literal block move (mvn + banks + return)
-.define LZ_mvm _ZPAD_+$0a       ;Match block move (mvn + banks + return)
+.define LZ_source   _ZPAD_+$00  ;Source (indirect long)
+.define LZ_dest     _ZPAD_+$03  ;Destination (indirect long)
+.define LZ_mvl      _ZPAD_+$06  ;Literal block move (mvn + banks + return)
+.define LZ_mvm      _ZPAD_+$0a  ;Match block move (mvn + banks + return)
 .define LZ_blockend _ZPAD_+$0e  ;End address for current block
 
 Setup:

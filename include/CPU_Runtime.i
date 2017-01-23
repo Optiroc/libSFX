@@ -33,7 +33,7 @@
 */
 
 /**
-  Variable: SFX_joy#cnt
+  Variable: SFX_joy#cont
   Joypad continous readout (word)
 
   If so configured, libSFX enables automatic joypad readout and sets
@@ -41,7 +41,7 @@
   joypad buttons are pushed.
 
   Depending on how many joypads are enabled for automatic readout in
-  libSFX.cfg, SFX_joy1cnt to SFX_joy4cnt are available.
+  libSFX.cfg, SFX_joy1cont to SFX_joy4cont are available.
 
   Description:
   (start code)
@@ -61,46 +61,32 @@
   (end)
 */
 
-/**
-  Variable: SFX_joy#trg
-  Joypad trigger readout (word)
-
-  As opposed to SFX_joy#cnt, the bits in SFX_joy#trg are only set for
-  one frame as a joypad button is pushed.
-*/
-
-;Default settings for joypad polling
-.ifndef SFX_AUTOJOY
-    SFX_AUTOJOY = JOY1 | JOY2
-.endif
-
-.if (SFX_AUTOJOY < 0) || (SFX_AUTOJOY > (JOY1 | JOY2 | JOY3 | JOY4))
-    SFX_error "SFX_AUTOJOY: Bad configuration"
-.endif
-
-.ifndef SFX_AUTOJOY_FIRST
-    SFX_AUTOJOY_FIRST = NO
-.endif
-
 .global Main, BootVector, VBlankVector, IRQVector, EmptyVector, EmptyVBlank
 .global SFX_stash_nmi, SFX_restore_nmi
 
-.globalzp _ZPAD_
+.globalzp _ZPAD_, _ZNMI_
 .globalzp SFX_nmi_jml, SFX_irq_jml, SFX_nmi_store, SFX_inidisp, SFX_nmitimen
-.globalzp SFX_tick, SFX_jml, SFX_addr, SFX_word
-.globalzp SFX_mvn, SFX_mvn_dst, SFX_mvn_src
+.globalzp SFX_tick, SFX_mvn, SFX_mvn_dst, SFX_mvn_src
 
+
+/**
+  Variable: SFX_joy#trig
+  Joypad trigger readout (word)
+
+  As opposed to SFX_joy#cont, the bits in SFX_joy#trig are only set for
+  one frame as a joypad button is pushed.
+*/
 .if SFX_AUTOJOY & JOY1
-.globalzp SFX_joy1cnt, SFX_joy1trg
+.globalzp SFX_joy1cont, SFX_joy1trig
 .endif
 .if SFX_AUTOJOY & JOY2
-.globalzp SFX_joy2cnt, SFX_joy2trg
+.globalzp SFX_joy2cont, SFX_joy2trig
 .endif
 .if SFX_AUTOJOY & JOY3
-.globalzp SFX_joy3cnt, SFX_joy3tr
+.globalzp SFX_joy3cont, SFX_joy3trig
 .endif
 .if SFX_AUTOJOY & JOY4
-.globalzp SFX_joy3cnt, SFX_joy3tr
+.globalzp SFX_joy3cont, SFX_joy3trig
 .endif
 
 ;-------------------------------------------------------------------------------

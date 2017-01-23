@@ -36,11 +36,6 @@ Main:
         VBL_on
 
 :       wai
-
-        ;Set background color from joypad readout
-        ;ldx     z:SFX_joy1cnt
-        ;CGRAM_setcolor 3, x
-
         bra     :-
 
 ;-------------------------------------------------------------------------------

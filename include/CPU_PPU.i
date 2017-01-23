@@ -138,7 +138,7 @@
 
 /**
   Macro: OAM_init
-  Initialize shadow OAM table in WRAM
+  Initialize shadow OAM table in RAM
 
   Parameters:
   >:in:    table     Table address (uint24)        constant
@@ -156,6 +156,11 @@
         jsl     SFX_INIT_oam
         RW_pull
 .endmac
+
+/*
+.macro OAM_set_tile number, tile
+.endmac
+*/
 
 /**
   Macro: OAM_memcpy

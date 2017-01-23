@@ -7,9 +7,6 @@
 .global SFX_LZ4_decompress, SFX_LZ4_decompress_block
 
 ;-------------------------------------------------------------------------------
-;
-;
-
 /**
   Group: LZ4
   Optional package adding LZ4 decompression

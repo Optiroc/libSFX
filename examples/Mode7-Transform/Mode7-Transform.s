@@ -1,7 +1,8 @@
-; Hello Mode 7
+; Mode 7 Transform
 ; David Lindecrantz <optiroc@gmail.com>
 ;
-; Mode 7 infinite zoom
+; Mode 7 zoom and rotate using joypad or mouse in port 1
+; Building requires python to generate sine table
 
 .include "libSFX.i"
 
@@ -9,10 +10,10 @@
 VRAM_MODE7_LOC   = $0000
 
 ;Mode 7 center and offset
-CENTER_X = 524
-CENTER_Y = 538
-SCROLL_X = (CENTER_X - (256/2)) - 8
-SCROLL_Y = (CENTER_Y - (224/2)) - 12
+CENTER_X = 64
+CENTER_Y = 64
+SCROLL_X = (CENTER_X - (256/2))
+SCROLL_Y = (CENTER_Y - (224/2))
 
 Main:
         ;Transfer and execute SPC file
@@ -56,11 +57,8 @@ Main:
         lda     #>CENTER_Y
         sta     M7Y
 
-        ldx     #$0000
+        ldx     #$0100
         stx     scale
-
-        ldx     #$0001
-        stx     speed
 
         ;Set VBlank handler
         VBL_set VBL
@@ -74,53 +72,131 @@ Main:
         bra     :-              ;VBL is called in each vertical blanking period
 
 ;-------------------------------------------------------------------------------
+.macro sign_extend
+        bpl     :+
+        xba
+        lda     #$ff
+        xba
+        bra     :++
+:
+        xba
+        lda     #$00
+        xba
+:
+.endmac
+
 VBL:
-        RW a16
+        RW_assume a8i16
 
-        lda     scale
-        add     speed
+        ;Controller deltas -> angle and scale
+        RW      a8
+        lda     z:SFX_mouse1+MOUSE_data::delta_x
+        neg
+        sign_extend
+        RW      a16
+        add     angle
+        sta     angle
+
+        RW      a8
+        lda     z:SFX_mouse1+MOUSE_data::delta_y
+        asl
+        asl
+        sign_extend
+        RW      a16
+        add     scale
         sta     scale
+        RW      a8
 
-        and     #$003f          ;Increase speed every 64 frames
-        bne     :+
-        inc     speed
-:
-        lda     speed           ;Start flashing after a while
-        and     #$fff0
-        beq     :+
-
-        inc     speed
-        lda     color
-        sub     speed
-        and     #%0011110011101111
-        sta     color
+        ;angle -> x
+        lda     #$00
+        xba
+        lda     angle
         tax
-        CGRAM_setcolor 0, x
-:
-        RW a8                   ;Set mode 7 registers
+
+        ;scale -> M7 multiplicand
         lda     scale
-        sta     M7A
+        sta     WRMPYM7A
         lda     scale+1
+        sta     WRMPYM7A
+
+        ;sin(angle) * scale -> m7b
+        lda     Sin,x
+        neg
+        sta     WRMPYM7B
+        ldy     MPYM
+        sty     m7b
+
+        ;-sin(angle) * scale -> m7c
+        lda     Sin,x
+        sta     WRMPYM7B
+        ldy     MPYM
+        sty     m7c
+
+        ;cos index -> x
+        lda     #$00
+        xba
+        txa
+        add     #$40
+        tax
+
+        ;cos(angle) * scale -> m7a
+        lda     Sin,x
+        sta     WRMPYM7B
+        ldy     MPYM
+        sty     m7a
+
+        ;cos(angle) * scale -> m7d
+        lda     Sin,x
+        sta     WRMPYM7B
+        ldy     MPYM
+        sty     m7d
+
+
+        ;set registers
+        lda     m7a
         sta     M7A
-        lda     scale
+        lda     m7a+1
+        sta     M7A
+
+        lda     m7b
+        sta     M7B
+        lda     m7b+1
+        sta     M7B
+
+        lda     m7c
+        sta     M7C
+        lda     m7c+1
+        sta     M7C
+
+        lda     m7d
         sta     M7D
-        lda     scale+1
+        lda     m7d+1
         sta     M7D
 
         rtl
 
 ;-------------------------------------------------------------------------------
 .segment "LORAM"
+angle: .res 2
 scale: .res 2
-color: .res 2
-speed: .res 2
+
+m7a:   .res 2
+m7b:   .res 2
+m7c:   .res 2
+m7d:   .res 2
 
 ;-------------------------------------------------------------------------------
+;.segment "RODATA_ALIGN"
+
 ;Import graphics
 .segment "RODATA"
-incbin  Palette,        "Data/SNES-Mode7.png.palette"
-incbin  Tiles,          "Data/SNES-Mode7.png.tiles.lz4"
-incbin  Map,            "Data/SNES-Mode7.png.map.lz4"
+
+incbin  Sin,            "Data/Sin.bin"
+
+incbin  Palette,        "Data/Background.png.palette"
+incbin  Tiles,          "Data/Background.png.tiles.lz4"
+incbin  Map,            "Data/Background.png.map.lz4"
+
 
 ;Import music
 .define spc_file "Data/Music.spc"

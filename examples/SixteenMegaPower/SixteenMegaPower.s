@@ -5,6 +5,8 @@
 ;   - Customized memory map (Map.cfg)
 ;   - Customized libSFX.cfg
 ;   - Customized Makefile
+;   - Calling out to code in other source file
+;   - Nothing on screen!
 
 .include "libSFX.i"
 

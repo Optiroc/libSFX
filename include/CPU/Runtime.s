@@ -36,7 +36,6 @@ BootVector:
         lda     #$5c
         sta     SFX_nmi_jml
         sta     SFX_irq_jml
-        sta     SFX_jml
         lda     #^EmptyVBlank
         ldx     #.loword(EmptyVBlank)
         stx     SFX_nmi_jml+1
@@ -67,6 +66,7 @@ VBlankVector:
         jml     :+                      ;Jump to fast mirror
 :       push
 
+        dpage   $0000
         inc     a:SFX_tick              ;Global frame ticker
 
         RW a8
@@ -78,56 +78,55 @@ VBlankVector:
         jsl     SFX_nmi_jml             ;Call trampoline
 .endif
 
-.if SFX_AUTOJOY <> DISABLE
+.if .defined(SFXPKG_MOUSE)              ;If mouse support is enabled, let the mouse
+        jsl     SFX_MOUSE_nmi_hook      ;driver take care of joypad polling
+.else
+
+  .if SFX_AUTOJOY <> DISABLE
         RW a8
 :       lda     HVBJOY                  ;Wait for joypad readout
         and     #1
         bne     :-
 
         RW a16i16
-.endif
-.if SFX_AUTOJOY & JOY1
-        ldx     JOY1L                   ;Read joypad 1
+  .endif
+  .if SFX_AUTOJOY & JOY1                ;Read joypad 1
+        ldx     z:SFX_joy1cont
+        lda     JOY1L
+        sta     z:SFX_joy1cont
         txa
-        eor     a:SFX_joy1cnt
-        sta     a:SFX_joy1trg
+        eor     z:SFX_joy1cont
+        and     z:SFX_joy1cont
+        sta     z:SFX_joy1trig
+  .endif
+  .if SFX_AUTOJOY & JOY2                ;Read joypad 2
+        ldx     z:SFX_joy2cont
+        lda     JOY2L
+        sta     z:SFX_joy2cont
         txa
-        and     a:SFX_joy1trg
-        sta     a:SFX_joy1trg
-        stx     a:SFX_joy1cnt
-.endif
-.if SFX_AUTOJOY & JOY2
-        ldx     JOY2L
+        eor     z:SFX_joy2cont
+        and     z:SFX_joy2cont
+        sta     z:SFX_joy2trig
+  .endif
+  .if SFX_AUTOJOY & JOY3                ;Read joypad 3
+        ldx     z:SFX_joy3cont
+        lda     JOY3L
+        sta     z:SFX_joy3cont
         txa
-        eor     a:SFX_joy2cnt
-        sta     a:SFX_joy2trg
+        eor     z:SFX_joy3cont
+        and     z:SFX_joy3cont
+        sta     z:SFX_joy3trig
+  .endif
+  .if SFX_AUTOJOY & JOY4                ;Read joypad 4
+        ldx     z:SFX_joy4cont
+        lda     JOY4L
+        sta     z:SFX_joy4cont
         txa
-        and     a:SFX_joy2trg
-        sta     a:SFX_joy2trg
-        stx     a:SFX_joy2cnt
-.endif
-.if SFX_AUTOJOY & JOY3
-        ldx     JOY3L
-        txa
-        eor     a:SFX_joy3cnt
-        sta     a:SFX_joy3trg
-        txa
-        and     a:SFX_joy3trg
-        sta     a:SFX_joy3trg
-        stx     a:SFX_joy3cnt
-.endif
-.if SFX_AUTOJOY & JOY4
-        ldx     JOY4L
-        txa
-        eor     a:SFX_joy4cnt
-        sta     a:SFX_joy4trg
-        txa
-        and     a:SFX_joy4trg
-        sta     a:SFX_joy4trg
-        stx     a:SFX_joy4cnt
-.endif
-.if .defined(SFXPKG_MOUSE)
-        SFX_MOUSE_nmi_hook
+        eor     z:SFX_joy4cont
+        and     z:SFX_joy4cont
+        sta     z:SFX_joy4trig
+  .endif
+
 .endif
 
 .if SFX_AUTOJOY_FIRST = YES
@@ -140,6 +139,7 @@ VBlankVector:
 
         lda     a:SFX_inidisp           ;Restore screen and return
         sta     INIDISP
+
         pull
 
 EmptyVector:
@@ -200,9 +200,6 @@ SFX_inidisp:    .res 1          ;Stashed INIDISP
 SFX_nmitimen:   .res 1          ;Stashed NMITIMEN
 
 SFX_tick:       .res 2          ;Frame ticker
-SFX_jml:        .res 1          ;General purpose jml trampoline
-SFX_addr:       .res 3          ;General purpose longaddr
-SFX_word:       .res 2          ;General purpose word
 
 SFX_mvn:        .res 1          ;Modifiable mvn instruction
 SFX_mvn_dst:    .res 1          ;  Destination bank
@@ -210,25 +207,29 @@ SFX_mvn_src:    .res 1          ;  Source bank
 SFX_mvn_rtl:    .res 1          ;  Return
 
 .if SFX_AUTOJOY & JOY1
-SFX_joy1cnt:    .res 2
-SFX_joy1trg:    .res 2
+SFX_joy1cont:   .res 2
+SFX_joy1trig:   .res 2
 .endif
 .if SFX_AUTOJOY & JOY2
-SFX_joy2cnt:    .res 2
-SFX_joy2trg:    .res 2
+SFX_joy2cont:   .res 2
+SFX_joy2trig:   .res 2
 .endif
 .if SFX_AUTOJOY & JOY3
-SFX_joy3cnt:    .res 2
-SFX_joy3trg:    .res 2
+SFX_joy3cont:   .res 2
+SFX_joy3trig:   .res 2
 .endif
 .if SFX_AUTOJOY & JOY4
-SFX_joy4cnt:    .res 2
-SFX_joy4trg:    .res 2
+SFX_joy4cont:   .res 2
+SFX_joy4trig:   .res 2
 .endif
 
-;Reserve ZPAD (ZEROPAGE scratchpad)
+;Reserve ZPAD (Zero page scratchpad)
 .segment "ZPAD": zeropage
 _ZPAD_:         .res __ZPADSIZE__
+
+;Reserve ZNMI (Zero page scratchpad for usage inside NMI/VBlank interrupts)
+.segment "ZNMI": zeropage
+_ZNMI_:         .res __ZNMISIZE__
 
 ;Reserve RPAD (LORAM scratchpad)
 .segment "LORAM"
