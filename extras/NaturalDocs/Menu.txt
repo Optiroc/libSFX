@@ -26,7 +26,7 @@ Footer: libSFX
 # These are indexes you deleted, so Natural Docs will not add them again
 # unless you remove them from this line.
 
-Don't Index: Meta Instructions, Variables, Memory locations, Files, General, Macros, Registers
+Don't Index: Registers, Files, Meta Instructions, Macros, General, Variables, Memory locations
 
 
 # --------------------------------------------------------------------------
@@ -72,5 +72,6 @@ Group: S-SMP  {
 Group: Packages  {
 
    File: LZ4  (no auto-title, Packages/LZ4/LZ4.i)
+   File: Mouse  (no auto-title, Packages/Mouse/Mouse.i)
    }  # Group: Packages
 
