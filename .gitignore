@@ -9,7 +9,6 @@ tests/**/*.sfc
 tests/**/*.dsym
 tests/**/*.dmap
 tests/**/*.srm
-_research
 extras/NaturalDocs/Data
 extras/NaturalDocs/libsfx.css
 dsp1b.bin

@@ -45,6 +45,14 @@
   makefile, making libSFX pretty much self contained. Running make from the
   repository root will sync the submodules and build the tools.
 
+  _SFX 🤷‍️_
+  Why is it called libSFX? That sounds like a library of sound effects. Well,
+  yes it does. However, "SFX" was also how Nintendo refered to the SNES/SFC in
+  the very early developer documentation. It was through photocopied binders of
+  those documents – with severe generation loss! – I first learned about the innards
+  of the Super Nintendo, and I have lovingly cultivated a habit of using SFX to prefix
+  and suffix my SNES code over the years.
+
   *Get started*
   Clone, fork or download the repository at <github.com/Optiroc/libSFX at https://github.com/Optiroc/libSFX>
   and dive into the <CPU.i> documentation.
