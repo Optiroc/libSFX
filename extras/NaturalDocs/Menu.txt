@@ -26,7 +26,7 @@ Footer: libSFX
 # These are indexes you deleted, so Natural Docs will not add them again
 # unless you remove them from this line.
 
-Don't Index: Macros, Files, General, Variables, Registers, Memory locations, Meta Instructions
+Don't Index: Macros, Files, Memory locations, Meta Instructions, Registers, General, Variables
 
 
 # --------------------------------------------------------------------------
@@ -49,7 +49,14 @@ Don't Index: Macros, Files, General, Variables, Registers, Memory locations, Met
 # --------------------------------------------------------------------------
 
 
-File: libSFX documentation  (libSFX.i)
+File: libSFX documentation  (no auto-title, libSFX.i)
+
+Group: Configuration  {
+
+   File: Make  (no auto-title, Docs/Make.txt)
+   File: libSFX.cfg  (no auto-title, Configurations/libSFX.cfg)
+   File: Map.cfg  (no auto-title, Configurations/Map.cfg)
+   }  # Group: Configuration
 
 Group: S-CPU  {
 

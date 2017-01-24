@@ -11,11 +11,11 @@
 .define CURSOR_MAX_Y $00d6
 
 ;Scratch pad usage
-.define ZP_reg     _ZNMI_+$00   ;Readout register (indirect)    (word)
-.define ZP_value   _ZNMI_+$02   ;Stashed auto joypad readout    (byte)
-.define ZP_dir_x   _ZNMI_+$03   ;X direction                    (byte)
-.define ZP_dir_y   _ZNMI_+$04   ;Y direction                    (byte)
-.define ZP_sens    _ZNMI_+$05   ;Sensitivity                    (byte)
+.define ZP_reg      ZNMI+$00 ;Read-out register (indirect)   (word)
+.define ZP_value    ZNMI+$02 ;Stashed auto joypad readout    (byte)
+.define ZP_dir_x    ZNMI+$03 ;X direction                    (byte)
+.define ZP_dir_y    ZNMI+$04 ;Y direction                    (byte)
+.define ZP_sens     ZNMI+$05 ;Sensitivity                    (byte)
 
 ;-------------------------------------------------------------------------------
 .ifdef SFX_MOUSE_STRINGS
@@ -26,7 +26,7 @@ SFX_MOUSE_nmi_hook:
         RW_assume a8i16
         RW a8i8
 
-:       lda     HVBJOY                  ;Wait for joypad readout
+:       lda     HVBJOY                  ;Wait for joypad read-out
         and     #1
         bne     :-
 
@@ -39,9 +39,9 @@ SFX_MOUSE_nmi_hook:
         lda     JOY1L
         jsr     read_mouse
 
-  .if SFX_AUTOJOY & JOY1
-        lda     a:SFX_mouse1            ;If joypad #1 readout is enabled
-        bne     @mouse1_connected       ;perform readout if SFX_mouse1::status == not connected
+  .if SFX_JOY & JOY1
+        lda     a:SFX_mouse1            ;If joypad #1 read-out is enabled
+        bne     @mouse1_connected       ;perform read-out if SFX_mouse1::status == not connected
 
         RW      a16i16
         ldx     z:SFX_joy1cont
@@ -105,9 +105,9 @@ SFX_MOUSE_nmi_hook:
         lda     JOY2L
         jsr     read_mouse
 
-  .if SFX_AUTOJOY & JOY2
-        lda     a:SFX_mouse2            ;If joypad #2 readout is enabled
-        bne     @mouse2_connected       ;perform readout if SFX_mouse1::status == not connected
+  .if SFX_JOY & JOY2
+        lda     a:SFX_mouse2            ;If joypad #2 read-out is enabled
+        bne     @mouse2_connected       ;perform read-out if SFX_mouse1::status == not connected
 
         RW      a16i16
         ldx     z:SFX_joy2cont
@@ -168,7 +168,7 @@ SFX_MOUSE_nmi_hook:
 read_mouse:
         RW_assume a8i8
 
-        sta     z:ZP_value                      ;Stash MSB of automatic readout
+        sta     z:ZP_value                      ;Stash MSB of automatic read-out
         and     #$0f                            ;Check device signature
         cmp     #1
         beq     connected
@@ -264,7 +264,7 @@ set_sensitivity:
         lsr
         rol     z:ZP_sens
 
-        lda     z:ZP_sens                       ;Is readout matching setting?
+        lda     z:ZP_sens                       ;Is read-out matching setting?
         cmp     z:MOUSE_data::sensitivity,x
         beq     @done
 

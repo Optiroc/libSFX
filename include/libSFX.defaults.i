@@ -1,4 +1,4 @@
-; libSFX S-CPU NMI/IRQ Vector Macros
+; libSFX Configuration Defaults
 ; David Lindecrantz <optiroc@gmail.com>
 
 .ifndef ::__MBSFX_DEFAULTS__
@@ -65,16 +65,20 @@ ROM_VERSION = $00
 ROM_COUNTRY = $00
 .endif
 
-.ifndef SFX_AUTOJOY
-    SFX_AUTOJOY = JOY1 | JOY2
+.ifndef SFX_JOY
+  SFX_JOY = JOY1 | JOY2
 .endif
 
-.if (SFX_AUTOJOY < 0) || (SFX_AUTOJOY > (JOY1 | JOY2 | JOY3 | JOY4))
-    SFX_error "SFX_AUTOJOY: Bad configuration"
+.if (SFX_JOY < 0) || (SFX_JOY > (JOY1 | JOY2 | JOY3 | JOY4))
+  SFX_error "SFX_JOY: Bad configuration"
 .endif
 
-.ifndef SFX_AUTOJOY_FIRST
-    SFX_AUTOJOY_FIRST = NO
+.ifndef SFX_AUTO_READOUT
+  SFX_AUTO_READOUT = ENABLE
+.endif
+
+.ifndef SFX_AUTO_READOUT_FIRST
+  SFX_AUTO_READOUT_FIRST = NO
 .endif
 
 .endif;__MBSFX_DEFAULTS__

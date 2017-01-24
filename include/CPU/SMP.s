@@ -33,22 +33,22 @@ SFX_SMP_jmp:
 ;Transfer and execute SPC700 binary (a8i16)
 ;       A:X = Source (bank:offset)
 ;         Y = Destination (offset in SMP RAM)
-;_ZPAD_+$03 = Length (word)
-;_ZPAD_+$05 = Execution offset (word)
+;  ZPAD+$03 = Length (word)
+;  ZPAD+$05 = Execution offset (word)
 SFX_SMP_exec:
-        stx     _ZPAD_+$00              ;Set 24-bit offset
-        sta     _ZPAD_+$02
+        stx     ZPAD+$00                ;Set 24-bit offset
+        sta     ZPAD+$02
 
         jsr     smpBeginUpload          ;SMP handshake, set destination
                                         ;Y=0 when done
-        ldx     _ZPAD_+$03              ;Length
+        ldx     ZPAD+$03                ;Length
 
-:       lda     [_ZPAD_],y              ;Upload bytes
+:       lda     [ZPAD],y                ;Upload bytes
         jsr     smpUploadByte
         dex
         bne     :-
 
-        ldy     _ZPAD_+$05              ;Execute
+        ldy     ZPAD+$05                ;Execute
         jsr     smpExecute
         rtl
 

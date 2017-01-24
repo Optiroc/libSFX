@@ -8,6 +8,16 @@
     SFX_MOUSE = MOUSE1
 .endif
 
+.if SFX_JOY <> DISABLE
+  .if (SFX_JOY < 0) || (SFX_JOY > (JOY1 | JOY2))
+      SFX_error "SFX_JOY: Bad configuration (only JOY1 and JOY2 is supported in conjunction with the mouse driver)"
+  .endif
+.endif
+
+.if SFX_AUTO_READOUT = DISABLE
+  SFX_error "SFX_AUTO_READOUT: Bad configuration (the mouse driver relies on automatic read-out)"
+.endif
+
 .define MOUSE_sensitivity_slow    0
 .define MOUSE_sensitivity_normal  1
 .define MOUSE_sensitivity_fast    2
@@ -59,7 +69,7 @@
   SFX_MOUSE = MOUSE1 | MOUSE2
   (end)
 
-  Mouse readout data is stored in MOUSE_data structs with the following members∶
+  Mouse read-out data is stored in MOUSE_data structs with the following members∶
 
   (start code)
   .struct MOUSE_data
@@ -107,7 +117,7 @@
 
   All other members are read-only.
 
-  If no mouse is detected and SFX_AUTOJOY is set for the port, the driver
+  If no mouse is detected and SFX_JOY is set for the port, the driver
   automatically falls back to joypad input. D-pad input is then mapped to
   delta and cursor, and the A/X buttons is mapped to the left/right buttons.
 

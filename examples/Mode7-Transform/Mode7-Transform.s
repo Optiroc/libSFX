@@ -5,6 +5,7 @@
 ; Building requires python to generate sine table
 
 .include "libSFX.i"
+.include "Math.i"
 
 ;VRAM destination address
 VRAM_MODE7_LOC   = $0000
@@ -72,21 +73,7 @@ Main:
         bra     :-              ;VBL is called in each vertical blanking period
 
 ;-------------------------------------------------------------------------------
-.macro sign_extend
-        bpl     :+
-        xba
-        lda     #$ff
-        xba
-        bra     :++
-:
-        xba
-        lda     #$00
-        xba
-:
-.endmac
-
-VBL:
-        RW_assume a8i16
+VBL:    RW_assume a8i16
 
         ;Controller deltas -> angle and scale
         RW      a8
@@ -119,14 +106,14 @@ VBL:
         lda     scale+1
         sta     WRMPYM7A
 
-        ;sin(angle) * scale -> m7b
+        ;-sin(angle) * scale -> m7b
         lda     Sin,x
         neg
         sta     WRMPYM7B
         ldy     MPYM
         sty     m7b
 
-        ;-sin(angle) * scale -> m7c
+        ;sin(angle) * scale -> m7c
         lda     Sin,x
         sta     WRMPYM7B
         ldy     MPYM
@@ -150,7 +137,6 @@ VBL:
         sta     WRMPYM7B
         ldy     MPYM
         sty     m7d
-
 
         ;set registers
         lda     m7a

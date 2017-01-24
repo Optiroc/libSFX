@@ -60,7 +60,7 @@ BootVector:
 
   SNES jumps here at the beginning of each vblank period
   - Software VBL interrupt is called
-  - Joypads are read out (depending on SFX_AUTOJOY settings)
+  - Joypads are read out (depending on SFX_JOY settings)
 */
 VBlankVector:
         jml     :+                      ;Jump to fast mirror
@@ -74,7 +74,7 @@ VBlankVector:
         lda     #inidisp(OFF, DISP_BRIGHTNESS_MIN)
         sta     INIDISP
 
-.if SFX_AUTOJOY_FIRST = NO
+.if SFX_AUTO_READOUT_FIRST = NO
         jsl     SFX_nmi_jml             ;Call trampoline
 .endif
 
@@ -82,15 +82,15 @@ VBlankVector:
         jsl     SFX_MOUSE_nmi_hook      ;driver take care of joypad polling
 .else
 
-  .if SFX_AUTOJOY <> DISABLE
+  .if SFX_AUTO_READOUT <> DISABLE && SFX_JOY <> DISABLE
         RW a8
-:       lda     HVBJOY                  ;Wait for joypad readout
+:       lda     HVBJOY                  ;Wait for joypad read-out
         and     #1
         bne     :-
 
         RW a16i16
   .endif
-  .if SFX_AUTOJOY & JOY1                ;Read joypad 1
+  .if SFX_AUTO_READOUT <> DISABLE && SFX_JOY & JOY1 ;Read joypad 1
         ldx     z:SFX_joy1cont
         lda     JOY1L
         sta     z:SFX_joy1cont
@@ -99,7 +99,7 @@ VBlankVector:
         and     z:SFX_joy1cont
         sta     z:SFX_joy1trig
   .endif
-  .if SFX_AUTOJOY & JOY2                ;Read joypad 2
+  .if SFX_AUTO_READOUT <> DISABLE && SFX_JOY & JOY2 ;Read joypad 2
         ldx     z:SFX_joy2cont
         lda     JOY2L
         sta     z:SFX_joy2cont
@@ -108,7 +108,7 @@ VBlankVector:
         and     z:SFX_joy2cont
         sta     z:SFX_joy2trig
   .endif
-  .if SFX_AUTOJOY & JOY3                ;Read joypad 3
+  .if SFX_AUTO_READOUT <> DISABLE && SFX_JOY & JOY3 ;Read joypad 3
         ldx     z:SFX_joy3cont
         lda     JOY3L
         sta     z:SFX_joy3cont
@@ -117,7 +117,7 @@ VBlankVector:
         and     z:SFX_joy3cont
         sta     z:SFX_joy3trig
   .endif
-  .if SFX_AUTOJOY & JOY4                ;Read joypad 4
+  .if SFX_AUTO_READOUT <> DISABLE && SFX_JOY & JOY4 ;Read joypad 4
         ldx     z:SFX_joy4cont
         lda     JOY4L
         sta     z:SFX_joy4cont
@@ -129,7 +129,7 @@ VBlankVector:
 
 .endif
 
-.if SFX_AUTOJOY_FIRST = YES
+.if SFX_AUTO_READOUT_FIRST = YES
         jsl     SFX_nmi_jml             ;Call trampoline
 .endif
 
@@ -206,31 +206,31 @@ SFX_mvn_dst:    .res 1          ;  Destination bank
 SFX_mvn_src:    .res 1          ;  Source bank
 SFX_mvn_rtl:    .res 1          ;  Return
 
-.if SFX_AUTOJOY & JOY1
+.if SFX_JOY & JOY1
 SFX_joy1cont:   .res 2
 SFX_joy1trig:   .res 2
 .endif
-.if SFX_AUTOJOY & JOY2
+.if SFX_JOY & JOY2
 SFX_joy2cont:   .res 2
 SFX_joy2trig:   .res 2
 .endif
-.if SFX_AUTOJOY & JOY3
+.if SFX_JOY & JOY3
 SFX_joy3cont:   .res 2
 SFX_joy3trig:   .res 2
 .endif
-.if SFX_AUTOJOY & JOY4
+.if SFX_JOY & JOY4
 SFX_joy4cont:   .res 2
 SFX_joy4trig:   .res 2
 .endif
 
 ;Reserve ZPAD (Zero page scratchpad)
 .segment "ZPAD": zeropage
-_ZPAD_:         .res __ZPADSIZE__
+ZPAD:           .res __ZPADSIZE__
 
 ;Reserve ZNMI (Zero page scratchpad for usage inside NMI/VBlank interrupts)
 .segment "ZNMI": zeropage
-_ZNMI_:         .res __ZNMISIZE__
+ZNMI:           .res __ZNMISIZE__
 
 ;Reserve RPAD (LORAM scratchpad)
 .segment "LORAM"
-_RPAD_:         .res __RPADSIZE__
+RPAD:           .res __RPADSIZE__

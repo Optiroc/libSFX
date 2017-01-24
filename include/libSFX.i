@@ -55,7 +55,7 @@
 
   *Get started*
   Clone, fork or download the repository at <github.com/Optiroc/libSFX at https://github.com/Optiroc/libSFX>
-  and dive into the <CPU.i> documentation.
+  and dive into the <Make> documentation.
 
   libSFX is developed by David Lindecrantz and distributed under the terms of
   the <MIT license at https://raw.githubusercontent.com/Optiroc/libSFX/master/LICENSE>.

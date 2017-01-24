@@ -1,0 +1,116 @@
+; libSFX Makefile documentation
+
+/**
+  Group: Make
+
+  Building with libSFX involves three major parts∶
+
+  * (GNU)Make is invoked and does <its thing at https://www.gnu.org/software/make/manual/make.html>
+    ... which in this case mostly involves:
+  * Assembling source files to object code files with ca65
+  * Linking the object code files into an sfc image with ld65
+
+  These three steps are configured with the Makefile, libSFX.cfg and Map.cfg respectively.
+
+  The <simplest possible project at https://github.com/Optiroc/libSFX/tree/master/examples/Template>
+  doesn't need the latter two, as all configurable settings fall back to reasonable defaults.
+
+  Make needs some input, but in the simplest case it's not much∶
+
+  Makefile:
+  (start code)
+  # Include libSFX.make
+  libsfx_dir    := ../..
+  include $(libsfx_dir)/libSFX.make
+  (end)
+
+  These are the two crucial statements needed to kick off the libSFX.make build script∶
+  * The "libsfx_dir" variable must point to the libSFX root directory.
+  * The second statement includes "libSFX.make", which contain the rules needed to
+    transform source files to object code and link the final binary.
+
+  There are also a couple of special configuration variables that was best suited to put
+  in the makefile, mostly because they are needed by both the assembler and the linker.
+
+  The makefile can of course be used like makefiles usually are – to define rules and
+  prerequisites for your particular project. In a lot of cases this will not be necessary
+  for source code files, since libSFX.make will recursively add all source files with the
+  appropriate file extensions (.s, .s700, .sgs) if none are explicitly added.
+
+
+  *Configuration variables*
+
+  _name_
+  Sets the name of the output file.
+
+  (start code)
+  name := Mode7-Madness
+  (end)
+
+  _debug_
+  If set debug information ($name.dsym, $name.dmap) will be written. Also, in debug
+  configuration the "break" macro will output the otherwise unused WDM instruction which
+  is used by the bsnes+ emulator to break the debugger.
+
+  (start code)
+  debug := 1
+  (end)
+
+  _libsfx_packages_
+  List of optional packages to link, as well as make available to the assembler with
+  additional macros, memory locations et cetera.
+
+  (start code)
+  libsfx_packages := LZ4 Mouse
+  (end)
+
+  _stack_size_
+  Set space reserved for 65816 stack at memory location 00:2000 and downwards.
+  Default is 100 bytes.
+
+  (start code)
+  stack_size := 200
+  (end)
+
+  _zpad_size_
+  Set space reserved for zero page scratchpad, addressable at label "ZPAD".
+  Default is 10 bytes.
+
+  (start code)
+  zpad_size := 20
+  (end)
+
+  _znmi_size_
+  Set space reserved for zero page scratchpad for use inside interrupts. Addressable at label "ZNMI".
+  Default is 10 bytes.
+
+  (start code)
+  znmi_size := 20
+  (end)
+
+  _rpad_size_
+  Set space reserved for LORAM scratchpad, addressable at label "RPAD".
+  Default is 100 bytes.
+
+  (start code)
+  rpad_size := 20
+  (end)
+
+  _obj_dir_
+  Set custom directory for intermediate build files.
+  Default is ".build".
+
+  (start code)
+  obj_dir := build
+  (end)
+
+  _src_
+  65816 source files. If not set libSFX.make will automatically add all files named *.s.
+
+  _src_smp_
+  SPC700 source files. If not set libSFX.make will automatically add all files named *.s700.
+
+  _src_gsu_
+  GSU-1 source files. If not set libSFX.make will automatically add all files named *.sgs.
+
+*/

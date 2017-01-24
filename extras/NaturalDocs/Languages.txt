@@ -122,6 +122,15 @@ Language: 65816 Assembler
    Package Separator: :--:
 
 
+Language: libSFX Configuration
+
+   Extensions: cfg txt
+   Shebang String: fictional
+   Line Comment: #
+   Block Comment: /** */
+   Package Separator: :--:
+
+
 Language: SPC700 Assembler
 
    Extension: s700

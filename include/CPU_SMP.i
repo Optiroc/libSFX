@@ -54,9 +54,9 @@ SFX_SPC_IMAGE = EXRAM
 .macro  SMP_exec dest, source, length, exec
         RW_push set:a8i16
         ldx     #length
-        stx     _ZPAD_+$03
+        stx     ZPAD+$03
         ldx     #exec
-        stx     _ZPAD_+$05
+        stx     ZPAD+$05
         ldy     #dest
         ldx     #.loword(source)
         lda     #^source
@@ -84,9 +84,9 @@ SFX_SPC_IMAGE = EXRAM
 .macro  SMP_memcpy dest, source, length
         RW_push set:a8i16
         ldx     #length
-        stx     _ZPAD_+$03
+        stx     ZPAD+$03
         ldx     #$ffc9
-        stx     _ZPAD_+$05
+        stx     ZPAD+$05
         ldy     #dest
         ldx     #.loword(source)
         lda     #^source

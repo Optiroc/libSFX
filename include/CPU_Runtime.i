@@ -34,13 +34,13 @@
 
 /**
   Variable: SFX_joy#cont
-  Joypad continous readout (word)
+  Joypad continous read-out (word)
 
-  If so configured, libSFX enables automatic joypad readout and sets
-  the 12 most significant bits in these variables continously as the
-  joypad buttons are pushed.
+  If enabled with <SFX_JOY>, libSFX performs automatic joypad read-out and
+  sets the 12 most significant bits in these variables to 1 continously as
+  the corresponding joypad button is pushed.
 
-  Depending on how many joypads are enabled for automatic readout in
+  Depending on how many joypads are enabled for automatic read-out in
   libSFX.cfg, SFX_joy1cont to SFX_joy4cont are available.
 
   Description:
@@ -63,29 +63,30 @@
 
 .global Main, BootVector, VBlankVector, IRQVector, EmptyVector, EmptyVBlank
 .global SFX_stash_nmi, SFX_restore_nmi
+.global RPAD
 
-.globalzp _ZPAD_, _ZNMI_
+.globalzp ZPAD, ZNMI
 .globalzp SFX_nmi_jml, SFX_irq_jml, SFX_nmi_store, SFX_inidisp, SFX_nmitimen
 .globalzp SFX_tick, SFX_mvn, SFX_mvn_dst, SFX_mvn_src
 
 
 /**
   Variable: SFX_joy#trig
-  Joypad trigger readout (word)
+  Joypad trigger read-out (word)
 
   As opposed to SFX_joy#cont, the bits in SFX_joy#trig are only set for
   one frame as a joypad button is pushed.
 */
-.if SFX_AUTOJOY & JOY1
+.if SFX_JOY & JOY1
 .globalzp SFX_joy1cont, SFX_joy1trig
 .endif
-.if SFX_AUTOJOY & JOY2
+.if SFX_JOY & JOY2
 .globalzp SFX_joy2cont, SFX_joy2trig
 .endif
-.if SFX_AUTOJOY & JOY3
+.if SFX_JOY & JOY3
 .globalzp SFX_joy3cont, SFX_joy3trig
 .endif
-.if SFX_AUTOJOY & JOY4
+.if SFX_JOY & JOY4
 .globalzp SFX_joy3cont, SFX_joy3trig
 .endif
 
@@ -130,7 +131,7 @@
 .macro  VBL_on
         RW_push set:a8
         lda     SFX_nmitimen
-.if SFX_AUTOJOY <> DISABLE
+.if SFX_AUTO_READOUT <> DISABLE
         ora     #NMI_NMI_ON + NMI_JOY_ON
 .else
         ora     #NMI_NMI_ON
