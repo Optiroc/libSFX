@@ -18,6 +18,19 @@
   SFX_error "SFX_AUTO_READOUT: Bad configuration (the mouse driver relies on automatic read-out)"
 .endif
 
+.ifndef MOUSE_cursor_x_min
+.define MOUSE_cursor_x_min $0000
+.endif
+.ifndef MOUSE_cursor_x_max
+.define MOUSE_cursor_x_max $00f4
+.endif
+.ifndef MOUSE_cursor_y_min
+.define MOUSE_cursor_y_min $0000
+.endif
+.ifndef MOUSE_cursor_y_max
+.define MOUSE_cursor_y_max $00d6
+.endif
+
 .define MOUSE_sensitivity_slow    0
 .define MOUSE_sensitivity_normal  1
 .define MOUSE_sensitivity_fast    2

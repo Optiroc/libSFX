@@ -5,11 +5,6 @@
 .segment "LIBSFX_PKG"
 
 ;-------------------------------------------------------------------------------
-.define CURSOR_MIN_X $0000
-.define CURSOR_MAX_X $00f4
-.define CURSOR_MIN_Y $0000
-.define CURSOR_MAX_Y $00d6
-
 ;Scratch pad usage
 .define ZP_reg      ZNMI+$00 ;Read-out register (indirect)   (word)
 .define ZP_value    ZNMI+$02 ;Stashed auto joypad readout    (byte)
@@ -54,10 +49,8 @@ SFX_MOUSE_nmi_hook:
         RW      a8i8
 
         xba                             ;Copy buttons A/X -> left/right
-        and     #%11000000
         sta     z:SFX_mouse1+MOUSE_data::buttons_trig
         lda     z:SFX_joy1cont
-        and     #%11000000
         sta     z:SFX_mouse1+MOUSE_data::buttons_cont
 
         lda     z:SFX_joy1cont+1         ;Set mouse deltas (TODO: Acceleration?)
@@ -120,10 +113,8 @@ SFX_MOUSE_nmi_hook:
         RW      a8i8
 
         xba                             ;Copy buttons A/X -> left/right
-        and     #%11000000
         sta     z:SFX_mouse2+MOUSE_data::buttons_trig
         lda     z:SFX_joy2cont
-        and     #%11000000
         sta     z:SFX_mouse2+MOUSE_data::buttons_cont
 
         lda     z:SFX_joy2cont+1         ;Set mouse deltas
@@ -222,16 +213,14 @@ read_bits:
         neg
 :       sta     z:MOUSE_data::delta_y,x
 
-
-        lda     z:ZP_value                      ;Set button bits
+        ldy     z:MOUSE_data::buttons_cont,x    ;Set button bits
+        lda     z:ZP_value
         and     #$c0
-        tay
-        eor     z:MOUSE_data::buttons_cont,x
-        sta     z:MOUSE_data::buttons_trig,x
+        sta     z:MOUSE_data::buttons_cont,x
         tya
-        and     z:MOUSE_data::buttons_trig,x
+        eor     z:MOUSE_data::buttons_cont,x
+        and     z:MOUSE_data::buttons_cont,x
         sta     z:MOUSE_data::buttons_trig,x
-        sty     z:MOUSE_data::buttons_cont,x
 
         rts
 
@@ -240,17 +229,15 @@ set_sensitivity:
         lda     #$10
         sta     z:ZP_value+1
 @loop:
-        lda     #$01
+        lda     #$01                             ;Strobe joypad register
         sta     JOYA
         lda     (ZP_reg)
         stz     JOYA
-
-        lda     #$01                            ;Strobe joypad register
+        lda     #$01
         sta     JOYA
-        lda     #$00
-        sta     JOYA            ;stz instead..?
+        stz     JOYA
 
-        sta     z:ZP_sens                       ;Clear
+        stz     z:ZP_sens                       ;Clear
         ldy     #10                             ;Skip to sensitivity bits
 :       lda     (ZP_reg)
         dey
@@ -293,9 +280,9 @@ set_cursor:
         xba
         RW a16
         add     z:MOUSE_data::cursor_x,x        ;Add and clamp
-        cmp     #CURSOR_MIN_X
+        cmp     #MOUSE_cursor_x_min
         bpl     :+
-        lda     #CURSOR_MIN_X
+        lda     #MOUSE_cursor_x_min
 :       sta     z:MOUSE_data::cursor_x,x
         RW a8
         bra     cursor_y
@@ -305,9 +292,9 @@ plus_x:
         xba
         RW a16
         add     z:MOUSE_data::cursor_x,x        ;Add and clamp
-        cmp     #CURSOR_MAX_X
+        cmp     #MOUSE_cursor_x_max
         bcc     :+
-        lda     #CURSOR_MAX_X
+        lda     #MOUSE_cursor_x_max
 :       sta     z:MOUSE_data::cursor_x,x
         RW a8
 
@@ -321,9 +308,9 @@ cursor_y:
         xba
         RW a16
         add     z:MOUSE_data::cursor_y,x        ;Add and clamp
-        cmp     #CURSOR_MIN_Y
+        cmp     #MOUSE_cursor_y_min
         bpl     :+
-        lda     #CURSOR_MIN_Y
+        lda     #MOUSE_cursor_y_min
 :       sta     z:MOUSE_data::cursor_y,x
         RW a8
         bra     cursor_done
@@ -333,9 +320,9 @@ plus_y:
         xba
         RW a16
         add     z:MOUSE_data::cursor_y,x        ;Add and clamp
-        cmp     #CURSOR_MAX_Y
+        cmp     #MOUSE_cursor_y_max
         bcc     :+
-        lda     #CURSOR_MAX_Y
+        lda     #MOUSE_cursor_y_max
 :       sta     z:MOUSE_data::cursor_y,x
         RW a8
 
