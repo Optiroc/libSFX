@@ -1,0 +1,36 @@
+{
+    "name": "ca65-gsu",
+    "displayName": "ca65-gsu",
+    "description": "ca65/GSU-1 syntax highlighting",
+    "version": "1.0.0",
+    "publisher": "optiroc",
+    "author": {
+        "name": "David Lindecrantz",
+        "email": "optiroc@gmail.com"
+    },
+    "engines": {
+        "vscode": "^1.5.0"
+    },
+    "keywords": [
+        "assembler",
+        "console",
+        "super nintendo",
+        "superfx"
+    ],
+    "categories": [
+        "Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "ca65-gsu",
+            "aliases": ["ca65-gsu", "ca65-gsu"],
+            "extensions": [".sgs",".igs"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "ca65-gsu",
+            "scopeName": "source.ca65-gsu",
+            "path": "./syntaxes/ca65-gsu.tmLanguage"
+        }]
+    }
+}

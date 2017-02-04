@@ -1,6 +1,6 @@
 #libSFX sublime text extras
 
-Syntax definitions for the ca65 assembler with 65816 and SPC700 instruction sets.
+Syntax definitions for the ca65 assembler with 65816, SPC700 and GSU-1 (SuperFX) instruction sets.
 
 ###installation
 

@@ -1,0 +1,35 @@
+{
+    "name": "ca65-spc700",
+    "displayName": "ca65-spc700",
+    "description": "ca65/SPC700 syntax highlighting",
+    "version": "1.0.0",
+    "publisher": "optiroc",
+    "author": {
+        "name": "David Lindecrantz",
+        "email": "optiroc@gmail.com"
+    },
+    "engines": {
+        "vscode": "^1.5.0"
+    },
+    "keywords": [
+        "assembler",
+        "console",
+        "super nintendo"
+    ],
+    "categories": [
+        "Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "ca65-spc700",
+            "aliases": ["ca65-spc700", "ca65-spc700"],
+            "extensions": [".s700",".i700"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "ca65-spc700",
+            "scopeName": "source.ca65-spc700",
+            "path": "./syntaxes/ca65-spc700.tmLanguage"
+        }]
+    }
+}

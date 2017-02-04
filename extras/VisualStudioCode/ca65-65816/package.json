@@ -1,0 +1,35 @@
+{
+    "name": "ca65-65816",
+    "displayName": "ca65-65816",
+    "description": "ca65/65816 syntax highlighting",
+    "version": "1.0.0",
+    "publisher": "optiroc",
+    "author": {
+        "name": "David Lindecrantz",
+        "email": "optiroc@gmail.com"
+    },
+    "engines": {
+        "vscode": "^1.5.0"
+    },
+    "keywords": [
+        "assembler",
+        "console",
+        "super nintendo"
+    ],
+    "categories": [
+        "Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "ca65-65816",
+            "aliases": ["ca65-65816", "ca65-65816"],
+            "extensions": [".s",".s816",".i",".i816"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "ca65-65816",
+            "scopeName": "source.ca65-65816",
+            "path": "./syntaxes/ca65-65816.tmLanguage"
+        }]
+    }
+}
