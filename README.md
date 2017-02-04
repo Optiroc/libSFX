@@ -36,11 +36,6 @@ For project customization – for example extending the ROM size, adding SRAM or
 To override the defaults, simply copy these two files into your project directory and edit them to your liking. In [include/Configurations](./include/Configurations/) there's a few additional Map.cfg examples. You may also check out the [example](./examples/SixteenMegaPower) [projects](./examples/SuperFX) to see how a project can be customized.
 
 
-##planned features
-* More fleshed out examples.
-* Automated testing.
-
-
 ##acknowledgments
 libSFX includes the following code and snippets:
 
