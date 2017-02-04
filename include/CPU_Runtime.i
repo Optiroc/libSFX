@@ -254,8 +254,13 @@
         txs
         lda     #$0000                  ;Set direct page at $0000
         tcd
+        RW a8
   .if ROM_MAPMODE <> 1
-        phk                             ;If not Mode 21 (HiROM): Set DB to fast mirror
+        phk                             ;If not Mode 21: Set DB to same as PC bank
+        plb
+  .else
+        lda     #$80                    ;If Mode21: Set DB to $80
+        pha
         plb
   .endif
         WAIT_frames 2
