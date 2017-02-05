@@ -1,59 +1,59 @@
 # Output
 ifeq ($(name),)
-	name := out
+name 		:= out
 endif
 
-rom				:= $(name).sfc
-debug_sym		:= $(name).dsym
-debug_map		:= $(name).dmap
+rom		:= $(name).sfc
+debug_sym	:= $(name).dsym
+debug_map	:= $(name).dmap
 
 # Tools
-libsfx_bin		:= $(libsfx_dir)/tools
-as				:= $(libsfx_bin)/cc65/bin/ca65
-ld				:= $(libsfx_bin)/cc65/bin/ld65
-sfcheck			:= $(libsfx_bin)/superfamicheck/bin/superfamicheck
+libsfx_bin	:= $(libsfx_dir)/tools
+as		:= $(libsfx_bin)/cc65/bin/ca65
+ld		:= $(libsfx_bin)/cc65/bin/ld65
+sfcheck		:= $(libsfx_bin)/superfamicheck/bin/superfamicheck
 superfamiconv	:= $(libsfx_bin)/superfamiconv/bin/superfamiconv
-brr_enc			:= $(libsfx_bin)/brrtools/bin/brr_encoder
+brr_enc		:= $(libsfx_bin)/brrtools/bin/brr_encoder
 lz4_compress	:= $(libsfx_bin)/lz4/programs/lz4
-usb2snes		:= $(libsfx_bin)/usb2snes/bin/usb2snes
+usb2snes	:= $(libsfx_bin)/usb2snes/bin/usb2snes
 
-rwildcard		= $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+rwildcard	= $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
 # Set defaults
 ifndef obj_dir
-	obj_dir		:= .build
+obj_dir		:= .build
 endif
 ifndef stack_size
-	stack_size	:= 100
+stack_size	:= 100
 endif
 ifndef zpad_size
-	zpad_size	:= 10
+zpad_size	:= 10
 endif
 ifndef znmi_size
-	znmi_size	:= 10
+znmi_size	:= 10
 endif
 ifndef rpad_size
-	rpad_size  := 100
+rpad_size	:= 100
 endif
 
-obj_dir_sfx		:= $(obj_dir)_libsfx
+obj_dir_sfx	:= $(obj_dir)_libsfx
 
 # Flags
-libsfx_inc		:= $(libsfx_dir)/include
-asflags			:= -D __STACKSIZE__=\$$$(stack_size) -D __ZPADSIZE__=\$$$(zpad_size) -D __ZNMISIZE__=\$$$(znmi_size) -D __RPADSIZE__=\$$$(rpad_size)
+libsfx_inc	:= $(libsfx_dir)/include
+asflags		:= -D __STACKSIZE__=\$$$(stack_size) -D __ZPADSIZE__=\$$$(zpad_size) -D __ZNMISIZE__=\$$$(znmi_size) -D __RPADSIZE__=\$$$(rpad_size)
 ldflags       	:=
 
 ifdef debug
-	ifeq ($(debug),1)
-		asflags += -D __DEBUG__=1
-		ldflags += -Ln $(debug_sym) -m $(debug_map) -vm
-	endif
+ifeq ($(debug),1)
+asflags 	+= -D __DEBUG__=1
+ldflags 	+= -Ln $(debug_sym) -m $(debug_map) -vm
+endif
 endif
 
-asflags			+= -g -U -I ./ -I $(libsfx_inc) -I $(libsfx_inc)/Configurations
-ldflags			+= --cfg-path ./ --cfg-path $(libsfx_inc)/Configurations/
-brr_flags		:= -rn1.0 -g
-lz4_flags		:= -f -9
+asflags		+= -g -U -I ./ -I $(libsfx_inc) -I $(libsfx_inc)/Configurations
+ldflags		+= --cfg-path ./ --cfg-path $(libsfx_inc)/Configurations/
+brr_flags	:= -rn1.0 -g
+lz4_flags	:= -f -9
 palette_flags   := -v
 tiles_flags     := -v
 map_flags       := -v
@@ -61,40 +61,40 @@ map_flags       := -v
 
 # Include all source files under working directory if $(src) isn't set
 ifndef src
-  	src			+= $(call rwildcard, , *.s)
+src		+= $(call rwildcard, , *.s)
 endif
 ifndef src_smp
-	src_smp		+= $(call rwildcard, , *.s700)
+src_smp		+= $(call rwildcard, , *.s700)
 endif
 ifndef src_gsu
-	src_gsu		+= $(call rwildcard, , *.sgs)
+src_gsu		+= $(call rwildcard, , *.sgs)
 endif
 
 derived_files	+=
 
 # libSFX
-libsfx_src		:= $(wildcard $(libsfx_inc)/CPU/*.s)
+libsfx_src	:= $(wildcard $(libsfx_inc)/CPU/*.s)
 libsfx_src_smp	:= $(wildcard $(libsfx_inc)/SMP/*.s700)
 
 # libSFX packages
-sfx_incs := $(foreach inc,$(addprefix $(libsfx_inc)/Packages/,$(libsfx_packages)),$(wildcard $(inc)/config))
+sfx_incs	:= $(foreach inc,$(addprefix $(libsfx_inc)/Packages/,$(libsfx_packages)),$(wildcard $(inc)/config))
 include $(sfx_incs)
 
 # Configuration file dependencies
-cfg_files		:= Makefile $(libsfx_dir)/libSFX.make
+cfg_files	:= Makefile $(libsfx_dir)/libSFX.make
 ifneq ("$(wildcard libSFX.cfg)","")
-	cfg_files	+= libSFX.cfg
+cfg_files	+= libSFX.cfg
 endif
 ifneq ("$(wildcard Map.cfg)","")
-	cfg_files	+= Map.cfg
+cfg_files	+= Map.cfg
 endif
 
 # Source -> obj targets
-obj_sfx			:= $(patsubst $(libsfx_inc)%,$(obj_dir_sfx)%,$(patsubst %.s,%.o,$(libsfx_src)))
-obj_smp_sfx		:= $(patsubst $(libsfx_inc)%,$(obj_dir_sfx)%,$(patsubst %.s700,%.o700,$(libsfx_src_smp)))
-obj				:= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s,%.o,$(src)))
-obj_smp			+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s700,%.o700,$(src_smp)))
-obj_gsu			:= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.sgs,%.ogs,$(src_gsu)))
+obj_sfx		:= $(patsubst $(libsfx_inc)%,$(obj_dir_sfx)%,$(patsubst %.s,%.o,$(libsfx_src)))
+obj_smp_sfx	:= $(patsubst $(libsfx_inc)%,$(obj_dir_sfx)%,$(patsubst %.s700,%.o700,$(libsfx_src_smp)))
+obj		:= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s,%.o,$(src)))
+obj_smp		+= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.s700,%.o700,$(src_smp)))
+obj_gsu		:= $(patsubst $(src_dir)%,$(obj_dir)/%,$(patsubst %.sgs,%.ogs,$(src_gsu)))
 
 
 # Rules
