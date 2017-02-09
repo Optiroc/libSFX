@@ -31,7 +31,7 @@ SMP_EventEnd:
         cmp     a,#$00
         beq     @smc
 @wait:  mov     x,T0OUT
-:	      cmp     x,T0OUT
+:       cmp     x,T0OUT
         beq     :-
         push    a
         call    !@cpuio
