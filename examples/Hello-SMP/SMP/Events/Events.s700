@@ -1,0 +1,24 @@
+.include "libSFX.i"
+.include "SMP_Runtime.i700"
+.include "Events/Events.i700"
+
+.define BASE_PITCH 3000
+
+Event_1:
+        SMP_start_voice 0, BASE_PITCH * 2
+        SMP_start_voice 2, BASE_PITCH
+        jmp !SMP_EventEnd
+
+Event_2:
+        SMP_start_voice 0, BASE_PITCH * 2
+        SMP_start_voice 1, BASE_PITCH
+        jmp !SMP_EventEnd
+
+Event_3:
+        SMP_start_voice 0, BASE_PITCH * 2
+        SMP_start_voice 2, BASE_PITCH
+        jmp !SMP_EventEnd
+
+Event_4:
+        SMP_start_voice 0, BASE_PITCH * 2
+        jmp !SMP_EventEnd

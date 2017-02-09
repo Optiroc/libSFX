@@ -1,0 +1,93 @@
+; libSFX SMP Runtime
+; Kyle Swanson <k@ylo.ph>
+
+.include "libSFX.i"
+.include "SMP_Runtime.i700"
+
+;-------------------------------------------------------------------------------
+.segment "CODE"
+
+
+/**
+  SMP_Runtime starts here!
+*/
+Main:
+.assert * = $400, error, "SMP_Runtime: `Main' not linked at $400"
+
+
+        ;Initalize SMP
+        call    !SMP_Init
+
+
+Event:
+        ;Fire event
+        mov     x,#$00
+        jmp     [!IPL_INIT+x]           ;`Event': Junk operand, modified via SMC
+SMP_EventEnd:
+        mov     a,!$FFFF                ;`Delta': Junk operand, modified via SMC
+
+
+        ;Wait
+        cmp     a,#$00
+        beq     @smc
+@wait:  mov     x,T0OUT
+:	      cmp     x,T0OUT
+        beq     :-
+        push    a
+        call    !@cpuio
+        pop     a
+        dec     a
+        bne     @wait
+
+
+        ;Update `Event' and `Delta'
+@smc:   inc     !SMP_EventEnd+1
+        bne     :+
+        inc     !SMP_EventEnd+2
+:       mov     y,!SMP_EventEnd+1
+        mov     a,!SMP_EventEnd+2
+        mov     !SMP_EventEnd-2,y
+        mov     !SMP_EventEnd-1,a
+        inc     !SMP_EventEnd+1
+        bne     :+
+        inc     !SMP_EventEnd+2
+:       inc     !SMP_EventEnd+1
+        bne     @reset
+        inc     !SMP_EventEnd+2
+
+
+        ;Reset sequence
+@reset: mov     y,!SMP_EventEnd-2
+        cmp     y,!SMP_seq_tail+0
+        bne     @loop
+        mov     a,!SMP_EventEnd-1
+        cmp     a,!SMP_seq_tail+1
+        bne     @loop
+        SMP_set_sequence_head !SMP_seq_head
+
+
+        ;Loop
+@loop:  bra     Event
+
+
+        ;Check for S-CPU events
+@cpuio: mov     x,CPUIO0
+        cmp     x,#$00
+        beq     :++
+        call    !SMP_AsyncEvent
+        mov     CPUIO0,x
+:       cmp     CPUIO0,#$00
+        bne     :-
+        mov     CPUIO0,#$00
+:       ret
+
+
+End_Main:
+
+
+;-------------------------------------------------------------------------------
+.zeropage
+
+
+SMP_seq_head:   .res 2
+SMP_seq_tail:   .res 2

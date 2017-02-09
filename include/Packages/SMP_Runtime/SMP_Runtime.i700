@@ -1,0 +1,73 @@
+; libSFX SMP Runtime Macros
+; Kyle Swanson <k@ylo.ph>
+
+.ifndef ::__MBSFX_SMP_Runtime__
+::__MBSFX_SMP_Runtime__ = 1
+
+
+.global SMP_AsyncEvent, SMP_Init, SMP_Directory, SMP_EventEnd
+.globalzp SMP_seq_head, SMP_seq_tail
+
+
+.macro SMP_start_voice voice_no, pitch
+       .if((voice_no < 0) || voice_no > 7)
+       .error .sprintf("SMP_start_voice: Invalid voice_no: `%d`.", voice_no)
+       .endif
+
+        DSP_set (V0PITCHL + (voice_no * $10)), #<(pitch)
+        DSP_set (V0PITCHH + (voice_no * $10)), #>(pitch)
+
+       ;Overkill, find out how many cycles of delay are actually required.
+        mov     a,#$FF
+:       dec     a
+        bne     :-
+
+        DSP_set KON, #1 << voice_no
+.endmacro
+
+
+.macro SMP_Set_Tempo BPM
+        .if(BPM < 32)
+        .error .sprintf("SMP_Set_Tempo: BPM (%d) too low, minimum value is 32.", BPM)
+        .endif
+
+        mov     T0DIV,#((8000+(BPM/2))/BPM)
+        or      CONTROL,#CONTROL_ST0_START
+.endmacro
+
+
+.macro SMP_event event_addr, duration
+        .word event_addr
+        .byte duration
+.endmacro
+
+
+.macro SMP_set_sequence_head addr
+        mov     y,#<(addr)
+        mov     a,#>(addr)
+        mov     !SMP_seq_head+0,y
+        mov     !SMP_seq_head+1,a
+        mov     !SMP_EventEnd-2,y
+        mov     !SMP_EventEnd-1,a
+        mov     y,#<(addr+2)
+        mov     a,#>(addr+2)
+        mov     !SMP_EventEnd+1,y
+        mov     !SMP_EventEnd+2,a
+.endmacro
+
+
+.macro SMP_set_sequence_tail addr
+        mov     y,#<(addr)
+        mov     a,#>(addr)
+        mov     !SMP_seq_tail+0,y
+        mov     !SMP_seq_tail+1,a
+.endmacro
+
+
+.macro SMP_load_sequence addr_head, addr_tail
+        SMP_set_sequence_head addr_head
+        SMP_set_sequence_tail addr_tail
+.endmacro
+
+
+.endif;__MBSFX_SMP_Runtime__
