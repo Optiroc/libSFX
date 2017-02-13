@@ -112,10 +112,10 @@ spcUploadDSP:
         jsr     smpBeginUpload
 
         ldx     #$0000                  ;Upload loader
-:       lda     f:SMP_SetDSP_OFFSET,x
+:       lda     f:SMP_SetDSP_LOC,x
         jsr     smpUploadByte
         inx
-        cpy     #SMP_SetDSP_LENGTH
+        cpy     #SMP_SetDSP_SIZ
         bne     :-
 
         lda     f:SFX_DSP_STATE+$86     ;#SPC_SP ;Upload SP, PC & PSW
@@ -174,10 +174,10 @@ spcUploadRAM:
         jsr     smpBeginUpload
 
         ldx     #$0000                  ;Upload transfer routine
-:       lda     f:SMP_Burst_OFFSET,x
+:       lda     f:SMP_Burst_LOC,x
         jsr     smpUploadByte
         inx
-        cpy     #SMP_Burst_LENGTH
+        cpy     #SMP_Burst_SIZ
         bne     :-
 
         ldx     #$023f                  ;Prepare transfer address
