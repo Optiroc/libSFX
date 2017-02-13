@@ -9,7 +9,7 @@
 
 /**
   Macro: DSP_set
-  Select DSP register
+  Set DSP register
 
   Parameters:
   >:in:    reg     Register (uint8)        constant
@@ -58,12 +58,10 @@
 /**
   Macro: SMP_exit
   Return to IPL (clears timers, zeropage)
-
 */
 .macro SMP_exit
         mov   CONTROL,#$80
         pcall <IPL_INIT
 .endmac
-
 
 .endif;__MBSFX_SMP_Util__

@@ -1,4 +1,4 @@
-; libSFX Super Nintendo Mouse Support
+; libSFX Super Nintendo SFM1 Mouse Support
 ; David Lindecrantz <optiroc@gmail.com>
 
 .ifndef ::__MBSFX_MOUSE__
@@ -62,7 +62,7 @@
 ;-------------------------------------------------------------------------------
 /**
   Group: Mouse
-  Optional package adding SNES Mouse support
+  Optional package adding SNES SFM1 Mouse support
 
   To link mouse support in a project, simply add Mouse to libsfx_packages in
   the project makefile.
