@@ -71,6 +71,7 @@
   .include "SMP_Def.i"
   .include "SMP_Util.i"
   .include "SMP_Assembler.i"
+  .include "SMP_ADSR.i"
 
 .elseif .defined(TARGET_GSU)
   ;GSU includes
