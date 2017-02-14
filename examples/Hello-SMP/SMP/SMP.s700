@@ -1,8 +1,9 @@
 .include "libSFX.i"
-.include "SMP_Runtime.i700"
 .include "Sequences/Sequences.i700"
 
-SMP_Init:
+SMP_Runtime_Import
+
+SMP_Runtime_Init:
         SMP_Set_Tempo 60
 
         DSP_set FLG,      #$20

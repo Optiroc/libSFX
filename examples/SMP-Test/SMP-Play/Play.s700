@@ -1,0 +1,83 @@
+.include "libSFX.i"
+.import Directory
+
+;-------------------------------------------------------------------------------
+.segment "MAIN"
+
+        ;Init
+        ;The MAIN segment should be linked before CODE, BSS, etc
+        ;So if used only once it (should!) be guaranteed to be linked at $0200
+
+        DSP_set FLG,      #$20
+        DSP_set KON,      #$00
+        DSP_set KOF,      #$FF
+        DSP_set DIR,      #>Directory
+        DSP_set KOF,      #00
+        DSP_set NON,      #00
+        DSP_set EON,      #00
+        DSP_set MVOLL,    #$7F
+        DSP_set MVOLR,    #$7F
+        DSP_set EVOLL,    #00
+        DSP_set EVOLR,    #00
+
+        DSP_set V0SRCN,   #$00
+        DSP_set V0VOLL,   #$7f
+        DSP_set V0VOLR,   #$7f
+        DSP_set V0GAIN,   #$7f
+
+        DSP_set V1SRCN,   #$00
+        DSP_set V1VOLL,   #$4f
+        DSP_set V1VOLR,   #$1f
+        DSP_set V1GAIN,   #$7f
+
+        DSP_set V2SRCN,   #$00
+        DSP_set V2VOLL,   #$10
+        DSP_set V2VOLR,   #$2f
+        DSP_set V2GAIN,   #$7f
+
+        ;Test zeropage addressing
+        mov     ZP_test, #$7f
+        mov     ZP_ptr, #<Directory
+        mov     ZP_ptr+1, #>Directory
+        movw    ya, ZP_ptr
+
+        ;Play sample
+        DSP_set V0PITCHL, #<(3000)
+        DSP_set V0PITCHH, #>(3000)
+        DSP_set V1PITCHL, #<(2600)
+        DSP_set V1PITCHH, #>(2600)
+        DSP_set V2PITCHL, #<(2500)
+        DSP_set V2PITCHH, #>(2500)
+        DSP_set KON,      #7
+
+        mov     y, #$a0
+        call    !wait
+
+        ;Play another sample
+        DSP_set V0SRCN,   #$01
+        DSP_set KON,      #1
+
+        mov     y, #$50
+        call    !wait
+
+        SMP_exit
+
+wait:
+        mov     x, #$ff
+:       nop
+        nop
+        nop
+        dec     x
+        bne     :-
+        dec     y
+        bne     :-
+        ret
+
+;-------------------------------------------------------------------------------
+.segment "ZEROPAGE"
+ZP_test: .res 1
+ZP_ptr:  .res 2
+
+.segment "ZPDATA"
+ZP_data:
+.byte "Zero!"

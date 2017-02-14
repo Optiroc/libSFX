@@ -1,6 +1,5 @@
 .include "libSFX.i"
-.include "SMP_Runtime.i700"
-.include "Events/Events.i700"
+.include "Events.i700"
 
 .define BASE_PITCH 3000
 

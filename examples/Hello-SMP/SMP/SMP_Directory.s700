@@ -1,6 +1,6 @@
 .include "libSFX.i"
-.include "SMP_Runtime.i700"
 
+.segment "DATA"
 kick:
 kick_loop:
         .incbin "Data/kick.brr"
@@ -17,7 +17,7 @@ ucc:
 ucc_loop:
         .incbin "Data/ucc.brr"
 
-.align $100
+.segment "DIR"
 SMP_Directory:
         .word hihat,  hihat_loop
         .word snare,  snare_loop

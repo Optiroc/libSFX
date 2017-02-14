@@ -1,0 +1,17 @@
+.include "libSFX.i"
+
+.export Directory
+
+.segment "DATA"
+sample1:
+sample1_loop:
+        .incbin "Data/Sample1.brr"
+
+sample2:
+sample2_loop:
+        .incbin "Data/Sample2.brr"
+
+.segment "DIR"
+Directory:
+        .word sample1, sample1_loop
+        .word sample2, sample2_loop

@@ -2,12 +2,12 @@
 name		:= Hello-SMP
 debug		:= 1
 
-src_smp := Hello-SMP.o
+# Use packages
+libsfx_packages	:= SMP_Runtime
+
+# SMP sub-projects
+smp_overlays := SMP
 
 # Include libSFX.make
 libsfx_dir	:= ../..
 include $(libsfx_dir)/libSFX.make
-
-.PHONY: smp_code
-smp_code:
-	cd SMP && make

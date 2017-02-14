@@ -1,25 +1,22 @@
 ; libSFX SMP Runtime
 ; Kyle Swanson <k@ylo.ph>
 
-.include "libSFX.i"
-.include "SMP_Runtime.i700"
-
 ;-------------------------------------------------------------------------------
-.segment "CODE"
-
 
 /**
   SMP_Runtime starts here!
 */
-Main:
-.assert * = $400, error, "SMP_Runtime: `Main' not linked at $400"
 
+.pushseg
+.segment "MAIN"
+
+SMP_Runtime_Main:
+.assert * = $200, error, "SMP_Runtime: `Main' entrypoint not linked at $200"
 
         ;Initalize SMP
-        call    !SMP_Init
+        call    !SMP_Runtime_Init
 
-
-Event:
+SMP_Runtime_Event:
         ;Fire event
         mov     x,#$00
         jmp     [!IPL_INIT+x]           ;`Event': Junk operand, modified via SMC
@@ -59,12 +56,12 @@ SMP_EventEnd:
         ;Reset sequence, loop
 @reset: mov     y,!SMP_EventEnd-2
         cmp     y,!SMP_seq_tail+0
-        bne     Event
+        bne     SMP_Runtime_Event
         mov     a,!SMP_EventEnd-1
         cmp     a,!SMP_seq_tail+1
-        bne     Event
+        bne     SMP_Runtime_Event
         SMP_set_sequence_head !SMP_seq_head
-        bra     Event
+        bra     SMP_Runtime_Event
 
 
         ;Check for S-CPU events
@@ -78,13 +75,13 @@ SMP_EventEnd:
         mov     CPUIO0,#$00
 :       ret
 
-
-End_Main:
-
+.popseg
 
 ;-------------------------------------------------------------------------------
-.zeropage
-
+.pushseg
+.segment "ZEROPAGE"
 
 SMP_seq_head:   .res 2
 SMP_seq_tail:   .res 2
+
+.popseg

@@ -5,7 +5,7 @@
 
 Main:
         ;Transfer and execute SMP code
-        SMP_exec $400, smp_code_start, smp_code_end - smp_code_start, $400
+        SMP_exec SMP_RAM, SMP, sizeof_SMP, SMP_RAM
 
         ldx   #$0000
         stx   SMPIO0
@@ -27,10 +27,7 @@ Main:
         lda     #$00
         sta     SMPIO0
         bra     :--
-;-------------------------------------------------------------------------------
 
-;Import smp.bin
+;-------------------------------------------------------------------------------
 .segment "RODATA"
-smp_code_start:
-.incbin "SMP/smp.bin"
-smp_code_end:
+incbin  SMP,  "SMP.bin"

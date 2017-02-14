@@ -1,0 +1,1 @@
+pkg_asflags += -D SFXPKG_SMP_RUNTIME

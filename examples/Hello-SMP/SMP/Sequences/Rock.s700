@@ -1,7 +1,6 @@
 .include "libSFX.i"
-.include "SMP_Runtime.i700"
-.include "Events/Events.i700"
-.include "Sequences/Sequences.i700"
+.include "../Events/Events.i700"
+.include "Sequences.i700"
 
 Rock_Begin:
         SMP_event Event_1, 15

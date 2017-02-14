@@ -70,4 +70,8 @@
 .endmacro
 
 
+.macro SMP_Runtime_Import
+.include "Packages/SMP_Runtime/SMP_Runtime.s700"
+.endmacro
+
 .endif;__MBSFX_SMP_Runtime__

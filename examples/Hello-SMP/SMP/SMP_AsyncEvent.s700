@@ -1,5 +1,4 @@
 .include "libSFX.i"
-.include "SMP_Runtime.i700"
 
 SMP_AsyncEvent:
         SMP_start_voice 3, 2200
