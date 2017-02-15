@@ -71,12 +71,6 @@
   .include "SMP_Def.i"
   .include "SMP_Util.i"
   .include "SMP_ADSR.i"
-
-  ;S-SMP optional packages
-  .if .defined(SFXPKG_SMP_RUNTIME)
-    .include "Packages/SMP_Runtime/SMP_Runtime.i700"
-  .endif
-
   .include "SMP_Assembler.i"
 
 .elseif .defined(TARGET_GSU)
