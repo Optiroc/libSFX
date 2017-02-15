@@ -217,7 +217,7 @@ spcUploadRAM:
         sep     #$20                    ;3
         RW_assume a8
         cpx     #$003f                  ;3
-        bne     :---                     ;3 = 19 cycles
+        bne     :---                    ;3 = 19 cycles
         rts
 
 

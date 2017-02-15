@@ -1,5 +1,6 @@
 ; libSFX S-SMP Utility Macros
 ; David Lindecrantz <optiroc@gmail.com>
+; Kyle Swanson <k@ylo.ph>
 
 .ifndef ::__MBSFX_SMP_Util__
 ::__MBSFX_SMP_Util__ = 1
@@ -66,21 +67,6 @@
 .endif
 .endmac
 
-
-/*
-;dir_set #sound, #offset, #loop_offset, #dir_offset
-;Set DSP register with value
-.MACRO  dir_set
-        mov     a,#(\2 & $00ff)
-        mov     !(\4 + \1*4),a
-        mov     a,#((\2 >> 8) & $00ff)
-        mov     !(\4 + \1*4)+1,a
-        mov     a,#(\3 & $00ff)
-        mov     !(\4 + \1*4)+2,a
-        mov     a,#((\3 >> 8) & $00ff)
-        mov     !(\4 + \1*4)+3,a
-.ENDM
-*/
 
 ;-------------------------------------------------------------------------------
 ;Misc

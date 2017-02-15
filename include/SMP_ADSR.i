@@ -1,7 +1,10 @@
 ; libSFX S-SMP ADSR Macros
 ; Kyle Swanson <k@ylo.ph>
 
+.ifndef ::__MBSFX_SMP_ADSR__
+::__MBSFX_SMP_ADSR__ = 1
 
+;-------------------------------------------------------------------------------
 .macro ADSR_attack_ms time_ms
   .if (   time_ms = 0)
     #$0F
@@ -262,3 +265,5 @@
 .delmacro ADSR_decay_ms
 .delmacro ADSR_sustain_ratio
 .delmacro ADSR_release_ms
+
+.endif;__MBSFX_SMP_ADSR__
