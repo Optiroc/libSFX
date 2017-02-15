@@ -1,2 +1,2 @@
 libsfx_src += $(libsfx_inc)/Packages/LZ4/LZ4.s
-asflags += -D SFXPKG_LZ4
+pkg_asflags += -D SFXPKG_LZ4

@@ -4,6 +4,8 @@
 .ifndef ::__MBSFX_CPU_SMP__
 ::__MBSFX_CPU_SMP__ = 1
 
+SMP_RAM                 = $0200
+
 ;Locations and sizes for relocatable SMP routines
 .import SMP_Burst, SMP_Burst_END, SMP_SetDSP, SMP_SetDSP_END
 SMP_Burst_LOC = __LIBSFX_SMP_LOAD__ - $02 + SMP_Burst

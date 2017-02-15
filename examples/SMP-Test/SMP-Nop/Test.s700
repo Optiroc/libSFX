@@ -1,0 +1,10 @@
+.include "libSFX.i"
+
+.segment "CODE"
+
+Nothing:
+        nop
+        nop
+        SMP_exit
+
+.byte   "Nothing to see here"
