@@ -92,7 +92,7 @@ endif
 # libSFX
 libsfx_src	:= $(wildcard $(libsfx_inc)/CPU/*.s)
 libsfx_src_smp	:= $(wildcard $(libsfx_inc)/SMP/*.s700)
-libsfx_headers	:= $(call rwildcard,$(libsfx_inc)/,%.i) $(call rwildcard,$(libsfx_inc)/,%.i700)
+libsfx_headers	:= $(call rwildcard,$(libsfx_inc)/,%.i) $(call rwildcard,$(libsfx_inc)/,%.i700) $(libsfx_inc)/Packages/SMP_Runtime/SMP_Runtime.s700
 
 # Include libSFX package configs
 sfx_incs	:= $(foreach inc,$(addprefix $(libsfx_inc)/Packages/,$(libsfx_packages)),$(wildcard $(inc)/config))
