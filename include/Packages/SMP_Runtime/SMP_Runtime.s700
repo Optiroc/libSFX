@@ -13,12 +13,9 @@ SMP_Runtime_Main:
 .assert * = $200, error, "SMP_Runtime: `Main' entrypoint not linked at $200"
 
         ;Initialize zeropage code
-        mov     a,#$1f                  ;jmp [!addr+x]
-        mov     SMP_FireEvent,a
-        mov     a,#$e5                  ;mov a,!addr
-        mov     SMP_EventEnd,a
-        mov     a,#$6f                  ;ret
-        mov     SMP_event_ret,a
+        mov     SMP_FireEvent,#$1f      ;jmp [!addr+x]
+        mov     SMP_EventEnd,#$e5       ;mov a,!addr
+        mov     SMP_event_ret,#$6f      ;ret
 
         ;Call initalizer
         call    !SMP_Runtime_Init
