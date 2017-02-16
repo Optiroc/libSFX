@@ -14,6 +14,9 @@ SMP-Play/Data/Sample2.brr: brrflags = -rs1.2 -g
 # Derived data files
 derived_files := SMP-Play/Data/Sample1.brr SMP-Play/Data/Sample2.brr
 
+# Explicit cleanup
+clean_files := SMP-Play-ZP.bin
+
 # Include libSFX.make
 libsfx_dir	:= ../..
 include $(libsfx_dir)/libSFX.make

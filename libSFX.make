@@ -155,8 +155,8 @@ else
 endif
 
 clean:
-	@rm -f $(rom) *.$(debug_sym_ext) *.$(debug_map_ext) *.$(debug_nfo_ext) $(derived_files) $(smp_overlays_products)
-	@rm -frd $(obj_dir) $(obj_dir_sfx)
+	@rm -f $(rom) *.$(debug_sym_ext) *.$(debug_map_ext) *.$(debug_nfo_ext) $(derived_files) $(smp_overlays_products) $(clean_files)
+	@rm -frd $(obj_dir) $(obj_dir_sfx) $(clean_dirs)
 
 
 # Prerequisite rules
