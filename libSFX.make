@@ -85,12 +85,16 @@ endif
 ifndef src_gsu
 src_gsu		:= $(call rwildcard, ,%.sgs)
 endif
+ifndef headers
+headers		:= $(call rwildcard, ,%.i) $(call rwildcard, ,%.i700)
+endif
 
 # libSFX
 libsfx_src	:= $(wildcard $(libsfx_inc)/CPU/*.s)
 libsfx_src_smp	:= $(wildcard $(libsfx_inc)/SMP/*.s700)
+libsfx_headers	:= $(call rwildcard,$(libsfx_inc)/,%.i) $(call rwildcard,$(libsfx_inc)/,%.i700)
 
-# libSFX packages
+# Include libSFX package configs
 sfx_incs	:= $(foreach inc,$(addprefix $(libsfx_inc)/Packages/,$(libsfx_packages)),$(wildcard $(inc)/config))
 include $(sfx_incs)
 
@@ -155,14 +159,14 @@ clean:
 	@rm -frd $(obj_dir) $(obj_dir_sfx)
 
 
-# Data/configuration files as prerequisites
+# Prerequisite rules
 $(derived_files) : $(cfg_files)
-$(smp_overlays_obj) : $(derived_files) $(cfg_files)
-$(obj) : $(smp_overlays_products) $(derived_files) $(cfg_files)
-$(obj_gsu) : $(derived_files) $(cfg_files)
-$(obj_smp) : $(derived_files) $(cfg_files)
-$(obj_sfx) : $(cfg_files)
-$(obj_smp_sfx) : $(cfg_files)
+$(smp_overlays_obj) : $(derived_files) $(cfg_files) $(headers) $(libsfx_headers)
+$(obj) : $(smp_overlays_products) $(derived_files) $(cfg_files) $(headers) $(libsfx_headers)
+$(obj_gsu) : $(derived_files) $(cfg_files) $(headers) $(libsfx_headers)
+$(obj_smp) : $(derived_files) $(cfg_files) $(headers) $(libsfx_headers)
+$(obj_sfx) : $(cfg_files) $(libsfx_headers)
+$(obj_smp_sfx) : $(cfg_files) $(libsfx_headers)
 
 # Link
 $(rom) : $(obj_sfx) $(obj_smp_sfx) $(obj) $(obj_smp) $(obj_gsu)
