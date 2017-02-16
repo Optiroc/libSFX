@@ -43,24 +43,18 @@
 
 
 .macro SMP_set_sequence_head addr
-        mov     y,#<(addr)
-        mov     a,#>(addr)
-        mov     !SMP_seq_head+0,y
-        mov     !SMP_seq_head+1,a
-        mov     !SMP_EventEnd-2,y
-        mov     !SMP_EventEnd-1,a
-        mov     y,#<(addr+2)
-        mov     a,#>(addr+2)
-        mov     !SMP_EventEnd+1,y
-        mov     !SMP_EventEnd+2,a
+        mov     SMP_seq_head,#<(addr)
+        mov     SMP_seq_head+1,#>(addr)
+        mov     SMP_event_ptr,#<(addr)
+        mov     SMP_event_ptr+1,#>(addr)
+        mov     SMP_event_delta,#<(addr+2)
+        mov     SMP_event_delta+1,#>(addr+2)
 .endmacro
 
 
 .macro SMP_set_sequence_tail addr
-        mov     y,#<(addr)
-        mov     a,#>(addr)
-        mov     !SMP_seq_tail+0,y
-        mov     !SMP_seq_tail+1,a
+        mov     SMP_seq_tail,#<(addr)
+        mov     SMP_seq_tail+1,#>(addr)
 .endmacro
 
 

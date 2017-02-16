@@ -2,27 +2,31 @@
 ; Kyle Swanson <k@ylo.ph>
 
 ;-------------------------------------------------------------------------------
+.pushseg
+.segment "MAIN"
 
 /**
   SMP_Runtime starts here!
 */
 
-.pushseg
-.segment "MAIN"
-
 SMP_Runtime_Main:
 .assert * = $200, error, "SMP_Runtime: `Main' entrypoint not linked at $200"
 
-        ;Initalize SMP
+        ;Initialize zeropage code
+        mov     a,#$1f                  ;jmp [!addr+x]
+        mov     SMP_FireEvent,a
+        mov     a,#$e5                  ;mov a,!addr
+        mov     SMP_EventEnd,a
+        mov     a,#$6f                  ;ret
+        mov     SMP_event_ret,a
+
+        ;Call initalizer
         call    !SMP_Runtime_Init
 
 SMP_Runtime_Event:
         ;Fire event
         mov     x,#$00
-        jmp     [!IPL_INIT+x]           ;`Event': Junk operand, modified via SMC
-SMP_EventEnd:
-        mov     a,!$FFFF                ;`Delta': Junk operand, modified via SMC
-
+        call    !SMP_FireEvent
 
         ;Wait
         cmp     a,#$00
@@ -38,28 +42,19 @@ SMP_EventEnd:
 
 
         ;Update `Event' and `Delta'
-@smc:   inc     !SMP_EventEnd+1
-        bne     :+
-        inc     !SMP_EventEnd+2
-:       mov     y,!SMP_EventEnd+1
-        mov     a,!SMP_EventEnd+2
-        mov     !SMP_EventEnd-2,y
-        mov     !SMP_EventEnd-1,a
-        inc     !SMP_EventEnd+1
-        bne     :+
-        inc     !SMP_EventEnd+2
-:       inc     !SMP_EventEnd+1
-        bne     @reset
-        inc     !SMP_EventEnd+2
+@smc:   incw    SMP_event_delta
 
+        mov     SMP_event_ptr,SMP_event_delta
+        mov     SMP_event_ptr+1,SMP_event_delta+1
+
+        incw    SMP_event_delta
+        incw    SMP_event_delta
 
         ;Reset sequence, loop
-@reset: mov     y,!SMP_EventEnd-2
-        cmp     y,!SMP_seq_tail+0
+        movw    ya,SMP_event_ptr
+        cmpw    ya,SMP_seq_tail
         bne     SMP_Runtime_Event
-        mov     a,!SMP_EventEnd-1
-        cmp     a,!SMP_seq_tail+1
-        bne     SMP_Runtime_Event
+
         SMP_set_sequence_head !SMP_seq_head
         bra     SMP_Runtime_Event
 
@@ -81,7 +76,14 @@ SMP_EventEnd:
 .pushseg
 .segment "ZEROPAGE"
 
-SMP_seq_head:   .res 2
-SMP_seq_tail:   .res 2
+SMP_seq_head:       .res 2
+SMP_seq_tail:       .res 2
+
+SMP_FireEvent:      .res 1      ;jmp [!addr+x]
+SMP_event_ptr:      .res 2      ; addr
+
+SMP_EventEnd:       .res 1      ;mov a,!addr
+SMP_event_delta:    .res 2      ; addr
+SMP_event_ret:      .res 1      ;ret
 
 .popseg
