@@ -2,6 +2,9 @@
 name        := SMP-Test
 debug		:= 1
 
+run_args := --show-debugger --break-on-wdm
+breakpoints := SMP-Test:@xbr SMP-Play:@xbr:x:smp SMP-Play:@rwbr:rw:smp
+
 # Use packages
 libsfx_packages := LZ4
 

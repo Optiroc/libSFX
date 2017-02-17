@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Extracts a list of bsnes+ breakpoints from ca65 symbol files in file:label:rwx?:source? format
+#
+# ca65 symbol format:
+#   al 000249 .label
+#
+# bsnes breakpoint format:
+#   <addr>[-<addr end>][:<rwx>[:<source>]]
+#   rwx = read / write / execute flags
+#   source = cpu, smp, vram, oam, cgram, sa1, sfx
+
+for bp in "$@"
+do
+  # split on comma
+  IFS=":" read -ra arr <<< "$bp"
+  if (( ${#arr[@]} < 2 )); then
+    continue
+  fi
+
+  # symbol file existance test
+  symfile="${arr[0]}.dsym"
+  if [ ! -f "$symfile" ]; then
+    continue
+  fi
+
+  # parameters
+  rwx="x"
+  if (( ${#arr[@]} > 2 )); then
+    rwx="${arr[2]}"
+  fi
+  mem="cpu"
+  if (( ${#arr[@]} > 3 )); then
+    mem="${arr[3]}"
+  fi
+
+  # extract
+  echo -n $(grep ".${arr[1]}" ${arr[0]}.dsym | awk -v rwx="$rwx" -v mem="$mem" '{ print "-b " $2 ":" rwx ":" mem }')
+  echo -n " "
+done
