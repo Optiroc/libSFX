@@ -36,6 +36,7 @@
         DSP_set V2GAIN,   #$7f
 
         ;Test zeropage addressing
+@xbr1:
         mov     ZP_test, #$7f
         mov     ZP_ptr, #<Directory
         mov     ZP_ptr+1, #>Directory
@@ -54,6 +55,7 @@
         call    !wait
 
         ;Play another sample
+@xbr2:
         DSP_set V0SRCN,   #$01
         DSP_set KON,      #1
 

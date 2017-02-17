@@ -10,6 +10,7 @@ Main:
         SMP_exec SMP_RAM, SMP_nop, sizeof_SMP_nop, SMP_RAM
         SMP_exec SMP_RAM, SMP_play, sizeof_SMP_play, SMP_RAM
         SMP_exec SMP_RAM, SMP_nop, sizeof_SMP_nop, SMP_RAM
+@xbr:
         SMP_exec SMP_RAM, SMP_play, sizeof_SMP_play, SMP_RAM
 
         ;Turn on screen

@@ -28,7 +28,7 @@ sfcheck		:= $(libsfx_bin)/superfamicheck/bin/superfamicheck
 superfamiconv	:= $(libsfx_bin)/superfamiconv/bin/superfamiconv
 brr_enc		:= $(libsfx_bin)/brrtools/bin/brr_encoder
 lz4_compress	:= $(libsfx_bin)/lz4/programs/lz4
-usb2snes	:= $(libsfx_bin)/usb2snes/bin/usb2snes
+make_bp		:= $(libsfx_bin)/make_breakpoints
 
 rwildcard = $(strip $(filter $(if $2,$2,%),$(foreach f,$(wildcard $1*),$(eval t = $(call rwildcard,$f/)) $(if $t,$t,$f))))
 
@@ -62,6 +62,10 @@ asflags		:= -D __STACKSIZE__=\$$$(stack_size) -D __ZPADSIZE__=\$$$(zpad_size) -D
 ldflags       	:=
 
 ifeq ($(debug),1)
+asflags 	+= -D __DEBUG__=1
+ldflags 	+= -Ln $(name).$(debug_sym_ext)
+endif
+ifeq ($(debug),2)
 asflags 	+= -D __DEBUG__=1
 ldflags 	+= -Ln $(name).$(debug_sym_ext) -m $(name).$(debug_map_ext) -vm --dbgfile $(name).$(debug_nfo_ext)
 endif
@@ -112,6 +116,8 @@ define smp_overlay_add_product
 smp_overlays_products := $(smp_overlays_products) $(1).bin
 $(1).bin : $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
 ifeq ($(debug),1)
+	$(ld) --cfg-path ./$(1) --cfg-path $(libsfx_inc)/Configurations/SMP -C Map.cfg -Ln $(1).$(debug_sym_ext) -o $(1).bin $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
+else ifeq ($(debug),2)
 	$(ld) --cfg-path ./$(1) --cfg-path $(libsfx_inc)/Configurations/SMP -C Map.cfg -Ln $(1).$(debug_sym_ext) -m $(1).$(debug_map_ext) -vm --dbgfile $(1).$(debug_nfo_ext) -o $(1).bin $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
 else
 	$(ld) --cfg-path ./$(1) --cfg-path $(libsfx_inc)/Configurations/SMP -C Map.cfg -o $(1).bin $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
@@ -142,13 +148,16 @@ obj		:= $(patsubst %,$(obj_dir)/%,$(patsubst %.s,%.o,$(src)))
 obj_smp		:= $(patsubst %,$(obj_dir)/%,$(patsubst %.s700,%.o700,$(src_smp)))
 obj_gsu		:= $(patsubst %,$(obj_dir)/%,$(patsubst %.sgs,%.ogs,$(src_gsu)))
 
-
 # Rules
 all: clean default
 
 run: $(rom)
 ifdef LIBSFX_RUNCMD
-	$(LIBSFX_RUNCMD)
+  ifndef breakpoints
+	$(LIBSFX_RUNCMD) $(run_args)
+  else
+	$(LIBSFX_RUNCMD) $(run_args) $$($(make_bp) $(breakpoints))
+  endif
 else
 	@echo NB! To enable running set LIBSFX_RUNCMD, for example \(macOS\):
 	@echo \ \ \ \ export LIBSFX_RUNCMD\=\'open -a \~/bsnes/bsnes+.app --args \$$\(realpath \$$\(rom\)\)\'
