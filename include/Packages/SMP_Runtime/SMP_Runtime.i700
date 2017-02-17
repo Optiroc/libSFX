@@ -5,8 +5,8 @@
 ::__MBSFX_SMP_Runtime__ = 1
 
 
-.global SMP_AsyncEvent, SMP_Init, SMP_Directory, SMP_EventEnd
-.globalzp SMP_seq_head, SMP_seq_tail
+.global SMP_AsyncEvent, SMP_Init, SMP_Directory
+.globalzp SMP_seq_head, SMP_seq_tail, SMP_EventEnd
 
 
 .macro SMP_start_voice voice_no, pitch
