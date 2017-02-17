@@ -20,9 +20,8 @@ SMP_Runtime_Main:
         ;Call initalizer
         call    !SMP_Runtime_Init
 
-SMP_Runtime_Event:
         ;Fire event
-        mov     x,#$00
+@event: mov     x,#$00
         call    !SMP_FireEvent
 
         ;Wait
@@ -37,24 +36,19 @@ SMP_Runtime_Event:
         dec     a
         bne     @wait
 
-
-        ;Update `Event' and `Delta'
+        ;Update `SMP_event_delta' and `SMP_event_ptr'
 @smc:   incw    SMP_event_delta
-
         mov     SMP_event_ptr,SMP_event_delta
         mov     SMP_event_ptr+1,SMP_event_delta+1
-
         incw    SMP_event_delta
         incw    SMP_event_delta
 
         ;Reset sequence, loop
         movw    ya,SMP_event_ptr
         cmpw    ya,SMP_seq_tail
-        bne     SMP_Runtime_Event
-
+        bne     @event
         SMP_set_sequence_head !SMP_seq_head
-        bra     SMP_Runtime_Event
-
+        bra     @event
 
         ;Check for S-CPU events
 @cpuio: mov     x,CPUIO0
@@ -66,6 +60,8 @@ SMP_Runtime_Event:
         bne     :-
         mov     CPUIO0,#$00
 :       ret
+
+End_SMP_Runtime_Main:
 
 .popseg
 
