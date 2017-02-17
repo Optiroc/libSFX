@@ -37,7 +37,8 @@ SMP_Runtime_Main:
         bne     @wait
 
         ;Update `SMP_event_delta' and `SMP_event_ptr'
-@smc:   incw    SMP_event_delta
+@smc:   clrp
+        incw    SMP_event_delta
         mov     SMP_event_ptr,SMP_event_delta
         mov     SMP_event_ptr+1,SMP_event_delta+1
         incw    SMP_event_delta
