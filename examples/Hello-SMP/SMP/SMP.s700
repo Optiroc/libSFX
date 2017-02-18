@@ -19,32 +19,24 @@ SMP_Runtime_Init:
         DSP_set EVOLR,    #00
 
         DSP_set V0SRCN,   #$00
-        DSP_set V0ADSR1,  #$AF
-        DSP_set V0ADSR2,  #$38
         DSP_set V0VOLL,   #$00
         DSP_set V0VOLR,   #$4F
-        DSP_set V0GAIN,   #$FB
+        ADSR_set 0, 0, 440, "2:8", 180
 
         DSP_set V1SRCN,   #$01
-        DSP_set V1ADSR1,  #$AF
-        DSP_set V1ADSR2,  #$38
         DSP_set V1VOLL,   #$4F
         DSP_set V1VOLR,   #$4F
-        DSP_set V1GAIN,   #$FB
+        ADSR_set 1, 0, 440, "2:8", 180
 
         DSP_set V2SRCN,   #$02
-        DSP_set V2ADSR1,  #$AF
-        DSP_set V2ADSR2,  #$38
         DSP_set V2VOLL,   #$4F
         DSP_set V2VOLR,   #$4F
-        DSP_set V2GAIN,   #$FB
+        ADSR_set 2, 0, 440, "2:8", 180
 
         DSP_set V3SRCN,   #$03
-        DSP_set V3ADSR1,  #$AF
-        DSP_set V3ADSR2,  #$70
         DSP_set V3VOLL,   #$7F
         DSP_set V3VOLR,   #$4F
-        DSP_set V3GAIN,   #$FB
+        ADSR_set 3, 0, 440, "2:8", 180
 
         SMP_load_sequence Rock_Begin, Rock_End
 
