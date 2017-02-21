@@ -55,11 +55,11 @@ SMP_Runtime_Main:
 @cpuio: mov     x,CPUIO0
         cmp     x,#$00
         beq     :++
-        call    !SMP_AsyncEvent
         mov     CPUIO0,x
 :       cmp     CPUIO0,#$00
         bne     :-
         mov     CPUIO0,#$00
+        call    !SMP_AsyncEvent
 :       ret
 
 End_SMP_Runtime_Main:
