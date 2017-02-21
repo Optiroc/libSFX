@@ -8,44 +8,42 @@ Main:
         SMP_exec SMP_RAM, SMP, sizeof_SMP, SMP_RAM
 
         ;Clear SMPIO0 to avoid an unintended SMP_Runtime_AsyncEvent.
-        ldx   #$0000
-        stx   SMPIO0
+        stz   SMPIO0
 
         VBL_on
 
 Loop:   wai
-        RW      a16
-        lda     z:SFX_joy1trig
-        cmp     #$00
+        ldx     z:SFX_joy1trig
+        cpx     #$00
         beq     Loop
 
         ;Trigger SMP_Runtime_AsyncEvent based on JOY1 button presses.
-@left:  cmp     #JOY_LEFT
-        bne     @up
+left:   cpx     #JOY_LEFT
+        bne     up
         SMP_Runtime_AsyncEvent $01
-@up:    cmp     #JOY_UP
-        bne     @right
+up:     cpx     #JOY_UP
+        bne     right
         SMP_Runtime_AsyncEvent $02
-@right: cmp     #JOY_RIGHT
-        bne     @down
+right:  cpx     #JOY_RIGHT
+        bne     down
         SMP_Runtime_AsyncEvent $03
-@down:  cmp     #JOY_DOWN
-        bne     @y
+down:   cpx     #JOY_DOWN
+        bne     btn_y
         SMP_Runtime_AsyncEvent $04
-@y:     cmp     #JOY_Y
-        bne     @x
+btn_y:  cpx     #JOY_Y
+        bne     btn_x
         SMP_Runtime_AsyncEvent $05
-@x:     cmp     #JOY_X
-        bne     @a
+btn_x:  cpx     #JOY_X
+        bne     btn_a
         SMP_Runtime_AsyncEvent $06
-@a:     cmp     #JOY_A
-        bne     @b
+btn_a:  cpx     #JOY_A
+        bne     btn_b
         SMP_Runtime_AsyncEvent $07
-@b:     cmp     #JOY_B
-        bne     @end
+btn_b:  cpx     #JOY_B
+        bne     end
         SMP_Runtime_AsyncEvent $08
 
-@end:   jmp     Loop
+end:    jmp     Loop
 
 ;-------------------------------------------------------------------------------
 .segment "RODATA"
