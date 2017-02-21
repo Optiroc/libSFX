@@ -103,6 +103,10 @@
   .if .defined(SFXPKG_MOUSE)
     .include "Packages/Mouse/Mouse.i"
   .endif
+  .if .defined(SFXPKG_SMP_RUNTIME)
+    .include "Packages/SMP_Runtime/SMP_Runtime.i"
+  .endif
+
 
   ;Initial register widths
   RW_assume a8i16
