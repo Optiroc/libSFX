@@ -36,7 +36,7 @@ SMP_Runtime_Init:
         DSP_set V3SRCN,   #$03
         DSP_set V3VOLL,   #$7F
         DSP_set V3VOLR,   #$4F
-        ADSR_set 3, 0, 440, "2:8", 180
+        ADSR_set 3, 0, 1200, "8:8", -1
 
         SMP_load_sequence Rock_Begin, Rock_End
 

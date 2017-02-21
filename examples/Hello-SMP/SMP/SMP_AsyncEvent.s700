@@ -1,5 +1,28 @@
 .include "libSFX.i"
 
 SMP_AsyncEvent:
-        SMP_start_voice 3, 2200
-        ret
+@left:  cmp     x,#$01
+        bne     @up
+        SMP_start_voice 3, 2093
+@up:    cmp     x,#$02
+        bne     @right
+        SMP_start_voice 3, 2349
+@right: cmp     x,#$03
+        bne     @down
+        SMP_start_voice 3, 2637
+@down:  cmp     x,#$04
+        bne     @y
+        SMP_start_voice 3, 2793
+@y:     cmp     x,#$05
+        bne     @x
+        SMP_start_voice 3, 3135
+@x:     cmp     x,#$06
+        bne     @a
+        SMP_start_voice 3, 3520
+@a:     cmp     x,#$07
+        bne     @b
+        SMP_start_voice 3, 3951
+@b:     cmp     x,#$08
+        bne     @end
+        SMP_start_voice 3, 4186
+@end:   ret
