@@ -18,32 +18,45 @@ Loop:   wai
         beq     Loop
 
         ;Trigger SMP_Runtime_AsyncEvent based on JOY1 button presses.
-left:   cpx     #JOY_LEFT
-        bne     up
-        SMP_Runtime_AsyncEvent $01
-up:     cpx     #JOY_UP
-        bne     right
-        SMP_Runtime_AsyncEvent $02
-right:  cpx     #JOY_RIGHT
-        bne     down
-        SMP_Runtime_AsyncEvent $03
-down:   cpx     #JOY_DOWN
-        bne     btn_y
-        SMP_Runtime_AsyncEvent $04
-btn_y:  cpx     #JOY_Y
-        bne     btn_x
-        SMP_Runtime_AsyncEvent $05
-btn_x:  cpx     #JOY_X
-        bne     btn_a
-        SMP_Runtime_AsyncEvent $06
-btn_a:  cpx     #JOY_A
-        bne     btn_b
-        SMP_Runtime_AsyncEvent $07
-btn_b:  cpx     #JOY_B
-        bne     end
-        SMP_Runtime_AsyncEvent $08
+@left:  cpx     #JOY_LEFT
+        bne     @up
+        lda     #$01
+        jsr     PerformEvent
+@up:    cpx     #JOY_UP
+        bne     @right
+        lda     #$02
+        jsr     PerformEvent
+@right: cpx     #JOY_RIGHT
+        bne     @down
+        lda     #$03
+        jsr     PerformEvent
+@down:  cpx     #JOY_DOWN
+        bne     @y
+        lda     #$04
+        jsr     PerformEvent
+@y:     cpx     #JOY_Y
+        bne     @x
+        lda     #$05
+        jsr     PerformEvent
+@x:     cpx     #JOY_X
+        bne     @a
+        lda     #$06
+        jsr     PerformEvent
+@a:     cpx     #JOY_A
+        bne     @b
+        lda     #$07
+        jsr     PerformEvent
+@b:     cpx     #JOY_B
+        bne     @end
+        lda     #$08
+        jsr     PerformEvent
 
-end:    jmp     Loop
+@end:   bra     Loop
+
+PerformEvent:
+        SMP_Runtime_AsyncEvent a
+        rts
+
 
 ;-------------------------------------------------------------------------------
 .segment "RODATA"

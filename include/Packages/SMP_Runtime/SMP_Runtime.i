@@ -12,15 +12,19 @@
   S-CPU is blocked until S-SMP has processed the event.
 
   Parameters:
-  >:in:    event_no   Value (uint8)       constant (1-255)
+  >:in:    event_no   Value (uint8)       a
+  >                                       constant (1-255)
 */
 .macro SMP_Runtime_AsyncEvent event_no
-        .if (event_no < 1 || event_no > 255)
-        .error .sprintf("SMP_Runtime_AsyncEvent: Invalid event_no: `%d'.", event_no)
-        .endif
-
         RW_push set:a8
+
+  .if .not .xmatch({event_no}, {a})
+    .if (event_no < 1 || event_no > 255)
+      .error .sprintf("SMP_Runtime_AsyncEvent: Invalid event_no: `%d'.", event_no)
+    .endif
         lda     #event_no
+  .endif
+
         sta     SMPIO0
 :       cmp     SMPIO0
         bne     :-
