@@ -21,8 +21,10 @@ SMP_Runtime_Main:
         call    !SMP_Runtime_Init
 
         ;Fire event
-@event: mov     x,#$00
+@event: mov     SMP_Runtime_KON_buf,#$00
+        mov     x,#$00
         call    !SMP_FireEvent
+        DSP_set KON, SMP_Runtime_KON_buf
 
         ;Wait
         cmp     a,#$00
@@ -59,7 +61,9 @@ SMP_Runtime_Main:
 :       cmp     CPUIO0,#$00
         bne     :-
         mov     CPUIO0,#$00
+        mov     SMP_Runtime_KON_buf,#$00
         call    !SMP_AsyncEvent
+        DSP_set KON, SMP_Runtime_KON_buf
 :       ret
 
 End_SMP_Runtime_Main:
@@ -80,4 +84,5 @@ SMP_EventEnd:       .res 1      ;mov a,!addr
 SMP_event_delta:    .res 2      ; addr
 SMP_event_ret:      .res 1      ;ret
 
+SMP_Runtime_KON_buf: .res 1
 .popseg

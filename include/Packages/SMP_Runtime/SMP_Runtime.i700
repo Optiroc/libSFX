@@ -6,7 +6,7 @@
 
 
 .global SMP_AsyncEvent, SMP_Init, SMP_Directory
-.globalzp SMP_seq_head, SMP_seq_tail, SMP_EventEnd
+.globalzp SMP_seq_head, SMP_seq_tail, SMP_EventEnd, SMP_Runtime_KON_buf
 
 
 .macro SMP_start_voice voice_no, pitch
@@ -17,12 +17,23 @@
         DSP_set (V0PITCHL + (voice_no * $10)), #<(pitch)
         DSP_set (V0PITCHH + (voice_no * $10)), #>(pitch)
 
-       ;Overkill, find out how many cycles of delay are actually required.
-        mov     a,#$FF
-:       dec     a
-        bne     :-
-
-        DSP_set KON, #1 << voice_no
+        .if(    voice_no = 0)
+        set1    SMP_Runtime_KON_buf.0
+        .elseif(voice_no = 1)
+        set1    SMP_Runtime_KON_buf.1
+        .elseif(voice_no = 2)
+        set1    SMP_Runtime_KON_buf.2
+        .elseif(voice_no = 3)
+        set1    SMP_Runtime_KON_buf.3
+        .elseif(voice_no = 4)
+        set1    SMP_Runtime_KON_buf.4
+        .elseif(voice_no = 5)
+        set1    SMP_Runtime_KON_buf.5
+        .elseif(voice_no = 6)
+        set1    SMP_Runtime_KON_buf.6
+        .elseif(voice_no = 7)
+        set1    SMP_Runtime_KON_buf.7
+        .endif
 .endmacro
 
 
