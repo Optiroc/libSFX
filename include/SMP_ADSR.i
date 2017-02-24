@@ -280,4 +280,22 @@
   .undef ADSR_release
 .endmacro
 
+
+/**
+  Macro: ADSR_on
+  Turn on ADSR mode.
+
+  Parameters:
+  >:in:    voice_no       Value (uint8)       constant
+*/
+.macro ADSR_on voice_no
+  .if(voice_no < 0 || voice_no > 7)
+  .error .sprintf("ADSR_on: Invalid voice_no: `%d'.", voice_no)
+  .endif
+
+  DSP_get (V0ADSR1 + (voice_no * $10)), a
+  or  a,#$80
+  DSP_set (V0ADSR1 + (voice_no * $10)), a
+.endmacro
+
 .endif;__MBSFX_SMP_ADSR__
