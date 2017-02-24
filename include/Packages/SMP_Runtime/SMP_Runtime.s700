@@ -19,6 +19,7 @@ SMP_Runtime_Main:
 
         ;Call initalizer
         call    !SMP_Runtime_Init
+        DSP_set DIR, #>SMP_Directory
 
         ;Fire event
 @event: mov     SMP_Runtime_KON_buf,#$00

@@ -9,7 +9,6 @@ SMP_Runtime_Init:
         DSP_set FLG,      #$20
         DSP_set KON,      #$00
         DSP_set KOF,      #$FF
-        DSP_set DIR,      #>SMP_Directory
         DSP_set KOF,      #00
         DSP_set NON,      #00
         DSP_set EON,      #00
