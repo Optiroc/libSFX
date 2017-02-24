@@ -3,28 +3,28 @@
 .include "Sequences.i700"
 
 Rock_Begin:
-        SMP_event Event_1, 15
-        SMP_event Event_4, 15
-        SMP_event Event_2, 15
-        SMP_event Event_4, 10
-        SMP_event Event_1, 5
+        SMP_Runtime_event Event_1, 15
+        SMP_Runtime_event Event_4, 15
+        SMP_Runtime_event Event_2, 15
+        SMP_Runtime_event Event_4, 10
+        SMP_Runtime_event Event_1, 5
 
-        SMP_event Event_1, 15
-        SMP_event Event_1, 15
-        SMP_event Event_2, 10
-        SMP_event Event_1, 5
-        SMP_event Event_4, 15
+        SMP_Runtime_event Event_1, 15
+        SMP_Runtime_event Event_1, 15
+        SMP_Runtime_event Event_2, 10
+        SMP_Runtime_event Event_1, 5
+        SMP_Runtime_event Event_4, 15
 
-        SMP_event Event_1, 15
-        SMP_event Event_4, 15
-        SMP_event Event_2, 15
-        SMP_event Event_4, 5
-        SMP_event Event_4, 5
-        SMP_event Event_4, 5
+        SMP_Runtime_event Event_1, 15
+        SMP_Runtime_event Event_4, 15
+        SMP_Runtime_event Event_2, 15
+        SMP_Runtime_event Event_4, 5
+        SMP_Runtime_event Event_4, 5
+        SMP_Runtime_event Event_4, 5
 
-        SMP_event Event_1, 15
-        SMP_event Event_1, 15
-        SMP_event Event_2, 10
-        SMP_event Event_1, 5
-        SMP_event Event_4, 15
+        SMP_Runtime_event Event_1, 15
+        SMP_Runtime_event Event_1, 15
+        SMP_Runtime_event Event_2, 10
+        SMP_Runtime_event Event_1, 5
+        SMP_Runtime_event Event_4, 15
 Rock_End:

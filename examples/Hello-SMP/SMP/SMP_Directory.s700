@@ -18,7 +18,7 @@ ucc_loop:
         .incbin "Data/ucc.brr"
 
 .segment "DIR"
-SMP_Directory:
+SMP_Runtime_Directory:
         .word hihat,  hihat_loop
         .word snare,  snare_loop
         .word kick,   kick_loop

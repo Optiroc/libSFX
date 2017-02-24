@@ -10,21 +10,21 @@
 */
 
 SMP_Runtime_Main:
-.assert * = $200, error, "SMP_Runtime: `Main' entrypoint not linked at $200"
+.assert * = $200, error, "SMP_Runtime: Entrypoint not linked at $200"
 
         ;Initialize zeropage code
-        mov     SMP_FireEvent,#$1f      ;jmp [!addr+x]
-        mov     SMP_EventEnd,#$e5       ;mov a,!addr
-        mov     SMP_event_ret,#$6f      ;ret
+        mov     SMP_Runtime_FireEvent,#$1f      ;jmp [!addr+x]
+        mov     SMP_Runtime_EventEnd,#$e5       ;mov a,!addr
+        mov     SMP_Runtime_event_ret,#$6f      ;ret
 
         ;Call initalizer
         call    !SMP_Runtime_Init
-        DSP_set DIR, #>SMP_Directory
+        DSP_set DIR, #>SMP_Runtime_Directory
 
         ;Fire event
 @event: mov     SMP_Runtime_KON_buf,#$00
         mov     x,#$00
-        call    !SMP_FireEvent
+        call    !SMP_Runtime_FireEvent
         DSP_set KON, SMP_Runtime_KON_buf
 
         ;Wait
@@ -39,19 +39,19 @@ SMP_Runtime_Main:
         dec     a
         bne     @wait
 
-        ;Update `SMP_event_delta' and `SMP_event_ptr'
+        ;Update `SMP_Runtime_event_delta' and `SMP_Runtime_event_ptr'
 @smc:   clrp
-        incw    SMP_event_delta
-        mov     SMP_event_ptr,SMP_event_delta
-        mov     SMP_event_ptr+1,SMP_event_delta+1
-        incw    SMP_event_delta
-        incw    SMP_event_delta
+        incw    SMP_Runtime_event_delta
+        mov     SMP_Runtime_event_ptr,SMP_Runtime_event_delta
+        mov     SMP_Runtime_event_ptr+1,SMP_Runtime_event_delta+1
+        incw    SMP_Runtime_event_delta
+        incw    SMP_Runtime_event_delta
 
         ;Reset sequence, loop
-        movw    ya,SMP_event_ptr
-        cmpw    ya,SMP_seq_tail
+        movw    ya,SMP_Runtime_event_ptr
+        cmpw    ya,SMP_Runtime_seq_tail
         bne     @event
-        SMP_set_sequence_head !SMP_seq_head
+        SMP_Runtime_set_sequence_head !SMP_Runtime_seq_head
         bra     @event
 
         ;Check for S-CPU events
@@ -63,7 +63,7 @@ SMP_Runtime_Main:
         bne     :-
         mov     CPUIO0,#$00
         mov     SMP_Runtime_KON_buf,#$00
-        call    !SMP_AsyncEvent
+        call    !SMP_Runtime_AsyncEvent
         DSP_set KON, SMP_Runtime_KON_buf
 :       ret
 
@@ -75,15 +75,16 @@ End_SMP_Runtime_Main:
 .pushseg
 .segment "ZEROPAGE"
 
-SMP_seq_head:       .res 2
-SMP_seq_tail:       .res 2
+SMP_Runtime_seq_head:       .res 2
+SMP_Runtime_seq_tail:       .res 2
 
-SMP_FireEvent:      .res 1      ;jmp [!addr+x]
-SMP_event_ptr:      .res 2      ; addr
+SMP_Runtime_FireEvent:      .res 1      ;jmp [!addr+x]
+SMP_Runtime_event_ptr:      .res 2      ; addr
 
-SMP_EventEnd:       .res 1      ;mov a,!addr
-SMP_event_delta:    .res 2      ; addr
-SMP_event_ret:      .res 1      ;ret
+SMP_Runtime_EventEnd:       .res 1      ;mov a,!addr
+SMP_Runtime_event_delta:    .res 2      ; addr
+SMP_Runtime_event_ret:      .res 1      ;ret
 
-SMP_Runtime_KON_buf: .res 1
+SMP_Runtime_KON_buf:        .res 1
+
 .popseg

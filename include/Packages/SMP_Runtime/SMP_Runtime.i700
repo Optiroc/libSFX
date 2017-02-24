@@ -5,13 +5,13 @@
 ::__MBSFX_SMP_Runtime__ = 1
 
 
-.global SMP_AsyncEvent, SMP_Init, SMP_Directory
-.globalzp SMP_seq_head, SMP_seq_tail, SMP_EventEnd, SMP_Runtime_KON_buf
+.global SMP_Runtime_AsyncEvent, SMP_Runtime_Init, SMP_Runtime_Directory
+.globalzp SMP_Runtime_seq_head, SMP_Runtime_seq_tail, SMP_Runtime_EventEnd, SMP_Runtime_KON_buf
 
 
-.macro SMP_start_voice voice_no, pitch
+.macro SMP_Runtime_start_voice voice_no, pitch
        .if((voice_no < 0) || voice_no > 7)
-       .error .sprintf("SMP_start_voice: Invalid voice_no: `%d`.", voice_no)
+       .error .sprintf("SMP_Runtime_start_voice: Invalid voice_no: `%d`.", voice_no)
        .endif
 
         DSP_set (V0PITCHL + (voice_no * $10)), #<(pitch)
@@ -37,41 +37,41 @@
 .endmacro
 
 
-.macro SMP_Set_Tempo BPM
-        .if(BPM < 32)
-        .error .sprintf("SMP_Set_Tempo: BPM (%d) too low, minimum value is 32.", BPM)
+.macro SMP_Runtime_set_tempo bpm
+        .if(bpm < 32)
+        .error .sprintf("SMP_Runtime_set_tempo: BPM (%d) too low, minimum value is 32.", bpm)
         .endif
 
-        mov     T0DIV,#((8000+(BPM/2))/BPM)
+        mov     T0DIV,#((8000+(bpm/2))/bpm)
         or      CONTROL,#CONTROL_ST0_START
 .endmacro
 
 
-.macro SMP_event event_addr, duration
+.macro SMP_Runtime_event event_addr, delta
         .word event_addr
-        .byte duration
+        .byte delta
 .endmacro
 
 
-.macro SMP_set_sequence_head addr
-        mov     SMP_seq_head,#<(addr)
-        mov     SMP_seq_head+1,#>(addr)
-        mov     SMP_event_ptr,#<(addr)
-        mov     SMP_event_ptr+1,#>(addr)
-        mov     SMP_event_delta,#<(addr+2)
-        mov     SMP_event_delta+1,#>(addr+2)
+.macro SMP_Runtime_set_sequence_head addr
+        mov     SMP_Runtime_seq_head,#<(addr)
+        mov     SMP_Runtime_seq_head+1,#>(addr)
+        mov     SMP_Runtime_event_ptr,#<(addr)
+        mov     SMP_Runtime_event_ptr+1,#>(addr)
+        mov     SMP_Runtime_event_delta,#<(addr+2)
+        mov     SMP_Runtime_event_delta+1,#>(addr+2)
 .endmacro
 
 
-.macro SMP_set_sequence_tail addr
-        mov     SMP_seq_tail,#<(addr)
-        mov     SMP_seq_tail+1,#>(addr)
+.macro SMP_Runtime_set_sequence_tail addr
+        mov     SMP_Runtime_seq_tail,#<(addr)
+        mov     SMP_Runtime_seq_tail+1,#>(addr)
 .endmacro
 
 
-.macro SMP_load_sequence addr_head, addr_tail
-        SMP_set_sequence_head addr_head
-        SMP_set_sequence_tail addr_tail
+.macro SMP_Runtime_load_sequence addr_head, addr_tail
+        SMP_Runtime_set_sequence_head addr_head
+        SMP_Runtime_set_sequence_tail addr_tail
 .endmacro
 
 

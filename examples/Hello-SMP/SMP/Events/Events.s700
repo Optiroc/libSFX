@@ -4,20 +4,20 @@
 .define BASE_PITCH 3000
 
 Event_1:
-        SMP_start_voice 0, BASE_PITCH * 2
-        SMP_start_voice 2, BASE_PITCH
-        jmp !SMP_EventEnd
+        SMP_Runtime_start_voice 0, BASE_PITCH * 2
+        SMP_Runtime_start_voice 2, BASE_PITCH
+        jmp !SMP_Runtime_EventEnd
 
 Event_2:
-        SMP_start_voice 0, BASE_PITCH * 2
-        SMP_start_voice 1, BASE_PITCH
-        jmp !SMP_EventEnd
+        SMP_Runtime_start_voice 0, BASE_PITCH * 2
+        SMP_Runtime_start_voice 1, BASE_PITCH
+        jmp !SMP_Runtime_EventEnd
 
 Event_3:
-        SMP_start_voice 0, BASE_PITCH * 2
-        SMP_start_voice 2, BASE_PITCH
-        jmp !SMP_EventEnd
+        SMP_Runtime_start_voice 0, BASE_PITCH * 2
+        SMP_Runtime_start_voice 2, BASE_PITCH
+        jmp !SMP_Runtime_EventEnd
 
 Event_4:
-        SMP_start_voice 0, BASE_PITCH * 2
-        jmp !SMP_EventEnd
+        SMP_Runtime_start_voice 0, BASE_PITCH * 2
+        jmp !SMP_Runtime_EventEnd

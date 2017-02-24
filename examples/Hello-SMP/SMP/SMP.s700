@@ -4,7 +4,7 @@
 SMP_Runtime_Import
 
 SMP_Runtime_Init:
-        SMP_Set_Tempo 60
+        SMP_Runtime_set_tempo 60
 
         DSP_set FLG,      #$20
         DSP_set KON,      #$00
@@ -37,6 +37,6 @@ SMP_Runtime_Init:
         DSP_set V3VOLR,   #$4F
         ADSR_set 3, 0, 1200, "8:8", -1
 
-        SMP_load_sequence Rock_Begin, Rock_End
+        SMP_Runtime_load_sequence Rock_Begin, Rock_End
 
         ret
