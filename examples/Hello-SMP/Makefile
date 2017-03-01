@@ -1,8 +1,12 @@
 # Name
 name		:= Hello-SMP
-debug		:= 1
 
-# Use packages
+# Debug
+debug := 1
+run_args := --show-debugger --break-on-wdm
+breakpoints := SMP:@breakpoint_reset_sequence:x:smp
+
+# Packages
 libsfx_packages	:= SMP_Runtime
 
 # SMP sub-projects

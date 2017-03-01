@@ -51,7 +51,8 @@ SMP_Runtime_Main:
         movw    ya,SMP_Runtime_event_ptr
         cmpw    ya,SMP_Runtime_seq_tail
         bne     @event
-        SMP_Runtime_set_sequence_head !SMP_Runtime_seq_head
+@breakpoint_reset_sequence:
+        SMP_Runtime_reset_sequence_head
         bra     @event
 
         ;Check for S-CPU events

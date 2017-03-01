@@ -62,6 +62,14 @@
         mov     SMP_Runtime_event_delta+1,#>(addr+2)
 .endmacro
 
+.macro SMP_Runtime_reset_sequence_head
+        mov     SMP_Runtime_event_ptr,SMP_Runtime_seq_head
+        mov     SMP_Runtime_event_ptr+1,SMP_Runtime_seq_head+1
+        mov     SMP_Runtime_event_delta,SMP_Runtime_seq_head
+        mov     SMP_Runtime_event_delta+1,SMP_Runtime_seq_head+1
+        incw    SMP_Runtime_event_delta
+        incw    SMP_Runtime_event_delta
+.endmacro
 
 .macro SMP_Runtime_set_sequence_tail addr
         mov     SMP_Runtime_seq_tail,#<(addr)
