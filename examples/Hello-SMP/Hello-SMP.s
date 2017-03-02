@@ -1,5 +1,8 @@
 ; Hello-SMP
 ; Kyle Swanson <k@ylo.ph>
+;
+; Example using the SMP_Runtime package
+; Demonstrates both sequenced and asynchronous events
 
 .include "libSFX.i"
 
