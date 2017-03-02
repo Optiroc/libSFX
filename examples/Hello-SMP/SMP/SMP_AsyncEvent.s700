@@ -1,4 +1,5 @@
 .include "libSFX.i"
+.include "Sequences/Sequences.i700"
 
 SMP_Runtime_AsyncEvent:
 @left:  cmp     x,#$01
@@ -23,6 +24,12 @@ SMP_Runtime_AsyncEvent:
         bne     @b
         SMP_Runtime_start_voice 3, 3951
 @b:     cmp     x,#$08
-        bne     @end
+        bne     @l
         SMP_Runtime_start_voice 3, 4186
+@l:     cmp     x,#$09
+        bne     @r
+        SMP_Runtime_load_sequence Rock_Begin, Rock_End
+@r:     cmp     x,#$0A
+        bne     @end
+        SMP_Runtime_load_sequence Roll_Begin, Roll_End
 @end:   ret

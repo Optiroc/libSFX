@@ -47,8 +47,16 @@ Loop:   wai
         lda     #$07
         jsr     PerformEvent
 @b:     cpx     #JOY_B
-        bne     @end
+        bne     @l
         lda     #$08
+        jsr     PerformEvent
+@l:     cpx     #JOY_L
+        bne     @r
+        lda     #$09
+        jsr     PerformEvent
+@r:     cpx     #JOY_R
+        bne     @end
+        lda     #$0A
         jsr     PerformEvent
 
 @end:   bra     Loop

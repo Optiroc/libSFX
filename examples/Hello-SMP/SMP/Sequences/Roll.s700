@@ -1,0 +1,12 @@
+.include "libSFX.i"
+.include "../Events/Events.i700"
+.include "Sequences.i700"
+
+Roll_Begin:
+        SMP_Runtime_event Event_1, 10
+        SMP_Runtime_event Event_4, 10
+        SMP_Runtime_event Event_1, 10
+        SMP_Runtime_event Event_2, 10
+        SMP_Runtime_event Event_4, 10
+        SMP_Runtime_event Event_1, 10
+Roll_End:
