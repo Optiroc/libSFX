@@ -7,6 +7,7 @@
 
 .global SMP_Runtime_AsyncEvent, SMP_Runtime_Init, SMP_Runtime_Directory
 .globalzp SMP_Runtime_seq_head, SMP_Runtime_seq_tail, SMP_Runtime_EventEnd, SMP_Runtime_KON_buf
+.globalzp SMP_Runtime_event_delta, SMP_Runtime_event_ptr
 
 
 .macro SMP_Runtime_start_voice voice_no, pitch
