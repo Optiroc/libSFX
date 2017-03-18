@@ -5,34 +5,48 @@
 ::__MBSFX_SMP_Runtime__ = 1
 
 
-.global SMP_Runtime_AsyncEvent, SMP_Runtime_Init, SMP_Runtime_Directory
-.globalzp SMP_Runtime_seq_head, SMP_Runtime_seq_tail, SMP_Runtime_EventEnd, SMP_Runtime_KON_buf
+.global   SMP_Runtime_AsyncEvent, SMP_Runtime_Init, SMP_Runtime_Directory
+.globalzp SMP_Runtime_seq_head, SMP_Runtime_seq_tail, SMP_Runtime_EventEnd
 .globalzp SMP_Runtime_event_delta, SMP_Runtime_event_ptr
+.globalzp SMP_Runtime_KON_buf, SMP_Runtime_KOF_buf, SMP_Runtime_KOF_ctr
 
 
-.macro SMP_Runtime_start_voice voice_no, pitch
-       .if((voice_no < 0) || voice_no > 7)
-       .error .sprintf("SMP_Runtime_start_voice: Invalid voice_no: `%d`.", voice_no)
-       .endif
+.macro SMP_Runtime_start_voice voice_no, pitch, duration
+        .if(voice_no < 0 || voice_no > 7)
+        .error .sprintf("SMP_Runtime_start_voice: Invalid voice_no: `%d`.", voice_no)
+        .endif
+
+        .ifnblank duration
+        mov     SMP_Runtime_KOF_ctr + (voice_no * 2) + 0, #<(duration)
+        mov     SMP_Runtime_KOF_ctr + (voice_no * 2) + 1, #>(duration)
+        .endif
 
         DSP_set (V0PITCHL + (voice_no * $10)), #<(pitch)
         DSP_set (V0PITCHH + (voice_no * $10)), #>(pitch)
 
         .if(    voice_no = 0)
+        clr1    SMP_Runtime_KOF_buf.0
         set1    SMP_Runtime_KON_buf.0
         .elseif(voice_no = 1)
+        clr1    SMP_Runtime_KOF_buf.1
         set1    SMP_Runtime_KON_buf.1
         .elseif(voice_no = 2)
+        clr1    SMP_Runtime_KOF_buf.2
         set1    SMP_Runtime_KON_buf.2
         .elseif(voice_no = 3)
+        clr1    SMP_Runtime_KOF_buf.3
         set1    SMP_Runtime_KON_buf.3
         .elseif(voice_no = 4)
+        clr1    SMP_Runtime_KOF_buf.4
         set1    SMP_Runtime_KON_buf.4
         .elseif(voice_no = 5)
+        clr1    SMP_Runtime_KOF_buf.5
         set1    SMP_Runtime_KON_buf.5
         .elseif(voice_no = 6)
+        clr1    SMP_Runtime_KOF_buf.6
         set1    SMP_Runtime_KON_buf.6
         .elseif(voice_no = 7)
+        clr1    SMP_Runtime_KOF_buf.7
         set1    SMP_Runtime_KON_buf.7
         .endif
 .endmacro

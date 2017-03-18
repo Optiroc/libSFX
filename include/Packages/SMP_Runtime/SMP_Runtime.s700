@@ -22,9 +22,12 @@ SMP_Runtime_Main:
         DSP_set DIR, #>SMP_Runtime_Directory
 
         ;Fire event
-@event: mov     SMP_Runtime_KON_buf,#$00
+@event: DSP_get KOF, x
+        mov     SMP_Runtime_KOF_buf,x
+        mov     SMP_Runtime_KON_buf,#$00
         mov     x,#$00
         call    !SMP_Runtime_FireEvent
+        DSP_set KOF, SMP_Runtime_KOF_buf
         DSP_set KON, SMP_Runtime_KON_buf
 
         ;Wait
@@ -35,6 +38,7 @@ SMP_Runtime_Main:
         beq     :-
         push    a
         call    !@cpuio
+        call    !@kof
         pop     a
         dec     a
         bne     @wait
@@ -63,10 +67,61 @@ SMP_Runtime_Main:
 :       cmp     CPUIO0,#$00
         bne     :-
         mov     CPUIO0,#$00
+        DSP_get KOF, y
+        mov     SMP_Runtime_KOF_buf,y
         mov     SMP_Runtime_KON_buf,#$00
         call    !SMP_Runtime_AsyncEvent
+        DSP_set KOF, SMP_Runtime_KOF_buf
         DSP_set KON, SMP_Runtime_KON_buf
 :       ret
+
+        ;Check for KOF events
+@kof:   mov     y,#$00
+        mov     a,#$00
+        DSP_get KOF, x
+        mov     SMP_Runtime_KOF_buf,x
+        cmpw    ya, SMP_Runtime_KOF_ctr + (0 * 2)
+        beq     :++
+        decw    SMP_Runtime_KOF_ctr + (0 * 2)
+        bne     :++
+:       set1    SMP_Runtime_KOF_buf.0
+:       cmpw    ya, SMP_Runtime_KOF_ctr + (1 * 2)
+        beq     :++
+        decw    SMP_Runtime_KOF_ctr + (1 * 2)
+        bne     :++
+:       set1    SMP_Runtime_KOF_buf.1
+:       cmpw    ya, SMP_Runtime_KOF_ctr + (2 * 2)
+        beq     :++
+        decw    SMP_Runtime_KOF_ctr + (2 * 2)
+        bne     :++
+:       set1    SMP_Runtime_KOF_buf.2
+:       cmpw    ya, SMP_Runtime_KOF_ctr + (3 * 2)
+        beq     :++
+        decw    SMP_Runtime_KOF_ctr + (3 * 2)
+        bne     :++
+:       set1    SMP_Runtime_KOF_buf.3
+:       cmpw    ya, SMP_Runtime_KOF_ctr + (4 * 2)
+        beq     :++
+        decw    SMP_Runtime_KOF_ctr + (4 * 2)
+        bne     :++
+:       set1    SMP_Runtime_KOF_buf.4
+:       cmpw    ya, SMP_Runtime_KOF_ctr + (5 * 2)
+        beq     :++
+        decw    SMP_Runtime_KOF_ctr + (5 * 2)
+        bne     :++
+:       set1    SMP_Runtime_KOF_buf.5
+:       cmpw    ya, SMP_Runtime_KOF_ctr + (6 * 2)
+        beq     :++
+        decw    SMP_Runtime_KOF_ctr + (6 * 2)
+        bne     :++
+:       set1    SMP_Runtime_KOF_buf.6
+:       cmpw    ya, SMP_Runtime_KOF_ctr + (7 * 2)
+        beq     :++
+        decw    SMP_Runtime_KOF_ctr + (7 * 2)
+        bne     :++
+:       set1    SMP_Runtime_KOF_buf.7
+:       DSP_set KOF, SMP_Runtime_KOF_buf
+        ret
 
 End_SMP_Runtime_Main:
 
@@ -87,5 +142,7 @@ SMP_Runtime_event_delta:    .res 2      ; addr
 SMP_Runtime_event_ret:      .res 1      ;ret
 
 SMP_Runtime_KON_buf:        .res 1
+SMP_Runtime_KOF_buf:        .res 1
+SMP_Runtime_KOF_ctr:        .res 2 * 8
 
 .popseg

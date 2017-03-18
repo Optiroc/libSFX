@@ -4,7 +4,7 @@
 SMP_Runtime_AsyncEvent:
 @left:  cmp     x,#$01
         bne     @up
-        SMP_Runtime_start_voice 3, 2093
+        SMP_Runtime_start_voice 3, 2093, $10
 @up:    cmp     x,#$02
         bne     @right
         SMP_Runtime_start_voice 3, 2349
