@@ -39,6 +39,7 @@ SMP_Runtime_Main:
         push    a
         call    !@cpuio
         call    !@kof
+        call    !@port
         pop     a
         dec     a
         bne     @wait
@@ -121,6 +122,10 @@ SMP_Runtime_Main:
         bne     :++
 :       set1    SMP_Runtime_KOF_buf.7
 :       DSP_set KOF, SMP_Runtime_KOF_buf
+        ret
+
+        ;Check for portamento events
+@port:  ;to-do
         ret
 
 End_SMP_Runtime_Main:
