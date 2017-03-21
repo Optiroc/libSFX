@@ -82,45 +82,45 @@ SMP_Runtime_Main:
         DSP_get KOF, x
         mov     SMP_Runtime_KOF_buf,x
         cmpw    ya, SMP_Runtime_KOF_ctr + (0 * 2)
-        beq     :++
+        beq     :+
         decw    SMP_Runtime_KOF_ctr + (0 * 2)
-        bne     :++
-:       set1    SMP_Runtime_KOF_buf.0
+        bne     :+
+        set1    SMP_Runtime_KOF_buf.0
 :       cmpw    ya, SMP_Runtime_KOF_ctr + (1 * 2)
-        beq     :++
+        beq     :+
         decw    SMP_Runtime_KOF_ctr + (1 * 2)
-        bne     :++
-:       set1    SMP_Runtime_KOF_buf.1
+        bne     :+
+        set1    SMP_Runtime_KOF_buf.1
 :       cmpw    ya, SMP_Runtime_KOF_ctr + (2 * 2)
-        beq     :++
+        beq     :+
         decw    SMP_Runtime_KOF_ctr + (2 * 2)
-        bne     :++
-:       set1    SMP_Runtime_KOF_buf.2
+        bne     :+
+        set1    SMP_Runtime_KOF_buf.2
 :       cmpw    ya, SMP_Runtime_KOF_ctr + (3 * 2)
-        beq     :++
+        beq     :+
         decw    SMP_Runtime_KOF_ctr + (3 * 2)
-        bne     :++
-:       set1    SMP_Runtime_KOF_buf.3
+        bne     :+
+        set1    SMP_Runtime_KOF_buf.3
 :       cmpw    ya, SMP_Runtime_KOF_ctr + (4 * 2)
-        beq     :++
+        beq     :+
         decw    SMP_Runtime_KOF_ctr + (4 * 2)
-        bne     :++
-:       set1    SMP_Runtime_KOF_buf.4
+        bne     :+
+        set1    SMP_Runtime_KOF_buf.4
 :       cmpw    ya, SMP_Runtime_KOF_ctr + (5 * 2)
-        beq     :++
+        beq     :+
         decw    SMP_Runtime_KOF_ctr + (5 * 2)
-        bne     :++
-:       set1    SMP_Runtime_KOF_buf.5
+        bne     :+
+        set1    SMP_Runtime_KOF_buf.5
 :       cmpw    ya, SMP_Runtime_KOF_ctr + (6 * 2)
-        beq     :++
+        beq     :+
         decw    SMP_Runtime_KOF_ctr + (6 * 2)
-        bne     :++
-:       set1    SMP_Runtime_KOF_buf.6
+        bne     :+
+        set1    SMP_Runtime_KOF_buf.6
 :       cmpw    ya, SMP_Runtime_KOF_ctr + (7 * 2)
-        beq     :++
+        beq     :+
         decw    SMP_Runtime_KOF_ctr + (7 * 2)
-        bne     :++
-:       set1    SMP_Runtime_KOF_buf.7
+        bne     :+
+        set1    SMP_Runtime_KOF_buf.7
 :       DSP_set KOF, SMP_Runtime_KOF_buf
         ret
 
