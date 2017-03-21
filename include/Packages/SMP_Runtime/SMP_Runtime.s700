@@ -56,7 +56,6 @@ SMP_Runtime_Main:
         movw    ya,SMP_Runtime_event_ptr
         cmpw    ya,SMP_Runtime_seq_tail
         bne     @event
-@breakpoint_reset_sequence:
         SMP_Runtime_reset_sequence_head
         bra     @event
 
