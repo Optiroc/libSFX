@@ -19,7 +19,9 @@ libSFX is developed by David Lindecrantz and distributed under the terms of the 
 
 
 ## dependencies
-A C/C++ toolchain, make, git and a decent command line interface. 
+A C/C++ toolchain, make, git and a decent command line interface.  
+
+Unix-like (Mac, Linux, etc.) systems should be ready to go out of the box. If you're running Windows the best option is to install [Cygwin](https://cygwin.com/install.html) and make sure you include the `git` and `mingw64` toolchain (`mingw64-x86_64-binutils`, `mingw64-x86_64-gcc-core` and `mingw64-x86_64-gcc-g++`) packages.
 
 
 ## building
