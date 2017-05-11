@@ -16,13 +16,13 @@
 
   Parameters:
   >:in:    ch        Channel (0-7)                 constant
-  >:in:    mode      Mode (0-1)                    constant
+  >:in:    mode      Mode (0-7)                    constant
   >:in:    dest      Destination register (uint8)  constant
   >:in:    table     Table location (uint24)       constant
 */
 .macro  HDMA_set_absolute ch, mode, dest, table
         RW_push set:a8i16
-        lda     #(HDMA_ABSOLUTE + (mode & 1))   ;A->B, absolute + mode
+        lda     #(HDMA_ABSOLUTE + (mode & 7))   ;A->B, absolute + mode
         sta     DMAP0 + (ch * $10)              ;DMAPx
         lda     #(dest & $00ff)                 ;Destination register
         sta     BBAD0 + (ch * $10)              ;BBADx
@@ -39,14 +39,14 @@
 
   Parameters:
   >:in:    ch        Channel (0-7)                 constant
-  >:in:    mode      Mode (0-1)                    constant
+  >:in:    mode      Mode (0-7)                    constant
   >:in:    dest      Destination register (uint8)  constant
   >:in:    a1_table  A1 Table location (uint24)    constant
   >:in:    a2_table  A2 Table location (uint24)    constant
 */
 .macro  HDMA_set_indirect ch, mode, dest, a1_table, a2_table
         RW_push set:a8i16
-        lda     #(HDMA_INDIRECT + mode)         ;A->B, indirect + mode
+        lda     #(HDMA_INDIRECT + (mode & 7))   ;A->B, indirect + mode
         sta     DMAP0 + (ch * $10)              ;DMAPx
         lda     #(dest & $00ff)                 ;Destination register
         sta     BBAD0 + (ch * $10)              ;BBADx
