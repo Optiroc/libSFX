@@ -87,7 +87,7 @@
 .globalzp SFX_joy3cont, SFX_joy3trig
 .endif
 .if SFX_JOY & JOY4
-.globalzp SFX_joy3cont, SFX_joy3trig
+.globalzp SFX_joy4cont, SFX_joy4trig
 .endif
 
 ;-------------------------------------------------------------------------------
