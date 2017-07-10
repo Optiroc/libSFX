@@ -18,31 +18,26 @@
 SFX_WRAM_memset:
         RW_assume a8i16
         stz     MDMAEN          ;Disable DMA
-        sta     A1B7            ;Dest bank
-        stx     A1T7L           ;Dest address
+        sta     WMADDH          ;WRAM bank
+        stx     WMADDL          ;WRAM offset
         sty     DAS7L           ;Length
-        lda     #VMA_TIMING_1   ;VRAM transfer mode
-        sta     VMAINC
 
-        stz     VMADDL          ;Stash VRAM:0000
-        stz     VMADDH
-        ldy     VMDATALREAD
-
-        stz     VMADDL          ;Write clear value
-        stz     VMADDH
-        xba
-        sta     VMDATAL
-        sta     VMDATAH
+        lda     #(^SFX_linear_tab)
+        sta     A1B7            ;Source bank
+        xba                     ;Clear value offset
+        RW a16
+        and     #$00ff
+        clc
+        adc     #.loword(SFX_linear_tab)
+        sta     A1T7L
+        RW a8
 
         ;Set mode, destination and start transfer
-        ldx     #(<VMDATALREAD << 8 + DMA_DIR_PPU_TO_MEM + DMA_TRANS_1 + DMA_INCREMENT)
+        ldx     #(<WMDATA << 8 + DMA_DIR_MEM_TO_PPU + DMA_TRANS_1 + DMA_FIXED)
         stx     DMAP7
-        stz     VMADDL
-        stz     VMADDH
+
         lda     #%10000000
         sta     MDMAEN
-
-        sty     VMDATAL         ;Restore VRAM:0000
         rtl
 
 
@@ -347,3 +342,12 @@ SFX_PPU_is_ntsc:
         dey                     ;NTSC = YES
 :       tya
         rtl
+
+;-------------------------------------------------------------------------------
+; Data
+
+; Table with values #$00-#$ff, used for WRAM_memset
+SFX_linear_tab:
+  .repeat $100, I
+        .byte I
+  .endrep

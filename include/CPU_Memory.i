@@ -259,11 +259,11 @@
     .endif
         xba
     .if .xmatch({addr},{hi:x})
-        lda     #$7e
+        lda     #$00
     .elseif .xmatch({addr},{ex:x})
-        lda     #$7f
+        lda     #$01
     .else
-        lda     #(^addr & $7f)
+        lda     #(^addr & $01)
     .endif
   .endif
 
