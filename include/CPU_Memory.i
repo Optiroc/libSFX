@@ -248,7 +248,7 @@
 
   .if .not (.xmatch({value},{a}) .and (.xmatch({addr},{hi:x}) .or .xmatch({addr},{ex:x})))
         RW a16
-        lda     #(value << 8) + (^addr & $7f)
+        lda     #(value << 8) + (^addr & $1)
         ldx     #.loword(addr)
   .else
         RW a8
@@ -263,7 +263,7 @@
     .elseif .xmatch({addr},{ex:x})
         lda     #$01
     .else
-        lda     #(^addr & $01)
+        lda     #(^addr & $1)
     .endif
   .endif
 
