@@ -1,0 +1,5 @@
+.include "libSFX.i"
+
+DSP_set MVOLL,    #$7F
+DSP_set MVOLR,    #$7F
+sleep
