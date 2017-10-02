@@ -1,11 +1,11 @@
 # Name
-name := Hello
+name := MSU1
 
 # SMP sub-projects
 smp_overlays := SMP
 
 # Cleanup PCM files
-clean_files := *.pcm
+clean_files := $(name)-*.pcm
 
 # Include libSFX.make
 libsfx_dir := ../..
