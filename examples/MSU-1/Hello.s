@@ -8,7 +8,6 @@
 init_with_MSU:
         RW_push set:a8i16
 
-
         lda     #$FF
         sta     MSU_VOLUME
         ldx     #$0001
@@ -38,7 +37,24 @@ Main:
         VBL_on
 
 :       wai
-        bra     :-
+        ldx     z:SFX_joy1trig
+        cpx     #$00
+        beq     :-
+@l:     cpx     #JOY_L
+        bne     @r
+        ldy     #$0001
+        jsr     ChangeTrack
+@r:     cpx     #JOY_R
+        bne     @end
+        ldy     #$0002
+        jsr     ChangeTrack
+@end:   bra     :-
+
+ChangeTrack:
+        sty     MSU_TRACK
+        lda     #$03
+        sta     MSU_CONTROL
+        rts
 
 .segment "RODATA"
 incbin  SMP,  "SMP.bin"
