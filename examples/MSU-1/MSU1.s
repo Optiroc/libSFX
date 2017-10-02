@@ -6,16 +6,12 @@
 .include "libSFX.i"
 
 init_with_MSU:
-        RW_push set:a8i16
-
         lda     #$FF
         sta     MSU_VOLUME
         ldy     #$0001
         jsr     PlayTrack
 
         CGRAM_setcolor_rgb 0, 0,255,0
-
-        RW_pull
         rts
 
 init_without_MSU:
