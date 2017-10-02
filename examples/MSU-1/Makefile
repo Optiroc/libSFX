@@ -1,13 +1,14 @@
 # Name
-name		:= Hello
-debug				:= 1
-
-run_args := --show-debugger --break-on-wdm
+name := Hello
 
 # SMP sub-projects
 smp_overlays := SMP
 
 # Include libSFX.make
-libsfx_dir	:= ../..
+libsfx_dir := ../..
 include $(libsfx_dir)/libSFX.make
 
+.PHONY: pcm
+pcm:
+	echo "MSU1   " > $(name)-1.pcm
+	ffmpeg -i https://voyager.jpl.nasa.gov/assets/audio/golden-record/english.au -ar 44.1k -ac 2 -f s16le -acodec pcm_s16le - >> $(name)-1.pcm

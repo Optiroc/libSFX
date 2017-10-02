@@ -6,20 +6,19 @@
 .include "libSFX.i"
 
 init_with_MSU:
-        break
-        ldx     #$0001  ; Writing a 16-bit value will automatically
-        stx     MSU_TRACK
+        RW_push set:a8i16
 
-        break
-        lda     #$01    ; Set audio state to play, no repeat.
-        sta     MSU_CONTROL
 
-        break
         lda     #$FF
         sta     MSU_VOLUME
+        ldx     #$0001
+        stx     MSU_TRACK
+        lda     #$03
+        sta     MSU_CONTROL
 
-        break
         CGRAM_setcolor_rgb 0, 0,255,0
+
+        RW_pull
         rts
 
 init_without_MSU:
