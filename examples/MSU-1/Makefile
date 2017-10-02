@@ -4,7 +4,7 @@ name := MSU1
 # SMP sub-projects
 smp_overlays := SMP
 
-# Cleanup PCM files
+# Cleanup MSU files
 clean_files := $(name)-*.pcm $(name).msu
 
 # Include libSFX.make
