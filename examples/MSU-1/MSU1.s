@@ -10,10 +10,8 @@ init_with_MSU:
 
         lda     #$FF
         sta     MSU_VOLUME
-        ldx     #$0001
-        stx     MSU_TRACK
-        lda     #$03
-        sta     MSU_CONTROL
+        ldy     #$0001
+        jsr     PlayTrack
 
         CGRAM_setcolor_rgb 0, 0,255,0
 
@@ -43,14 +41,14 @@ Main:
 @l:     cpx     #JOY_L
         bne     @r
         ldy     #$0001
-        jsr     ChangeTrack
+        jsr     PlayTrack
 @r:     cpx     #JOY_R
         bne     @end
         ldy     #$0002
-        jsr     ChangeTrack
+        jsr     PlayTrack
 @end:   bra     :-
 
-ChangeTrack:
+PlayTrack:
         sty     MSU_TRACK
         lda     #$03
         sta     MSU_CONTROL
