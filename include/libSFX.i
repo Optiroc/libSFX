@@ -89,6 +89,7 @@
   .include "CPU_SMP.i"
   .include "CPU_DSP.i"
   .include "CPU_GSU.i"
+  .include "CPU_MSU.i"
 
   ;S-CPU optional packages
   .if .defined(SFXPKG_LZ4)
