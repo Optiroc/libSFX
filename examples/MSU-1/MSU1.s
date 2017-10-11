@@ -10,7 +10,6 @@ init_with_MSU:
         sta     MSU_VOLUME
         ldy     #$0001
         jsr     PlayTrack
-
         CGRAM_setcolor_rgb 0, 0,255,0
         rts
 
@@ -46,9 +45,15 @@ Main:
 
 PlayTrack:
         sty     MSU_TRACK
+@bsy:   lda     MSU_STATUS
+        bit     #$40
+        bne     @bsy
+        lda     MSU_STATUS
+        bit     #$08
+        bne     @ret
         lda     #$03
         sta     MSU_CONTROL
-        rts
+@ret:   rts
 
 .segment "RODATA"
 incbin  SMP,  "SMP.bin"
