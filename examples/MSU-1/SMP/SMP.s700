@@ -3,4 +3,4 @@
 DSP_set FLG,      #$20
 DSP_set MVOLL,    #$7F
 DSP_set MVOLR,    #$7F
-sleep
+jmp     !IPL_INIT
