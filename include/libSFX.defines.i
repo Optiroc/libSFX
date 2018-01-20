@@ -36,10 +36,18 @@
 
   :in:    name    Name         identifier
   :in:    file    Filename     string
+  :in?:   offset  File offset  constant
+  :in?:   size    Data size    constant
 */
-.macro incbin name, file
+.macro incbin name, file, offset, size
   .ident(.sprintf("%s", .string(name))):
-  .incbin file
+  .if .not .blank(size)
+    .incbin file, offset, size
+  .elseif .not .blank(offset)
+    .incbin file, offset
+  .else
+    .incbin file
+  .endif
   .ident(.sprintf("sizeof_%s", .string(name))) = * - .ident(.sprintf("%s", .string(name)))
 .endmac
 
