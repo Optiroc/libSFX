@@ -33,7 +33,7 @@ make_bp		:= $(libsfx_bin)/make_breakpoints
 rwildcard = $(strip $(filter $(if $2,$2,%),$(foreach f,$(wildcard $1*),$(eval t = $(call rwildcard,$f/)) $(if $t,$t,$f))))
 
 # File extensions
-debug_sym_ext	:= dsym
+debug_sym_ext	:= sym
 debug_map_ext	:= dmap
 debug_nfo_ext	:= dnfo
 
