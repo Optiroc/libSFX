@@ -25,7 +25,7 @@ submodules:
 docs:
 	@rm -frd docs
 	@mkdir -pv docs
-	python -m scss < extras/NaturalDocs/libsfx.scss -C >extras/NaturalDocs/libsfx.css
+	sass --scss < extras/NaturalDocs/libsfx.scss >extras/NaturalDocs/libsfx.css
 	naturaldocs -r -i include -o HTML docs -p extras/NaturalDocs -s libsfx -t 2
 	./extras/NaturalDocs/wash.sh `find ./docs/files -name '*.html'`
 	@rm -frd ./docs/index && rm -frd ./docs/search
