@@ -100,7 +100,7 @@
   .endif
 
   ;Initial register widths
-  RW_assume a8i16
+  RW_init
 
 .endif
 

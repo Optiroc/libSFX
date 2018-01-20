@@ -140,7 +140,7 @@ SFX_SPC_IMAGE = EXRAM
   (end)
 */
 .macro  SMP_playspc state, ram, ram_hi
-  .if ((ROM_MAPMODE = $0) && (.blank({ram_hi})))
+  .if ((::ROM_MAPMODE = $0) && (.blank({ram_hi})))
         SFX_error "SMP_playspc: If ROM_MAPMODE == 0 (`LoROM`) both ram and ram_hi parameters are required."
   .endif
   .if .blank({ram_hi})
@@ -192,7 +192,7 @@ SFX_SPC_IMAGE = EXRAM
   >:in:    filename  SPC File                path
 */
 .macro SPC_incbin_hi filename
-        .incbin spc_file, $8100, $8000  ;$8000-$ffff SMP RAM
+        .incbin filename, $8100, $8000  ;$8000-$ffff SMP RAM
 .endmac
 
 /**

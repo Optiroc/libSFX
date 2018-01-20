@@ -131,7 +131,7 @@
 .macro  VBL_on
         RW_push set:a8
         lda     SFX_nmitimen
-.if SFX_AUTO_READOUT <> DISABLE
+.if ::SFX_AUTO_READOUT <> DISABLE
         ora     #NMI_NMI_ON + NMI_JOY_ON
 .else
         ora     #NMI_NMI_ON
@@ -255,7 +255,7 @@
         lda     #$0000                  ;Set direct page at $0000
         tcd
         RW a8
-  .if ROM_MAPMODE <> 1
+  .if ::ROM_MAPMODE <> 1
         phk                             ;If not Mode 21: Set DB to same as PC bank
         plb
   .else
