@@ -2,10 +2,13 @@
 **/.build
 **/.build_libsfx
 examples/**/*.sfc
+examples/**/*.sym
 examples/**/*.dsym
 examples/**/*.dmap
 examples/**/*.srm
+examples/**/*.bin
 tests/**/*.sfc
+tests/**/*.sym
 tests/**/*.dsym
 tests/**/*.dmap
 tests/**/*.srm
@@ -16,3 +19,10 @@ examples/X-WIP
 *.psd
 *.swp
 *.dnfo
+**/_build_*
+**/*.palette
+**/*.tiles
+**/*.map
+**/*.m7d
+**/*.brr
+**/*.lz4
