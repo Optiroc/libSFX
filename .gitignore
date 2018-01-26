@@ -3,8 +3,10 @@
 **/.build_libsfx
 examples/**/*.sfc
 examples/**/*.sym
-examples/**/*.dsym
+examples/**/*.cpu.sym
+examples/**/*.smp.sym
 examples/**/*.dmap
+examples/**/*.dnfo
 examples/**/*.srm
 examples/**/*.bin
 tests/**/*.sfc
