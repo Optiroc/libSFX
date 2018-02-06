@@ -67,9 +67,10 @@ VBlankVector:
 :       push
 
         dpage   $0000
-        inc     a:SFX_tick              ;Global frame ticker
+        inc     z:SFX_tick              ;Global frame ticker
 
         RW a8
+        dbank   $80
         lda     RDNMI                   ;Clear NMI
         lda     #inidisp(OFF, DISP_BRIGHTNESS_MIN)
         sta     INIDISP
@@ -134,10 +135,10 @@ VBlankVector:
 .endif
 
         RW a8
-        lda     a:SFX_nmitimen          ;Set IRQ flags
+        lda     z:SFX_nmitimen          ;Set IRQ flags
         sta     NMITIMEN
 
-        lda     a:SFX_inidisp           ;Restore screen and return
+        lda     z:SFX_inidisp           ;Restore screen and return
         sta     INIDISP
 
         pull
@@ -157,7 +158,7 @@ IRQVector:
         jml     :+                      ;Jump to fast mirror
 :       push
         RW a8
-        lda     TIMEUP                  ;Acknowledge IRQ
+        lda     f:TIMEUP                ;Acknowledge IRQ
         jsl     SFX_irq_jml             ;Call trampoline
         pull
         rti

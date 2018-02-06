@@ -141,7 +141,7 @@
   SFX_error "memcpy: Missing required parameter(s)"
 .else
         RW_push set:i16
-
+        phb
   .if (.xmatch({dest},{ay}) .or .xmatch({source},{ax}))
     ;Using 'a' as bank pointer, set that right away so 'a' can safely be modified later
         RW a8
@@ -211,7 +211,6 @@
     .endif
         jsl     SFX_mvn
   .endif
-        phk
         plb
         RW_pull
 .endif
