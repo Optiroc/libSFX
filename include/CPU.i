@@ -48,18 +48,18 @@
 /**
   Macro: proc
   Define procedure with separate RW state
-  
+
   This is equivalent to .proc directive, but ensures that using the RW*
   macros inside of the procedure does not affect tracking of CPU state anywhere
   outside of the procedure, and vice-versa.
-  
+
   It is recommended to use the 'proc' and 'endproc' macros instead of .proc and
   .endproc for any code using libSFX macros.
-  
+
   By default, code inside the procedure assumes 8-bit A and 16-bit X/Y (M=1, X=0).
   Optionally, you may specify other incoming register sizes as a parameter.
   (See also: 'RW_init', 'RW_assume')
-  
+
   Parameter:
   >:in:    name      Procedure name
   >:in?:   widths    Register widths         a8/a16/i8/i16/a8i8/a16i16/a8i16/a16i8
@@ -76,7 +76,7 @@
 /**
   Macro: endproc
   End procedure and restore RW state
-  
+
   This is the equivalent to .endproc corresponding with the 'proc' macro.
   This ensures that the outer scope continues to track the correct register
   sizes regardless of any RW* macros which were used in the inner scope.
@@ -89,7 +89,7 @@
 /**
   Macro: RW_init
   Define RW state variables in current scope
-  
+
   Used by all register width macros to ensure that register state can be tracked
   in any scope. This also means that code inside of a .proc or .scope will not
   affect tracked register widths for code in the global scope, and vice-versa.
@@ -98,10 +98,10 @@
 .macro RW_init
   .if !.const(SFX_RW_init)
     SFX_RW_init .set 1
-    
+
     ;Initial register widths
     RW_assume a8i16
-	
+
     ;RW stack (bit 0 = accumulator size, bit 1 = index size)
     SFX_RW_size_sp .set 0
     SFX_RW_size_s1 .set %00
