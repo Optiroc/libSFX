@@ -719,13 +719,6 @@ SFX_dp_offset .set 0
 .endmac
 
 /**
-  wdm
-*/
-.macro wdm op
-        .byte   $42, <op
-.endmac
-
-/**
   Meta: break
   Break debugger
 
