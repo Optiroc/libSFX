@@ -169,26 +169,26 @@
         .if (.loword(source) >= .loword(dest))
           ldx     #.loword(source)
           ldy     #.loword(dest)
-          mvn     ^(dest), ^(source)
+          mvn     ^(source), ^(dest)
         .else
           ldx     #.loword(source)+length-1
           ldy     #.loword(dest)+length-1
-          mvp     ^(dest), ^(source)
+          mvp     ^(source), ^(dest)
         .endif
       .else
         ;Addresses not known - mvn is the best bet
           ldx     #.loword(source)
           ldy     #.loword(dest)
-          mvn     ^(dest), ^(source)
+          mvn     ^(source), ^(dest)
       .endif
     .else
       ;Addresses in registers - use mvn
       .if (.xmatch({dest},{hi:y}) .and .xmatch({source},{hi:x}))
           mvn     $7e, $7e
       .elseif (.xmatch({dest},{hi:y}) .and .xmatch({source},{ex:x}))
-          mvn     $7e, $7f
-      .elseif (.xmatch({dest},{ex:y}) .and .xmatch({source},{hi:x}))
           mvn     $7f, $7e
+      .elseif (.xmatch({dest},{ex:y}) .and .xmatch({source},{hi:x}))
+          mvn     $7e, $7f
       .elseif (.xmatch({dest},{ex:y}) .and .xmatch({source},{ex:x}))
           mvn     $7f, $7f
       .endif
