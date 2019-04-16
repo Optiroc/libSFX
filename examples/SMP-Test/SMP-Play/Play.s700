@@ -6,7 +6,7 @@
 
         ;Init
         ;The MAIN segment should be linked before CODE, BSS, etc
-        ;So if used only once it (should!) be guaranteed to be linked at $0200
+        ;So if used only once it should be guaranteed to be linked at $0200
 
         DSP_set FLG,      #$20
         DSP_set KON,      #$00

@@ -116,11 +116,11 @@ define smp_overlay_add_product
 smp_overlays_products := $(smp_overlays_products) $(1).bin
 $(1).bin : $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
 ifeq ($(debug),1)
-	$(ld) --cfg-path ./$(1) --cfg-path $(libsfx_inc)/Configurations/SMP -C Map.cfg -Ln $(1).$(debug_sym_ext) -o $(1).bin $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
+	$(ld) --cfg-path ./$(1) --cfg-path $(libsfx_inc)/Configurations -C SMP-Map.cfg -Ln $(1).$(debug_sym_ext) -o $(1).bin $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
 else ifeq ($(debug),2)
-	$(ld) --cfg-path ./$(1) --cfg-path $(libsfx_inc)/Configurations/SMP -C Map.cfg -Ln $(1).$(debug_sym_ext) -m $(1).$(debug_map_ext) -vm --dbgfile $(1).$(debug_nfo_ext) -o $(1).bin $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
+	$(ld) --cfg-path ./$(1) --cfg-path $(libsfx_inc)/Configurations -C SMP-Map.cfg -Ln $(1).$(debug_sym_ext) -m $(1).$(debug_map_ext) -vm --dbgfile $(1).$(debug_nfo_ext) -o $(1).bin $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
 else
-	$(ld) --cfg-path ./$(1) --cfg-path $(libsfx_inc)/Configurations/SMP -C Map.cfg -o $(1).bin $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
+	$(ld) --cfg-path ./$(1) --cfg-path $(libsfx_inc)/Configurations -C SMP-Map.cfg -o $(1).bin $(filter $(obj_dir)/$(1)/%,$(smp_overlays_obj))
 endif
 endef
 

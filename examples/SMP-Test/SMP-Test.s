@@ -9,6 +9,7 @@ Main:
         ;Execute SMP payloads in sequence
         SMP_exec SMP_RAM, SMP_nop, sizeof_SMP_nop, SMP_RAM
         SMP_exec SMP_RAM, SMP_play, sizeof_SMP_play, SMP_RAM
+        break
         SMP_exec SMP_RAM, SMP_nop, sizeof_SMP_nop, SMP_RAM
 @xbr:
         SMP_exec SMP_RAM, SMP_play, sizeof_SMP_play, SMP_RAM
@@ -20,11 +21,13 @@ Main:
         sta     SFX_inidisp
         VBL_on
 
-:       ;Execute SMP payloads in sequence, forever
-        SMP_exec SMP_RAM, SMP_play, sizeof_SMP_play, SMP_RAM
-        SMP_exec SMP_RAM, SMP_nop, sizeof_SMP_nop, SMP_RAM
+        ;Execute SMP payloads in sequence, forever
+        SMP_memcpy  $02, SMP_zp, sizeof_SMP_zp
+:       SMP_exec    SMP_RAM, SMP_play, sizeof_SMP_play, SMP_RAM
+        SMP_exec    SMP_RAM, SMP_nop, sizeof_SMP_nop, SMP_RAM
         bra :-
 
 .segment "RODATA"
 incbin  SMP_play,  "SMP-Play.bin"
 incbin  SMP_nop,   "SMP-Nop.bin"
+incbin  SMP_zp,    "SMP-Play-ZP.bin"
