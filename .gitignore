@@ -14,8 +14,7 @@ tests/**/*.sym
 tests/**/*.dsym
 tests/**/*.dmap
 tests/**/*.srm
-extras/NaturalDocs/Data
-extras/NaturalDocs/libsfx.css
+extras/NaturalDocs/config/Data
 dsp1b.bin
 examples/X-WIP
 *.psd

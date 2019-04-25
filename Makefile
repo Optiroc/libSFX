@@ -23,13 +23,21 @@ submodules:
 	git submodule update --init --recursive
 
 docs:
+ifeq (, $(shell which perl))
+  $(error "'perl' not found in $$PATH")
+endif
+ifeq (, $(shell which sassc))
+  $(error "'sassc' not found in $$PATH")
+endif
+ifeq (, $(shell which awk))
+  $(error "'awk' not found in $$PATH")
+endif
 	@rm -frd docs
 	@mkdir -pv docs
-	sass --scss < extras/NaturalDocs/libsfx.scss >extras/NaturalDocs/libsfx.css
-	naturaldocs -r -i include -o HTML docs -p extras/NaturalDocs -s libsfx -t 2
-	./extras/NaturalDocs/wash.sh `find ./docs/files -name '*.html'`
-	@rm -frd ./docs/index && rm -frd ./docs/search
-	@cp ./extras/NaturalDocs/readme ./docs/README.md
+	sassc extras/NaturalDocs/config/libsfx.scss extras/NaturalDocs/config/libsfx.css
+	extras/NaturalDocs/bin/NaturalDocs -r -i include -o HTML docs -p extras/NaturalDocs/config -s libsfx -t 2
+	@rm -frd ./docs/index && rm -frd ./docs/search && rm -frd ./docs/javascript
+	@cp ./extras/NaturalDocs/config/readme ./docs/README.md
 
 clean:
 	@$(MAKE) clean -C tools/cc65

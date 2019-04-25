@@ -33,6 +33,14 @@
 */
 
 /**
+  Variable: SFX_tick
+  Frame ticker (word)
+
+  16 bit variable that is incremented by 1 during every vertical
+  blanking interval.
+*/
+
+/**
   Variable: SFX_joy#cont
   Joypad continous read-out (word)
 
@@ -263,7 +271,7 @@
         pha
         plb
   .endif
-        WAIT_frames 2
+        WAIT_frames 2                   ;Because N said so
         RW_pull
 .endmac
 
