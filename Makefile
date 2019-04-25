@@ -38,6 +38,7 @@ endif
 	extras/NaturalDocs/bin/NaturalDocs -r -i include -o HTML docs -p extras/NaturalDocs/config -s libsfx -t 2
 	@rm -frd ./docs/index && rm -frd ./docs/search && rm -frd ./docs/javascript
 	@cp ./extras/NaturalDocs/config/readme ./docs/README.md
+	@cp ./extras/NaturalDocs/config/favicon.ico ./docs/favicon.ico
 
 clean:
 	@$(MAKE) clean -C tools/cc65
