@@ -12,8 +12,8 @@ derived_files	+= Data/SNES.png.tiles.lz4 Data/SNES.png.map.lz4
 derived_files	+= Data/Sprites.png.palette Data/Sprites.png.tiles
 derived_files	+= Data/Sprites.png.tiles.lz4
 
-# Use --no-discard option for sprite sheets
-Data/Sprites.png.tiles: tiles_flags = -v --no-discard
+# Use --sprite-mode flag for sprite sheets
+Data/Sprites.png.tiles: tiles_flags = -v --sprite-mode
 
 # Include libSFX.make
 libsfx_dir	:= ../..

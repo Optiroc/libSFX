@@ -10,7 +10,7 @@ derived_files	+= Data/Background.png.palette Data/Background.png.tiles Data/Back
 derived_files	+= Data/Background.png.tiles.lz4 Data/Background.png.map.lz4
 
 Data/Background.png.palette: palette_flags = -v --colors 128
-Data/Background.png.tiles: tiles_flags = -v -M snes_mode7 --max-tiles 256
+Data/Background.png.tiles: tiles_flags = -v -M snes_mode7
 Data/Background.png.map: map_flags = -v -M snes_mode7
 
 # Sine table
