@@ -480,20 +480,17 @@
   .endif
 
   .if .xmatch({source},{ax})
-        stx     A1T7L                           ;Data offset
-        sta     A1B7                            ;Data bank
+        ;nop
   .elseif .xmatch({source},{hi:x})
         lda     #$7e                            ;Load source bank
-        sta     A1B7                            ;Data bank
   .elseif .xmatch({source},{ex:x})
         lda     #$7f                            ;Load source bank
-        sta     A1B7                            ;Data bank
   .else
         ldx     #.loword(source)                ;Load source offset
         lda     #^source                        ;Load source bank
+  .endif
         stx     A1T7L                           ;Data offset
         sta     A1B7                            ;Data bank
-  .endif
 
   .if (.blank({vmainc}))
         lda     #$80                            ;VRAM transfer mode word access, increment by 1
@@ -553,6 +550,11 @@
 
   .if .xmatch({dest},{a})
         sta     CGADD                           ;Set CGRAM address
+  .elseif .xmatch({source},{ax})
+        xba
+        lda     #.loword(dest)                  ;Register y not used
+        sta     CGADD                           ;Set CGRAM address
+        xba
   .else
         lda     #.loword(dest)                  ;Register y not used
         sta     CGADD                           ;Set CGRAM address
