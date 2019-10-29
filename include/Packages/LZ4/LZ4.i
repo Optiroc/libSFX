@@ -63,7 +63,8 @@
   Decompress LZ4 frame
 
   Parameters:
-  >:in:    source  LZ4 frame address (uint24)    constant
+  >:in:    source  LZ4 frame address (uint24)    ax/hi:x/ex:x
+  >                                              constant
   >:in:    dest    Destination address (uint24)  ay/hi:y/ex:y
   >                                              constant
   >:out?:  outlen  Decompressed length (uint16)  a/x/y
@@ -79,38 +80,70 @@
 .macro  LZ4_decompress source, dest, outlen
 .if (.blank({dest}))
   SFX_error "LZ4_decompress: Missing required parameter(s)"
+.elseif (.xmatch({source}, {ax}) .and .xmatch({dest}, {ay}))
+  SFX_error "LZ4_decompress: Can't use register a for both source and dest"
 .else
         RW_push set:a16i16
+  .if .xmatch({source}, {ax}) .or .xmatch({source}, {hi:x}) .or .xmatch({source}, {ex:x})
+        ;no-op, source already in x
+  .else
         ldx     #.loword(source)
-.if .xmatch({dest}, {ay})
+  .endif
+
+  .if .xmatch({dest}, {ay})
         xba
         and     #$ff00
         ora     #.loword(^source)
-.elseif .xmatch({dest}, {hi:y})
-        lda     #$7e00
-        ora     #.loword(^source)
-.elseif .xmatch({dest}, {ex:y})
-        lda     #$7f00
-        ora     #.loword(^source)
-.else
+  .elseif .xmatch({dest}, {hi:y})
+    .if .xmatch({source}, {ax})
+        and     #$00ff
+        ora     #$7e00
+    .elseif .xmatch({source}, {hi:x})
+        lda     #$7e7e
+    .elseif .xmatch({source}, {ex:x})
+        lda     #$7e7f
+    .else
+        lda     #.loword($7e00 + ^source)
+    .endif
+  .elseif .xmatch({dest}, {ex:y})
+    .if .xmatch({source}, {ax})
+        and     #$00ff
+        ora     #$7f00
+    .elseif .xmatch({source}, {hi:x})
+        lda     #$7f7e
+    .elseif .xmatch({source}, {ex:x})
+        lda     #$7f7f
+    .else
+        lda     #.loword($7f00 + ^source)
+    .endif
+  .else
         ldy     #.loword(dest)
+    .if .xmatch({source}, {ax})
+        and     #$00ff
+        ora     #.loword(^dest << 8)
+    .elseif .xmatch({source}, {hi:x})
+        lda     #.loword((^dest << 8) + $007e)
+    .elseif .xmatch({source}, {ex:x})
+        lda     #.loword((^dest << 8) + $007f)
+    .else
         lda     #.loword((^dest << 8) + ^source)
-.endif
+    .endif
+  .endif
         RW a8
         jsl     SFX_LZ4_decompress
         RW_assume a16
 
-.ifnblank outlen
-  .if .xmatch({outlen}, {a})
-        ;no-nop, length already in a
-  .elseif .xmatch({outlen}, {x})
+  .ifnblank outlen
+    .if .xmatch({outlen}, {a})
+        ;no-op, length already in a
+    .elseif .xmatch({outlen}, {x})
         tax
-  .elseif .xmatch({outlen}, {y})
+    .elseif .xmatch({outlen}, {y})
         tay
-  .else
-    SFX_error "LZ4_decompress: Parameter 'outlen' is incorrect"
+    .else
+      SFX_error "LZ4_decompress: Parameter 'outlen' is incorrect"
+    .endif
   .endif
-.endif
 
         RW_pull
 .endif
@@ -121,7 +154,8 @@
   Decompress LZ4 block
 
   Parameters:
-  >:in:    source  LZ4 block address (uint24)    constant
+  >:in:    source  LZ4 block address (uint24)    ax/hi:x/ex:x
+  >                                              constant
   >:in:    dest    Destination address (uint24)  ay/hi:y/ex:y
   >                                              constant
   >:out?:  outlen  Decompressed length (uint16)  a/x/y
@@ -129,38 +163,70 @@
 .macro  LZ4_decompress_block source, dest
 .if (.blank({dest}))
   SFX_error "LZ4_decompress_block: Missing required parameter(s)"
+.elseif (.xmatch({source}, {ax}) .and .xmatch({dest}, {ay}))
+  SFX_error "LZ4_decompress_block: Can't use register a for both source and dest"
 .else
         RW_push set:a16i16
+  .if .xmatch({source}, {ax}) .or .xmatch({source}, {hi:x}) .or .xmatch({source}, {ex:x})
+        ;no-op, source already in x
+  .else
         ldx     #.loword(source)
-.if .xmatch({dest}, {ay})
+  .endif
+
+  .if .xmatch({dest}, {ay})
         xba
         and     #$ff00
         ora     #.loword(^source)
-.elseif .xmatch({dest}, {hi:y})
-        lda     #$7e00
-        ora     #.loword(^source)
-.elseif .xmatch({dest}, {ex:y})
-        lda     #$7f00
-        ora     #.loword(^source)
-.else
+  .elseif .xmatch({dest}, {hi:y})
+    .if .xmatch({source}, {ax})
+        and     #$00ff
+        ora     #$7e00
+    .elseif .xmatch({source}, {hi:x})
+        lda     #$7e7e
+    .elseif .xmatch({source}, {ex:x})
+        lda     #$7e7f
+    .else
+        lda     #.loword($7e00 + ^source)
+    .endif
+  .elseif .xmatch({dest}, {ex:y})
+    .if .xmatch({source}, {ax})
+        and     #$00ff
+        ora     #$7f00
+    .elseif .xmatch({source}, {hi:x})
+        lda     #$7f7e
+    .elseif .xmatch({source}, {ex:x})
+        lda     #$7f7f
+    .else
+        lda     #.loword($7f00 + ^source)
+    .endif
+  .else
         ldy     #.loword(dest)
+    .if .xmatch({source}, {ax})
+        and     #$00ff
+        ora     #.loword(^dest << 8)
+    .elseif .xmatch({source}, {hi:x})
+        lda     #.loword((^dest << 8) + $007e)
+    .elseif .xmatch({source}, {ex:x})
+        lda     #.loword((^dest << 8) + $007f)
+    .else
         lda     #.loword((^dest << 8) + ^source)
-.endif
+    .endif
+  .endif
         RW a8
         jsl     SFX_LZ4_decompress_block
         RW_assume a16
 
-.ifnblank outlen
-  .if .xmatch({outlen}, {a})
+  .ifnblank outlen
+    .if .xmatch({outlen}, {a})
         ;no-op, length already in a
-  .elseif .xmatch({outlen}, {x})
+    .elseif .xmatch({outlen}, {x})
         tax
-  .elseif .xmatch({outlen}, {y})
+    .elseif .xmatch({outlen}, {y})
         tay
-  .else
-    SFX_error "LZ4_decompress_block: Parameter 'outlen' is incorrect"
+    .else
+      SFX_error "LZ4_decompress_block: Parameter 'outlen' is incorrect"
+    .endif
   .endif
-.endif
 
         RW_pull
 .endif
