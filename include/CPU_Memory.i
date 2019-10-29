@@ -550,6 +550,11 @@
 
   .if .xmatch({dest},{a})
         sta     CGADD                           ;Set CGRAM address
+  .elseif .xmatch({source},{ax})
+        xba
+        lda     #.loword(dest)                  ;Register y not used
+        sta     CGADD                           ;Set CGRAM address
+        xba
   .else
         lda     #.loword(dest)                  ;Register y not used
         sta     CGADD                           ;Set CGRAM address
