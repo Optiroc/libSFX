@@ -23,15 +23,6 @@ submodules:
 	git submodule update --init --recursive
 
 docs:
-ifeq (, $(shell which perl))
-  $(error "'perl' not found in $$PATH")
-endif
-ifeq (, $(shell which sassc))
-  $(error "'sassc' not found in $$PATH")
-endif
-ifeq (, $(shell which awk))
-  $(error "'awk' not found in $$PATH")
-endif
 	@rm -frd docs
 	@mkdir -pv docs
 	sassc extras/NaturalDocs/config/libsfx.scss extras/NaturalDocs/config/libsfx.css
