@@ -285,8 +285,8 @@ _CASFX_AUTO_NOP = 1
 
 
 .define mbra    _op_branch $05, ; target
-.define mbge    _op_branch $06, ; target
-.define mblt    _op_branch $07, ; target
+.define mbge    _op_branch $07, ; target
+.define mblt    _op_branch $06, ; target
 .define mbne    _op_branch $08, ; target
 .define mbeq    _op_branch $09, ; target
 .define mbpl    _op_branch $0A, ; target
