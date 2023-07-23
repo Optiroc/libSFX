@@ -11,6 +11,12 @@ ifndef debug
 debug		:= 0
 endif
 
+ifndef out_dir
+out_dir		:= .
+endif
+
+name		:= $(out_dir)/$(name)
+
 # Output
 rom		:= $(name).sfc
 
@@ -33,9 +39,15 @@ make_bp		:= $(libsfx_bin)/make_breakpoints
 rwildcard = $(strip $(filter $(if $2,$2,%),$(foreach f,$(wildcard $1*),$(eval t = $(call rwildcard,$f/)) $(if $t,$t,$f))))
 
 # File extensions
+ifndef debug_sym_ext
 debug_sym_ext	:= cpu.sym
+endif
+ifndef debug_map_ext
 debug_map_ext	:= dmap
+endif
+ifndef debug_nfo_ext
 debug_nfo_ext	:= dnfo
+endif
 
 # Set defaults
 ifndef obj_dir
@@ -79,18 +91,21 @@ tiles_flags     := -v
 map_flags       := -v
 
 
-# Include all source files under working directory if $(src) isn't set
+# Include all source files under $(src_dir) or working directory if $(src) isn't set
+ifndef src_dir
+src_dir := .
+endif
 ifndef src
-src		:= $(call rwildcard, ,%.s)
+src		:= $(call rwildcard, $(src_dir)/, %.s)
 endif
 ifndef src_smp
-src_smp		:= $(call rwildcard, ,%.s700)
+src_smp		:= $(call rwildcard, $(src_dir)/, %.s700)
 endif
 ifndef src_gsu
-src_gsu		:= $(call rwildcard, ,%.sgs)
+src_gsu		:= $(call rwildcard, $(src_dir)/, %.sgs)
 endif
 ifndef headers
-headers		:= $(call rwildcard, ,%.i) $(call rwildcard, ,%.i700)
+headers		:= $(call rwildcard, $(src_dir)/, %.i) $(call rwildcard, $(src_dir)/, %.i700)
 endif
 
 # libSFX
@@ -179,6 +194,7 @@ $(obj_smp_sfx) : $(cfg_files) $(libsfx_headers)
 
 # Link
 $(rom) : $(obj_sfx) $(obj_smp_sfx) $(obj) $(obj_smp) $(obj_gsu)
+	@mkdir -pv $(dir $@)
 	$(ld) $(ldflags) -C Map.cfg -o $@ $^
 	$(sfcheck) $@ -f
 

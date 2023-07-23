@@ -104,13 +104,41 @@
   obj_dir := build
   (end)
 
+  _src_dir_
+  Set custom directory for source files.
+  Default is the current directory.
+
+  (start code)
+  src_dir := src
+  (end)
+
+  _out_dir_
+  Set custom directory for output files.
+  Default is the current directory.
+
+  (start code)
+  out_dir := out
+  (end)
+
+  _debug_sym_ext_
+  Extension for debug symbol table.
+  Default is "cpu.sym".
+
+  _debug_map_ext_
+  Extension for debug map.
+  Default is "dmap".
+
+  _debug_nfo_ext_
+  Extension for debug information file.
+  Default is "dnfo".
+
   _src_
-  65816 source files. If not set libSFX.make will automatically add all files named *.s.
+  65816 source files. If not set libSFX.make will automatically add all files named *.s within src_dir.
 
   _src_smp_
-  SPC700 source files. If not set libSFX.make will automatically add all files named *.s700.
+  SPC700 source files. If not set libSFX.make will automatically add all files named *.s700 within src_dir.
 
   _src_gsu_
-  GSU-1 source files. If not set libSFX.make will automatically add all files named *.sgs.
+  GSU-1 source files. If not set libSFX.make will automatically add all files named *.sgs within src_dir.
 
 */
