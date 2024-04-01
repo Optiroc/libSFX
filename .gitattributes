@@ -1,0 +1,8 @@
+*.i linguist-language=asm
+*.s linguist-language=asm
+*.s700 linguist-language=asm
+*.sgs linguist-language=asm
+extras/** linguist-vendored
+extras/** linguist-documentation
+tools/** linguist-vendored
+tools/** linguist-documentation
