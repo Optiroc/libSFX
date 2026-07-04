@@ -22,4 +22,4 @@ include $(libsfx_dir)/libSFX.make
 
 # Custom rules
 Data/Sin.bin : Sin.py
-	./$< $@
+	python3 ./$< $@

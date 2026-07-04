@@ -1,23 +1,23 @@
-.PHONY: clean submodules docs
+.PHONY: clean submodules docs cc65 superfamiconv superfamicheck lz4
 
-default: cc65 superfamiconv superfamicheck brrtools lz4
+all: clean submodules programs
 
-all: clean default
+programs: cc65 superfamiconv superfamicheck brrtools lz4
 
-cc65: submodules
-	@$(MAKE) -C tools/cc65 bin -j4
+cc65:
+	@$(MAKE) -C tools/cc65/src -j
 
-superfamiconv: submodules
-	@$(MAKE) -C tools/superfamiconv -j4
+superfamiconv:
+	@$(MAKE) -C tools/superfamiconv
 
-superfamicheck: submodules
+superfamicheck:
 	@$(MAKE) -C tools/superfamicheck
 
-brrtools: submodules
+brrtools:
 	@$(MAKE) -C tools/brrtools
 
-lz4: submodules
-	@$(MAKE) lz4 -C tools/lz4/programs -j4
+lz4:
+	@$(MAKE) lz4 -C tools/lz4/programs -j
 
 submodules:
 	git submodule update --init --recursive
@@ -32,7 +32,7 @@ docs:
 	@cp ./extras/NaturalDocs/config/favicon.ico ./docs/favicon.ico
 
 clean:
-	@$(MAKE) clean -C tools/cc65
+	@$(MAKE) clean -C tools/cc65/src
 	@$(MAKE) clean -C tools/superfamiconv
 	@$(MAKE) clean -C tools/superfamicheck
 	@$(MAKE) clean -C tools/brrtools
